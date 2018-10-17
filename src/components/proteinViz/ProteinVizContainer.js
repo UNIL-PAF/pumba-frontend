@@ -8,7 +8,7 @@ class ProteinVizContainer extends Component {
     render(){
 
         return <div>
-            hihi
+            <div>{this.props.proteinData ? this.props.proteinData.length : 0 }</div>
         </div>
     }
 

@@ -10,6 +10,9 @@ export function fetchProtein(proteinId){
     return function (dispatch) {
         dispatch(requestProtein(proteinId))
 
+        // we reset the error message to undefined
+        dispatch(proteinLoadError(undefined))
+
         return fetch(pumbaConfig.urlBackend + "/proteins/" + proteinId )
             .then( response => {
                 if (!response.ok) { throw response }
@@ -18,6 +21,7 @@ export function fetchProtein(proteinId){
             .then(json => {
                     dispatch(addProteinData(json))
                     dispatch(proteinIsLoaded())
+
                 }
             )
             .catch(err => {

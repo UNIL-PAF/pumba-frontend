@@ -15,7 +15,6 @@ class ProteinSearchContainer extends Component {
             <div>{this.props.proteinIsLoading ? "loading" : "not loading"}</div>
             <ProteinSearchInput onChange={this.onChangeInput}/>
             <ProteinSearchButton onClick={() => this.props.onLoadProtein(this.state.searchString)} />
-            <div>{this.props.proteinData ? this.props.proteinData.length : 0 }</div>
             <div>{this.props.error}</div>
         </div>
     }
