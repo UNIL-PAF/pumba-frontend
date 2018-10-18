@@ -3,15 +3,22 @@ import React, {
 } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { fetchProtein } from '../../actions/loadProtein'
+import {fetchProtein, gotoViz} from '../../actions/loadProtein'
 import ProteinSearchButton from "./ProteinSearchButton";
 import ProteinSearchInput from "./ProteinSearchInput";
 
-class ProteinSearchContainer extends Component {
-    render(){
+class ProteinSearchContainer extends React.Component{
 
+    componentDidUpdate() {
+        // let's move to the ProteinViz, but only once
+        if (this.props.gotoViz){
+            this.props.history.push('/proteins')
+            this.props.gotoProteinViz(false)
+        }
+    }
+
+    render(){
         return <div>
-            <div>ProteinSearch</div>
             <div>{this.props.proteinIsLoading ? "loading" : "not loading"}</div>
             <ProteinSearchInput onChange={this.onChangeInput}/>
             <ProteinSearchButton onClick={() => this.props.onLoadProtein(this.state.searchString)} />
@@ -29,7 +36,8 @@ class ProteinSearchContainer extends Component {
 ProteinSearchContainer.propTypes = {
     proteinIsLoading: PropTypes.bool.isRequired,
     proteinData: PropTypes.array.isRequired,
-    error: PropTypes.string
+    error: PropTypes.string,
+    gotoViz: PropTypes.bool
 };
 
 const mapStateToProps = (state) => {
@@ -38,7 +46,8 @@ const mapStateToProps = (state) => {
     const props = {
         proteinIsLoading: state.loadProtein.proteinIsLoading,
         proteinData: state.loadProtein.proteinData,
-        error: state.loadProtein.error
+        error: state.loadProtein.error,
+        gotoViz: state.loadProtein.gotoViz
     }
     return props
 }
@@ -47,7 +56,11 @@ const mapDispatchToProps = (dispatch) => {
     return {
         onLoadProtein: proteinId => {
             dispatch(fetchProtein(proteinId))
+        },
+        gotoProteinViz: (letsGo) => {
+            dispatch(gotoViz(letsGo))
         }
+
     }
 }
 

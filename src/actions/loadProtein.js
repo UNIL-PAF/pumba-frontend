@@ -5,6 +5,7 @@ export const PROTEIN_IS_LOADED = 'PROTEIN_IS_LOADED'
 export const REQUEST_PROTEIN = 'REQUEST_PROTEIN'
 export const ADD_PROTEIN_DATA = 'ADD_PROTEIN_DATA'
 export const PROTEIN_LOAD_ERROR = 'PROTEIN_LOAD_ERROR'
+export const GOTO_VIZ = 'GOTO_VIZ'
 
 export function fetchProtein(proteinId){
     return function (dispatch) {
@@ -21,7 +22,7 @@ export function fetchProtein(proteinId){
             .then(json => {
                     dispatch(addProteinData(json))
                     dispatch(proteinIsLoaded())
-
+                    dispatch(gotoViz(true))
                 }
             )
             .catch(err => {
@@ -46,4 +47,8 @@ export const proteinIsLoaded = (proteinData) => ({
 
 export const proteinLoadError = (error) => ({
     type: PROTEIN_LOAD_ERROR, error: error
+})
+
+export const gotoViz = (gotoViz) => ({
+    type: GOTO_VIZ, gotoViz: gotoViz
 })
