@@ -18,3 +18,4 @@ ProteinSearchInput.propTypes = {
 };
 
 export default ProteinSearchInput
+

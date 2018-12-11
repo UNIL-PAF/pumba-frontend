@@ -3,24 +3,25 @@ import React, {
 } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import Merged2DPlot from "./merged2DPlot/Merged2DPlot";
 
 class ProteinVizContainer extends Component {
+
     render(){
+        const {proteinData} = this.props
 
         return <div>
-            <div>{this.props.proteinData ? this.props.proteinData.length : 0 }</div>
+            { proteinData && <Merged2DPlot proteinData={proteinData} width={800} height={300}/> }
         </div>
     }
 
 }
 
 ProteinVizContainer.propTypes = {
-    proteinData: PropTypes.array.isRequired
+    proteinData: PropTypes.array
 };
 
 const mapStateToProps = (state) => {
-    console.log(state.loadProtein.proteinData)
-
     const props = {
         proteinData: state.loadProtein.proteinData
     }

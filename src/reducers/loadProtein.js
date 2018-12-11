@@ -5,7 +5,7 @@ import {
 
 const initialState = {
     proteinIsLoading: false,
-    proteinData: []
+    proteinData: null
 }
 
 const loadProteinReducer = (state = initialState, action) => {
@@ -15,8 +15,7 @@ const loadProteinReducer = (state = initialState, action) => {
         case PROTEIN_IS_LOADED:
             return { ...state, proteinIsLoading: false, finishedLoading: true}
         case ADD_PROTEIN_DATA:
-            const newProteinData = state.proteinData.concat(action.proteinData)
-            return { ...state, proteinData: newProteinData}
+            return { ...state, proteinData: action.proteinData}
         case PROTEIN_LOAD_ERROR:
             return { ...state, error: action.error}
         case GOTO_VIZ:

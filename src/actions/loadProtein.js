@@ -14,7 +14,7 @@ export function fetchProtein(proteinId){
         // we reset the error message to undefined
         dispatch(proteinLoadError(undefined))
 
-        return fetch(pumbaConfig.urlBackend + "/proteins/" + proteinId )
+        return fetch(pumbaConfig.urlBackend + "/merge-protein/" + proteinId )
             .then( response => {
                 if (!response.ok) { throw response }
                 return response.json()
@@ -26,9 +26,14 @@ export function fetchProtein(proteinId){
                 }
             )
             .catch(err => {
-                err.text().then(message => {
-                    dispatch(proteinLoadError(err.statusText + ": " + message))
-                })
+                // we have to catch error messages differently for if backend is on or off.
+                if(err.message){
+                    dispatch(proteinLoadError(err.message))
+                }else{
+                    err.text().then(message => {
+                        dispatch(proteinLoadError(err.statusText + ": " + message))
+                    })
+                }
             })
     }
 }

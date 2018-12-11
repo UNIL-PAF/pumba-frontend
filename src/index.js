@@ -6,8 +6,8 @@ import { applyMiddleware, compose, createStore } from 'redux'
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux'
 import './styles/index.css';
-import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap/dist/css/bootstrap-theme.css';
+import './styles/App.css';
+import '../node_modules/bootstrap/dist/css/bootstrap.css';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 import rootReducer from './reducers'

@@ -26,3 +26,44 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+/***********************************/
+/* d3 axis */
+
+.x-axis {
+  font-size: 50%;
+  font-weight: lighter;
+}
+
+.x-axis line {
+  stroke: #404040;
+  stroke-width: 0.5;
+}
+
+.x-axis path {
+  stroke: #404040;
+  stroke-width: 0.5;
+}
+
+.x-axis text {
+  fill: #404040
+}
+
+.y-axis {
+  font-size: 50%;
+  font-weight: lighter;
+}
+
+.y-axis line {
+  stroke: #404040;
+  stroke-width: 0.5;
+}
+
+.y-axis path {
+  stroke: #404040;
+  stroke-width: 0.5;
+}
+
+.y-axis text {
+  fill: #404040
+}

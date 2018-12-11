@@ -35,7 +35,7 @@ class ProteinSearchContainer extends React.Component{
 
 ProteinSearchContainer.propTypes = {
     proteinIsLoading: PropTypes.bool.isRequired,
-    proteinData: PropTypes.array.isRequired,
+    proteinData: PropTypes.array,
     error: PropTypes.string,
     gotoViz: PropTypes.bool
 };
