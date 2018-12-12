@@ -7,6 +7,7 @@ import * as _ from 'lodash';
 import { axisLeft, axisBottom } from 'd3-axis';
 import { select } from 'd3-selection';
 import { sampleColor, lightSampleColor } from '../../common/colorSettings'
+import TheoWeightLine from './TheoWeightLine'
 
 
 class Merged2DPlot extends Component {
@@ -33,9 +34,13 @@ class Merged2DPlot extends Component {
             }))
         }))
 
+        // just take the theoretical weight of the first protein, it should always be the same.
+        const theoMolWeight = Math.log10(proteinData[0].proteins[0].theoMolWeight)
+
         this.state = {
             xScale: scaleLinear().range([0, this.props.width - this.margin.left - this.margin.right]).domain([marginMin, marginMax]),
             yScale: scaleLinear().range([this.props.height - this.margin.top - this.margin.bottom, 0]).domain([0, maxInt]),
+            theoMolWeight: theoMolWeight
         }
 
     }
@@ -121,6 +126,7 @@ class Merged2DPlot extends Component {
 
     render() {
         const {proteinData, width, height} = this.props
+        const {theoMolWeight, xScale} = this.state
 
         return <div>
             <svg className="merged-2d-svg"
@@ -135,6 +141,7 @@ class Merged2DPlot extends Component {
                 <g className="x-axis" ref={r => this.xAxis = r}
                    transform={'translate(' + this.margin.left + ',' + (height - this.margin.bottom) + ')'}/>
                 <g className="merged-2d-main-g" transform={'translate(' + this.margin.left + ',' + this.margin.top + ')'}>
+                    <TheoWeightLine xPos={xScale(theoMolWeight)} yTop={height}></TheoWeightLine>
                     {this.plotProteinMerges(proteinData)}
                 </g>
             </svg></div>

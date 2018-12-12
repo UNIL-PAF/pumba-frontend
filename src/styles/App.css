@@ -28,8 +28,9 @@
 }
 
 /***********************************/
-/* d3 axis */
+/*** Merged2DPlot
 
+/* d3 axis */
 .x-axis {
   font-size: 50%;
   font-weight: lighter;
@@ -67,3 +68,12 @@
 .y-axis text {
   fill: #404040
 }
+
+/* theo prot line */
+.theo-weight-line {
+  stroke-dasharray: 0.9;
+  stroke-width: 1;
+  stroke: green;
+}
+
+
