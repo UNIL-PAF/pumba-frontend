@@ -9,6 +9,11 @@ import ProteinSearchInput from "./ProteinSearchInput";
 
 class ProteinSearchContainer extends React.Component{
 
+    componentDidMount() {
+        // Autoloading for testing
+        this.props.onLoadProtein("P02786")
+    }
+
     componentDidUpdate() {
         // let's move to the ProteinViz, but only once
         if (this.props.gotoViz){

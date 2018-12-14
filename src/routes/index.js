@@ -5,7 +5,7 @@ import ProteinSearchContainer from '../components/proteinSearch/ProteinSearchCon
 import ProteinViz from '../components/proteinViz/ProteinVizContainer'
 
 const routes = (
-  <div>
+  <div id={"routes"}>
     <NavBar />
     <Switch>
       <Route exact path="/" component={ProteinSearchContainer} />

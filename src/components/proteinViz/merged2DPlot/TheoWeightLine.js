@@ -4,16 +4,16 @@ import React, {
 import PropTypes from 'prop-types';
 
 class TheoWeightLine extends Component {
-    
+
     render() {
-        const { xPos, yTop } = this.props;
+        const { xPos, yTop, height } = this.props;
 
         return <line
             className="theo-weight-line"
             x1={xPos}
             y1={yTop}
             x2={xPos}
-            y2={0}
+            y2={ height ? height : 0 }
         />
 
     }
@@ -21,7 +21,8 @@ class TheoWeightLine extends Component {
 
 TheoWeightLine.propTypes = {
     xPos: PropTypes.number.isRequired,
-    yTop: PropTypes.number.isRequired
+    yTop: PropTypes.number.isRequired,
+    height: PropTypes.number
 };
 
 export default (TheoWeightLine);

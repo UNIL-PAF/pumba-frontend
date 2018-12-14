@@ -27,6 +27,27 @@
   to { transform: rotate(360deg); }
 }
 
+#root {
+  height: 100%;
+  width: 100%;
+}
+
+#routes {
+  height: 100%;
+  width: 100%;
+}
+
+#protein-viz {
+  height: calc(100% - 60px);
+  width: 100%;
+  /*padding-bottom: 60px;*/
+}
+
+#merged-2d-plot {
+  height: 100%;
+  width: 100%;
+}
+
 /***********************************/
 /*** Merged2DPlot
 

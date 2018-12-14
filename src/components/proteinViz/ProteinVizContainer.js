@@ -3,15 +3,15 @@ import React, {
 } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import Merged2DPlot from "./merged2DPlot/Merged2DPlot";
+import Merged2DContainer from "./merged2DPlot/Merged2DContainer";
 
 class ProteinVizContainer extends Component {
 
     render(){
         const {proteinData} = this.props
 
-        return <div>
-            { proteinData && <Merged2DPlot proteinData={proteinData} width={800} height={300}/> }
+        return <div id={"protein-viz"}>
+            { proteinData && <Merged2DContainer proteinData={proteinData} /> }
         </div>
     }
 

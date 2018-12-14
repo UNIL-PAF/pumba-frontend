@@ -8,13 +8,14 @@ import { axisLeft, axisBottom } from 'd3-axis';
 import { select } from 'd3-selection';
 import { sampleColor, lightSampleColor } from '../../common/colorSettings'
 import TheoWeightLine from './TheoWeightLine'
+import Merged2DLegends from './Merged2DLegends'
 
 
 class Merged2DPlot extends Component {
 
     constructor(props) {
         super(props)
-        const {proteinData} = this.props
+        const {proteinData } = this.props
 
         const minMolWeightDa = Math.pow(10, _.min(_.map(proteinData, function(p){
             return p.theoMergedProtein.theoMolWeights[0]
@@ -38,8 +39,8 @@ class Merged2DPlot extends Component {
         const theoMolWeight = Math.log10(proteinData[0].proteins[0].theoMolWeight)
 
         this.state = {
-            xScale: scaleLinear().range([0, this.props.width - this.margin.left - this.margin.right]).domain([marginMin, marginMax]),
-            yScale: scaleLinear().range([this.props.height - this.margin.top - this.margin.bottom, 0]).domain([0, maxInt]),
+            xScale: scaleLinear().range([0, this.props.viewWidth - this.margin.left - this.margin.right]).domain([marginMin, marginMax]),
+            yScale: scaleLinear().range([this.props.viewHeight - this.margin.top - this.margin.bottom, 0]).domain([0, maxInt]),
             theoMolWeight: theoMolWeight
         }
 
@@ -54,6 +55,7 @@ class Merged2DPlot extends Component {
         select(this.xAxis).call(xAxis)
 
         const yAxis = axisLeft(this.state.yScale)
+            .tickFormat((d) => { return d.toExponential() })
 
         select(this.yAxis)
             .call(yAxis)
@@ -77,26 +79,27 @@ class Merged2DPlot extends Component {
         return res
     }
 
-    plotSliceBars = (proteins, idx) => {
-        const lightSampleCol = lightSampleColor(idx)
+    plotSliceBars = (proteins, idx, mouseOverReplId) => {
+        const col = sampleColor(idx)
 
-        return <g key={"splice-bars-"+idx}>
-            {_.map(proteins, (p, i) => {
-                return this.plotOneProtein(p, lightSampleCol, "splice-bar-"+idx+"-"+i+"-")
+        return  <g key={"slice-bars-"+idx}>
+            {_.map(proteins.proteins, (p, i) => {
+                const highlight = (i === mouseOverReplId)
+                return this.plotOneProtein(p, col, "slice-bar-"+idx+"-"+i+"-", highlight)
             })}
         </g>
     }
 
-    plotOneProtein = (protein, color, keyName) => {
+    plotOneProtein = (protein, color, keyName, highlight) => {
         const massFits = protein.dataSet.massFitResult.massFits
         const ints = protein.intensities
 
         return _.map(_.zip(massFits, ints), (x, i) => {
-            return this.plotOneSlice(x[0], x[1], color, keyName+i)
+            return this.plotOneSlice(x[0], x[1], color, keyName+i, highlight)
         })
     }
 
-    plotOneSlice = (mass, int, color, keyName) => {
+    plotOneSlice = (mass, int, color, keyName, highlight) => {
         const xPos = this.state.xScale(mass)
 
         return <line
@@ -106,14 +109,14 @@ class Merged2DPlot extends Component {
             x2={xPos}
             y2={this.state.yScale(int)}
             stroke={color}
-            strokeWidth={1}
+            strokeWidth={ highlight ? 3 : 1 }
         />
     }
 
-    plotProteinMerges = (proteinData) => {
+    plotProteinMerges = (proteinData, mouseOverSampleId, mouseOverReplId) => {
         return <g>
-            { _.map(proteinData, (p, i) => this.plotSliceBars(p.proteins, i)) }
-            { _.map(proteinData, (p, i) => this.plotOneProteinMerge(p.theoMergedProtein, i)) }
+            { _.map(proteinData, (p, i) => this.plotOneProteinMerge(p.theoMergedProtein, i, mouseOverSampleId)) }
+            { mouseOverSampleId !== undefined && this.plotSliceBars(proteinData[mouseOverSampleId], mouseOverSampleId, mouseOverReplId)}
         </g>
     }
 
@@ -125,34 +128,50 @@ class Merged2DPlot extends Component {
     }
 
     render() {
-        const {proteinData, width, height} = this.props
+        const {proteinData, viewWidth, viewHeight, samples, mouseOverSampleId, mouseOverSampleCB, mouseOverReplId, mouseOverReplCB} = this.props
         const {theoMolWeight, xScale} = this.state
 
-        return <div>
+        return <div id={"merged-2d-plot"}>
             <svg className="merged-2d-svg"
-                 viewBox={`0 0 ${width} ${height}`}
-                 position="fixed"
+                 viewBox={`0 0 ${viewWidth} ${viewHeight}`}
                  width="100%"
                  height="100%"
                  ref={r => this.svg = r}
+                position="fixed"
+                 //preserveAspectRatio='none'
             >
                 <g className="y-axis" ref={r => this.yAxis = r}
                    transform={'translate(' + this.margin.left + ',' + this.margin.top + ')'}/>
                 <g className="x-axis" ref={r => this.xAxis = r}
-                   transform={'translate(' + this.margin.left + ',' + (height - this.margin.bottom) + ')'}/>
+                   transform={'translate(' + this.margin.left + ',' + (viewHeight - this.margin.bottom) + ')'}/>
+
                 <g className="merged-2d-main-g" transform={'translate(' + this.margin.left + ',' + this.margin.top + ')'}>
-                    <TheoWeightLine xPos={xScale(theoMolWeight)} yTop={height}></TheoWeightLine>
-                    {this.plotProteinMerges(proteinData)}
+
+                    <TheoWeightLine xPos={xScale(theoMolWeight)} yTop={viewHeight}></TheoWeightLine>
+
+                    {this.plotProteinMerges(proteinData, mouseOverSampleId, mouseOverReplId)}
+
+                    <Merged2DLegends x={viewWidth-150} y={20} width={100} samples={samples}
+                                     mouseOverSampleId={mouseOverSampleId} mouseOverSampleCB={mouseOverSampleCB}
+                                     mouseOverReplId={mouseOverReplId} mouseOverReplCB={mouseOverReplCB}>
+                    </Merged2DLegends>
                 </g>
-            </svg></div>
+
+            </svg>
+        </div>
     }
 
 }
 
 Merged2DPlot.propTypes = {
     proteinData: PropTypes.array.isRequired,
-    width: PropTypes.number.isRequired,
-    height: PropTypes.number.isRequired
+    viewWidth: PropTypes.number.isRequired,
+    viewHeight: PropTypes.number.isRequired,
+    samples: PropTypes.array.isRequired,
+    mouseOverSampleCB: PropTypes.func.isRequired,
+    mouseOverReplCB: PropTypes.func.isRequired,
+    mouseOverSampleId: PropTypes.number,
+    mouseOverReplId: PropTypes.number
 };
 
 export default Merged2DPlot
