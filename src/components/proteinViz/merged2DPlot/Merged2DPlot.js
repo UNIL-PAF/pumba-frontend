@@ -82,24 +82,24 @@ class Merged2DPlot extends Component {
     plotSliceBars = (proteins, idx, mouseOverReplId) => {
         const col = sampleColor(idx)
 
+        console.log(proteins.proteins)
+        console.log(mouseOverReplId)
+
         return  <g key={"slice-bars-"+idx}>
-            {_.map(proteins.proteins, (p, i) => {
-                const highlight = (i === mouseOverReplId)
-                return this.plotOneProtein(p, col, "slice-bar-"+idx+"-"+i+"-", highlight)
-            })}
+            { this.plotOneProtein(proteins.proteins[mouseOverReplId], col, "slice-bar-"+idx+"-") }
         </g>
     }
 
-    plotOneProtein = (protein, color, keyName, highlight) => {
+    plotOneProtein = (protein, color, keyName) => {
         const massFits = protein.dataSet.massFitResult.massFits
         const ints = protein.intensities
 
         return _.map(_.zip(massFits, ints), (x, i) => {
-            return this.plotOneSlice(x[0], x[1], color, keyName+i, highlight)
+            return this.plotOneSlice(x[0], x[1], color, keyName+i)
         })
     }
 
-    plotOneSlice = (mass, int, color, keyName, highlight) => {
+    plotOneSlice = (mass, int, color, keyName) => {
         const xPos = this.state.xScale(mass)
 
         return <line
@@ -109,14 +109,14 @@ class Merged2DPlot extends Component {
             x2={xPos}
             y2={this.state.yScale(int)}
             stroke={color}
-            strokeWidth={ highlight ? 3 : 1 }
+            strokeWidth={ 3 }
         />
     }
 
     plotProteinMerges = (proteinData, mouseOverSampleId, mouseOverReplId) => {
         return <g>
             { _.map(proteinData, (p, i) => this.plotOneProteinMerge(p.theoMergedProtein, i, mouseOverSampleId)) }
-            { mouseOverSampleId !== undefined && this.plotSliceBars(proteinData[mouseOverSampleId], mouseOverSampleId, mouseOverReplId)}
+            { mouseOverReplId !== undefined && this.plotSliceBars(proteinData[mouseOverSampleId], mouseOverSampleId, mouseOverReplId)}
         </g>
     }
 
@@ -151,7 +151,7 @@ class Merged2DPlot extends Component {
 
                     {this.plotProteinMerges(proteinData, mouseOverSampleId, mouseOverReplId)}
 
-                    <Merged2DLegends x={viewWidth-150} y={20} width={100} samples={samples}
+                    <Merged2DLegends x={viewWidth-200} y={20} width={150} samples={samples}
                                      mouseOverSampleId={mouseOverSampleId} mouseOverSampleCB={mouseOverSampleCB}
                                      mouseOverReplId={mouseOverReplId} mouseOverReplCB={mouseOverReplCB}>
                     </Merged2DLegends>

@@ -24,7 +24,7 @@ class Merged2DLegends extends Component {
      * plot the symbol for the theo weight line
      */
     theoMolSymbol = (x, y, height) => {
-        return <TheoWeightLine xPos={x} yTop={y} height={height}>
+        return <TheoWeightLine xPos={x} yTop={y} height={height+10}>
         </TheoWeightLine>
     }
 
@@ -95,25 +95,28 @@ class Merged2DLegends extends Component {
         const { x, y, width, samples, mouseOverSampleCB, mouseOverSampleId, mouseOverReplId, mouseOverReplCB} = this.props;
 
         const legendHeight = 20
+        const nrLegends = samples.length + (mouseOverSampleId !== undefined ? samples[mouseOverSampleId].replicates.length : 0)
+        const xShift = 10
+        const yShift = 10
 
         return <g>
             <rect
                 className="merged-legends-box"
                 x={x}
                 y={y}
-                width={width}
-                height={100}
+                width={width + 20}
+                height={nrLegends * legendHeight + 40}
                 fill={"white"}
                 stroke={"grey"}
                 strokeWidth={1}
             />
 
             <LegendField
-                x={x} y={y} width={width} height={legendHeight}
+                x={x + xShift} y={y+yShift} width={width} height={legendHeight}
                 text={"Theo Mol Weight"} legend={this.theoMolSymbol}>
             </LegendField>
 
-            <g>{_.map(samples, (s) => this.plotSample(s, x, y, width, legendHeight, mouseOverSampleCB, mouseOverSampleId, mouseOverReplId, mouseOverReplCB))
+            <g>{_.map(samples, (s) => this.plotSample(s, x+xShift, y+yShift, width, legendHeight, mouseOverSampleCB, mouseOverSampleId, mouseOverReplId, mouseOverReplCB))
             })}</g>
 
         </g>
