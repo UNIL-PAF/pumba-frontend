@@ -82,9 +82,6 @@ class Merged2DPlot extends Component {
     plotSliceBars = (proteins, idx, mouseOverReplId) => {
         const col = sampleColor(idx)
 
-        console.log(proteins.proteins)
-        console.log(mouseOverReplId)
-
         return  <g key={"slice-bars-"+idx}>
             { this.plotOneProtein(proteins.proteins[mouseOverReplId], col, "slice-bar-"+idx+"-") }
         </g>
@@ -128,7 +125,7 @@ class Merged2DPlot extends Component {
     }
 
     render() {
-        const {proteinData, viewWidth, viewHeight, samples, mouseOverSampleId, mouseOverSampleCB, mouseOverReplId, mouseOverReplCB} = this.props
+        const {proteinData, viewWidth, viewHeight, samples, mouseOverSampleId, mouseOverSampleCB, mouseOverReplId, mouseOverReplCB, mouseLeaveSampleCB} = this.props
         const {theoMolWeight, xScale} = this.state
 
         return <div id={"merged-2d-plot"}>
@@ -144,6 +141,9 @@ class Merged2DPlot extends Component {
                    transform={'translate(' + this.margin.left + ',' + this.margin.top + ')'}/>
                 <g className="x-axis" ref={r => this.xAxis = r}
                    transform={'translate(' + this.margin.left + ',' + (viewHeight - this.margin.bottom) + ')'}/>
+
+                <rect x={0} y={0} width={viewWidth} height={viewHeight} fill={"white"} onMouseEnter={() => mouseLeaveSampleCB()}>
+                </rect>
 
                 <g className="merged-2d-main-g" transform={'translate(' + this.margin.left + ',' + this.margin.top + ')'}>
 
@@ -170,6 +170,7 @@ Merged2DPlot.propTypes = {
     samples: PropTypes.array.isRequired,
     mouseOverSampleCB: PropTypes.func.isRequired,
     mouseOverReplCB: PropTypes.func.isRequired,
+    mouseLeaveSampleCB: PropTypes.func.isRequired,
     mouseOverSampleId: PropTypes.number,
     mouseOverReplId: PropTypes.number
 };

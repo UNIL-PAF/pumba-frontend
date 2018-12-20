@@ -5,12 +5,12 @@ import * as _ from 'lodash';
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Merged2DPlot from "./Merged2DPlot";
-import {mouseOverSample, mouseOverRepl} from "../../../actions/sampleSelection";
+import {mouseOverSample, mouseOverRepl, mouseLeaveSample} from "../../../actions/sampleSelection";
 
 class Merged2DContainer extends Component {
 
     render(){
-        const {proteinData, mouseOverSampleId, mouseOverSampleCB, mouseOverReplId, mouseOverReplCB} = this.props
+        const {proteinData, mouseOverSampleId, mouseOverSampleCB, mouseOverReplId, mouseOverReplCB, mouseLeaveSampleCB} = this.props
 
         const samples = _.map(proteinData, (p, i) => {
             const replicates = _.map(p.proteins, (oneProt, i) => {
@@ -21,7 +21,7 @@ class Merged2DContainer extends Component {
 
         return <Merged2DPlot proteinData={proteinData} samples={samples} viewWidth={800} viewHeight={400}
                              mouseOverSampleId={mouseOverSampleId} mouseOverSampleCB={mouseOverSampleCB}
-                             mouseOverReplId={mouseOverReplId} mouseOverReplCB={mouseOverReplCB}/>
+                             mouseOverReplId={mouseOverReplId} mouseOverReplCB={mouseOverReplCB} mouseLeaveSampleCB={mouseLeaveSampleCB}/>
     }
 
 }
@@ -31,7 +31,8 @@ Merged2DContainer.propTypes = {
     mouseOverSampleId: PropTypes.number,
     mouseOverReplId: PropTypes.number,
     mouseOverSampleCB: PropTypes.func.isRequired,
-    mouseOverReplCB: PropTypes.func.isRequired
+    mouseOverReplCB: PropTypes.func.isRequired,
+    mouseLeaveSampleCB: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => {
@@ -49,6 +50,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         mouseOverReplCB: replIdx => {
             dispatch(mouseOverRepl(replIdx))
+        },
+        mouseLeaveSampleCB: () => {
+            dispatch(mouseLeaveSample())
         }
     }
 }

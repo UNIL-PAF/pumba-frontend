@@ -91,6 +91,8 @@ class Merged2DLegends extends Component {
         return res
     }
 
+    dummy = () => {console.log("yoho")}
+
     render() {
         const { x, y, width, samples, mouseOverSampleCB, mouseOverSampleId, mouseOverReplId, mouseOverReplCB} = this.props;
 
