@@ -122,7 +122,7 @@ class Merged2DPlot extends Component {
         const highlight = (this.props.mouseOverSampleId === idx)
 
         return <polyline key={"prot-merge-" + idx} points={this.theoPosString(proteinMerge)}
-                      stroke={sampleCol} fill="transparent" strokeWidth={ highlight ? "1" : "0.5" }/>
+                      stroke={sampleCol} fill="transparent" strokeWidth={ highlight ? "1.2" : "0.7" }/>
     }
 
     render() {
@@ -136,7 +136,7 @@ class Merged2DPlot extends Component {
                  width="100%"
                  height="100%"
                  ref={r => this.svg = r}
-                position="fixed"
+                 //position="fixed"
                  //preserveAspectRatio='none'
             >
                 <g className="y-axis" ref={r => this.yAxis = r}
