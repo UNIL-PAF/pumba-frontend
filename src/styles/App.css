@@ -95,6 +95,11 @@
   stroke-dasharray: 0.9;
   stroke-width: 1;
   stroke: green;
+  pointer-events: none;
+}
+
+.merged-plot-line {
+  pointer-events: none;
 }
 
 

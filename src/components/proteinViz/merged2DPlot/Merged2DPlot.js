@@ -105,7 +105,7 @@ class Merged2DPlot extends Component {
     }
 
     // set the margins
-    margin = {top: 10, right: 0, bottom: 30, left: 0};
+    margin = {top: 10, right: 0, bottom: 30, left: 50};
 
     /**
      * Give back a string with the positions of the merged protein points
@@ -116,7 +116,7 @@ class Merged2DPlot extends Component {
         const weightIntPairs = _.zip(theoMergedProtein.theoMolWeights, theoMergedProtein.intensities)
 
         const res = _.map(weightIntPairs, (p) => {
-          return (this.state.xScale(p[0]) + this.margin.left) + "," + this.state.yScale(p[1])
+          return (this.state.xScale(p[0]) + this.margin.left) + "," + (this.state.yScale(p[1]) + this.margin.top)
         }).join(" ")
 
         return res
@@ -131,30 +131,37 @@ class Merged2DPlot extends Component {
     }
 
     plotOneProtein = (protein, color, keyName) => {
+        const {zoomLeft, zoomRight} = this.props
+
         const massFits = protein.dataSet.massFitResult.massFits
         const ints = protein.intensities
 
-        return _.map(_.zip(massFits, ints), (x, i) => {
+        // filter out entries which are not in the visual range
+        const slices = _.zip(massFits, ints)
+        const fltSlices = _.filter(slices, (s) => {
+            return s[0] >= zoomLeft && s[0] <= zoomRight
+        })
+
+        return _.map(fltSlices, (x, i) => {
             return this.plotOneSlice(x[0], x[1], color, keyName+i)
         })
     }
 
     plotOneSlice = (mass, int, color, keyName) => {
-        const xPos = this.state.xScale(mass)
+        const xPos = this.state.xScale(mass) + this.margin.left
 
         return <line
             key={keyName}
             x1={xPos}
-            y1={this.state.yScale(0)}
+            y1={this.state.yScale(0) + this.margin.top}
             x2={xPos}
-            y2={this.state.yScale(int)}
+            y2={this.state.yScale(int) + this.margin.top}
             stroke={color}
             strokeWidth={ 2 }
         />
     }
 
     plotProteinMerges = () => {
-
         const {proteinData, mouseOverSampleId, mouseOverReplId, theoMergedProteins} = this.props
 
         // theoMergedProteins contain the filtered values, based on the given zoom range
@@ -168,18 +175,25 @@ class Merged2DPlot extends Component {
     }
 
     plotOneProteinMerge = (proteinMerge, idx) => {
-
         const sampleCol = sampleColor(idx)
         const highlight = (this.props.mouseOverSampleId === idx)
 
-        return <polyline key={"prot-merge-" + idx} points={this.theoPosString(proteinMerge)}
+        return <polyline class="merged-plot-line" key={"prot-merge-" + idx} points={this.theoPosString(proteinMerge)}
                       stroke={sampleCol} fill="transparent" strokeWidth={ highlight ? "1.2" : "0.7" }/>
+    }
+
+    plotTheoMolWeightLine = () => {
+        const {theoMolWeight, xScale, zoomLeft, zoomRight} = this.state
+        const {viewHeight} = this.props
+
+        if(!zoomLeft || (theoMolWeight >= zoomLeft && theoMolWeight <= zoomRight)){
+            return <TheoWeightLine xPos={xScale(theoMolWeight) + this.margin.left} yTop={viewHeight + this.margin.top}></TheoWeightLine>
+        }
     }
 
     render() {
         const {viewWidth, viewHeight, samples, mouseOverSampleId, mouseOverSampleCB, mouseOverReplId,
             mouseOverReplCB, mouseLeaveSampleCB, mouseLeaveReplCB, zoomLeft, zoomRight} = this.props
-        const {theoMolWeight, xScale} = this.state
 
         return <div id={"merged-2d-plot"}>
             <svg className="merged-2d-svg"
@@ -197,7 +211,7 @@ class Merged2DPlot extends Component {
 
                 <g className="merged-2d-main-g" transform={'translate(' + this.margin.left + ',' + this.margin.top + ')'}>
 
-                    <TheoWeightLine xPos={xScale(theoMolWeight)} yTop={viewHeight}></TheoWeightLine>
+                    {this.plotTheoMolWeightLine()}
 
                     {this.plotProteinMerges()}
 
