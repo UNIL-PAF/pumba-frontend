@@ -139,13 +139,13 @@ class Merged2DPlot extends Component {
                  //position="fixed"
                  //preserveAspectRatio='none'
             >
+                <rect x={0} y={0} width={viewWidth} height={viewHeight} fill={"white"} onMouseEnter={() => mouseLeaveSampleCB()}>
+                </rect>
+
                 <g className="y-axis" ref={r => this.yAxis = r}
                    transform={'translate(' + this.margin.left + ',' + this.margin.top + ')'}/>
                 <g className="x-axis" ref={r => this.xAxis = r}
                    transform={'translate(' + this.margin.left + ',' + (viewHeight - this.margin.bottom) + ')'}/>
-
-                <rect x={0} y={0} width={viewWidth} height={viewHeight} fill={"white"} onMouseEnter={() => mouseLeaveSampleCB()}>
-                </rect>
 
                 <g className="merged-2d-main-g" transform={'translate(' + this.margin.left + ',' + this.margin.top + ')'}>
 
