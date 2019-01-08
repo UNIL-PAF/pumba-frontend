@@ -118,6 +118,8 @@ class Merged2DLegends extends Component {
                 className="merged-legends-box"
                 x={x}
                 y={y}
+                rx={5}
+                ry={5}
                 width={width + 20}
                 height={nrLegends * legendHeight + 40}
                 fill={"white"}

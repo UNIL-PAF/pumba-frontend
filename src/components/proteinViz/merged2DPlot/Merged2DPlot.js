@@ -1,11 +1,12 @@
 import React, {
     Component,
-} from 'react';
-import PropTypes from 'prop-types';
-import { scaleLinear } from 'd3-scale';
-import * as _ from 'lodash';
-import { axisLeft, axisBottom } from 'd3-axis';
-import { select } from 'd3-selection';
+} from 'react'
+import PropTypes from 'prop-types'
+import { scaleLinear } from 'd3-scale'
+import * as _ from 'lodash'
+import { axisLeft, axisBottom } from 'd3-axis'
+import { brushX } from 'd3-brush'
+import { select, event } from 'd3-selection'
 import { sampleColor, lightSampleColor } from '../../common/colorSettings'
 import TheoWeightLine from './TheoWeightLine'
 import Merged2DLegends from './Merged2DLegends'
@@ -26,8 +27,8 @@ class Merged2DPlot extends Component {
             return theoMolWeights[theoMolWeights.length - 1]
         })))
 
-        const marginMin = Math.log10(minMolWeightDa - 1)
-        const marginMax = Math.log10(maxMolWeightDa + 10)
+        this.marginMin = Math.log10(minMolWeightDa - 1)
+        this.marginMax = Math.log10(maxMolWeightDa + 10)
 
         const maxInt = _.max(_.map(proteinData, function(pd){
             return _.max(_.map(pd.proteins, function(p){
@@ -39,13 +40,33 @@ class Merged2DPlot extends Component {
         const theoMolWeight = Math.log10(proteinData[0].proteins[0].theoMolWeight)
 
         this.state = {
-            xScale: scaleLinear().range([0, this.props.viewWidth - this.margin.left - this.margin.right]).domain([marginMin, marginMax]),
+            xScale: scaleLinear().range([0, this.props.viewWidth - this.margin.left - this.margin.right]).domain([this.marginMin, this.marginMax]),
             yScale: scaleLinear().range([this.props.viewHeight - this.margin.top - this.margin.bottom, 0]).domain([0, maxInt]),
             theoMolWeight: theoMolWeight
         }
 
     }
 
+    brushend = () => {
+        // look for a d3 event
+        var s = event.selection;
+        if(s){
+
+            // if there is an event we take its coordinates and remove the margin
+            const newDomain = _.map(s, (x) => { return this.state.xScale.invert(x - this.margin.left) })
+
+            // dispatch the new zoom
+            this.props.changeZoomRangeCB(newDomain[0], newDomain[1])
+
+            // remove the brush area
+            this.brushG.call(brushX().move, null)
+        }
+    }
+
+    zoomOut = () => {
+        // reset the original zoom
+        this.props.changeZoomRangeCB(this.marginMin, this.marginMax)
+    }
 
     componentDidMount(){
         // add the x-axis
@@ -59,10 +80,32 @@ class Merged2DPlot extends Component {
 
         select(this.yAxis)
             .call(yAxis)
+
+        setTimeout( () => this.brushG.call(brushX(this.state.xScale).on('end', this.brushend)) )
+    }
+
+    componentDidUpdate(){
+        const {zoomLeft, zoomRight} = this.props
+
+        // we only update the axis and stuff if the zoom changed
+        if(zoomLeft && this.state.zoomLeft !== zoomLeft && this.state.zoomRight !== zoomRight){
+            // change the scale after zooming
+            this.state.xScale.domain([zoomLeft, zoomRight]);
+
+            // update x-axis
+            const xAxis = axisBottom(this.state.xScale)
+                .tickFormat((d) => { return Math.round(Math.pow(10,d)) + ' kDa'; })
+
+            select(this.xAxis).call(xAxis)
+
+            // remember the current zoom state
+            this.setState({zoomLeft: zoomLeft, zoomRight: zoomRight})
+        }
+
     }
 
     // set the margins
-    margin = {top: 5, right: 10, bottom: 30, left: 40};
+    margin = {top: 10, right: 0, bottom: 30, left: 0};
 
     /**
      * Give back a string with the positions of the merged protein points
@@ -73,7 +116,7 @@ class Merged2DPlot extends Component {
         const weightIntPairs = _.zip(theoMergedProtein.theoMolWeights, theoMergedProtein.intensities)
 
         const res = _.map(weightIntPairs, (p) => {
-          return this.state.xScale(p[0]) + "," + this.state.yScale(p[1])
+          return (this.state.xScale(p[0]) + this.margin.left) + "," + this.state.yScale(p[1])
         }).join(" ")
 
         return res
@@ -110,14 +153,22 @@ class Merged2DPlot extends Component {
         />
     }
 
-    plotProteinMerges = (proteinData, mouseOverSampleId, mouseOverReplId) => {
+    plotProteinMerges = () => {
+
+        const {proteinData, mouseOverSampleId, mouseOverReplId, theoMergedProteins} = this.props
+
+        // theoMergedProteins contain the filtered values, based on the given zoom range
+        // they were filtered in the merged2DPlotActions
+        const mergedData = (theoMergedProteins) ? theoMergedProteins : proteinData
+
         return <g>
-            { _.map(proteinData, (p, i) => this.plotOneProteinMerge(p.theoMergedProtein, i, mouseOverSampleId)) }
+            { _.map(mergedData, (p, i) => this.plotOneProteinMerge(p.theoMergedProtein, i, mouseOverSampleId)) }
             { mouseOverReplId !== undefined && this.plotSliceBars(proteinData[mouseOverSampleId], mouseOverSampleId, mouseOverReplId)}
         </g>
     }
 
     plotOneProteinMerge = (proteinMerge, idx) => {
+
         const sampleCol = sampleColor(idx)
         const highlight = (this.props.mouseOverSampleId === idx)
 
@@ -126,8 +177,8 @@ class Merged2DPlot extends Component {
     }
 
     render() {
-        const {proteinData, viewWidth, viewHeight, samples, mouseOverSampleId, mouseOverSampleCB, mouseOverReplId,
-            mouseOverReplCB, mouseLeaveSampleCB, mouseLeaveReplCB} = this.props
+        const {viewWidth, viewHeight, samples, mouseOverSampleId, mouseOverSampleCB, mouseOverReplId,
+            mouseOverReplCB, mouseLeaveSampleCB, mouseLeaveReplCB, zoomLeft, zoomRight} = this.props
         const {theoMolWeight, xScale} = this.state
 
         return <div id={"merged-2d-plot"}>
@@ -139,19 +190,22 @@ class Merged2DPlot extends Component {
                  //position="fixed"
                  //preserveAspectRatio='none'
             >
-                <rect x={0} y={0} width={viewWidth} height={viewHeight} fill={"white"} onMouseEnter={() => mouseLeaveSampleCB()}>
-                </rect>
 
-                <g className="y-axis" ref={r => this.yAxis = r}
-                   transform={'translate(' + this.margin.left + ',' + this.margin.top + ')'}/>
-                <g className="x-axis" ref={r => this.xAxis = r}
-                   transform={'translate(' + this.margin.left + ',' + (viewHeight - this.margin.bottom) + ')'}/>
+                <g className="brush-g" ref={r => this.brushG = select(r)} onDoubleClick={this.zoomOut}
+                   onMouseEnter={() => mouseLeaveSampleCB()}
+                   transform={'translate(' + this.margin.left + ',' + this.margin.top + ')'}/> }
 
                 <g className="merged-2d-main-g" transform={'translate(' + this.margin.left + ',' + this.margin.top + ')'}>
 
                     <TheoWeightLine xPos={xScale(theoMolWeight)} yTop={viewHeight}></TheoWeightLine>
 
-                    {this.plotProteinMerges(proteinData, mouseOverSampleId, mouseOverReplId)}
+                    {this.plotProteinMerges()}
+
+                    <g className="y-axis" ref={r => this.yAxis = r}
+                       transform={'translate(' + this.margin.left + ',' + this.margin.top + ')'}/>
+
+                    <g className="x-axis" ref={r => this.xAxis = r}
+                       transform={'translate(' + this.margin.left + ',' + (viewHeight - this.margin.bottom) + ')'}/>
 
                     <Merged2DLegends x={viewWidth-200} y={20} width={150} samples={samples}
                                      mouseOverSampleId={mouseOverSampleId} mouseOverSampleCB={mouseOverSampleCB}
@@ -168,6 +222,7 @@ class Merged2DPlot extends Component {
 
 Merged2DPlot.propTypes = {
     proteinData: PropTypes.array.isRequired,
+    theoMergedProteins: PropTypes.array,
     viewWidth: PropTypes.number.isRequired,
     viewHeight: PropTypes.number.isRequired,
     samples: PropTypes.array.isRequired,
@@ -176,7 +231,10 @@ Merged2DPlot.propTypes = {
     mouseLeaveSampleCB: PropTypes.func.isRequired,
     mouseLeaveReplCB: PropTypes.func.isRequired,
     mouseOverSampleId: PropTypes.number,
-    mouseOverReplId: PropTypes.number
+    mouseOverReplId: PropTypes.number,
+    changeZoomRangeCB: PropTypes.func.isRequired,
+    zoomLeft: PropTypes.number,
+    zoomRight: PropTypes.number
 };
 
 export default Merged2DPlot
