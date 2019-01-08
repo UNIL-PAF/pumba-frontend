@@ -105,7 +105,7 @@ class Merged2DPlot extends Component {
     }
 
     // set the margins
-    margin = {top: 10, right: 0, bottom: 30, left: 50};
+    margin = {top: 10, right: 0, bottom: 30, left: 0};
 
     /**
      * Give back a string with the positions of the merged protein points
