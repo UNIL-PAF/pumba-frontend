@@ -125,7 +125,8 @@ class Merged2DPlot extends Component {
     }
 
     render() {
-        const {proteinData, viewWidth, viewHeight, samples, mouseOverSampleId, mouseOverSampleCB, mouseOverReplId, mouseOverReplCB, mouseLeaveSampleCB} = this.props
+        const {proteinData, viewWidth, viewHeight, samples, mouseOverSampleId, mouseOverSampleCB, mouseOverReplId,
+            mouseOverReplCB, mouseLeaveSampleCB, mouseLeaveReplCB} = this.props
         const {theoMolWeight, xScale} = this.state
 
         return <div id={"merged-2d-plot"}>
@@ -153,7 +154,8 @@ class Merged2DPlot extends Component {
 
                     <Merged2DLegends x={viewWidth-200} y={20} width={150} samples={samples}
                                      mouseOverSampleId={mouseOverSampleId} mouseOverSampleCB={mouseOverSampleCB}
-                                     mouseOverReplId={mouseOverReplId} mouseOverReplCB={mouseOverReplCB}>
+                                     mouseOverReplId={mouseOverReplId} mouseOverReplCB={mouseOverReplCB}
+                                     mouseLeaveReplCB={mouseLeaveReplCB} mouseLeaveSampleCB={mouseLeaveSampleCB}>
                     </Merged2DLegends>
                 </g>
 
@@ -171,6 +173,7 @@ Merged2DPlot.propTypes = {
     mouseOverSampleCB: PropTypes.func.isRequired,
     mouseOverReplCB: PropTypes.func.isRequired,
     mouseLeaveSampleCB: PropTypes.func.isRequired,
+    mouseLeaveReplCB: PropTypes.func.isRequired,
     mouseOverSampleId: PropTypes.number,
     mouseOverReplId: PropTypes.number
 };

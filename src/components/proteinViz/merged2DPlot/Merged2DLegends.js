@@ -33,7 +33,7 @@ class Merged2DLegends extends Component {
      */
     sampleSymbol = (x, y, height, idx, mouseOverSampleIdx) => {
         const highlight = (idx === mouseOverSampleIdx)
-        return <circle cx={x} cy={y-height/3} r={height/6} fill={sampleColor(idx)} strokeWidth={(highlight) ? 3 : 0.5} stroke={"black"}>
+        return <circle cx={x} cy={y-height/3} r={(highlight) ? height/4 : height/6} fill={sampleColor(idx)} strokeWidth={(highlight) ? 1 : 0.5} stroke={"black"}>
         </circle>
     }
 
@@ -53,9 +53,10 @@ class Merged2DLegends extends Component {
         />
     }
 
-    plotReplicate = (repl, x, y, width, height, sampleIdx, mouseOverReplId, mouseOverReplCB) => {
+    plotReplicate = (repl, x, y, height, sampleIdx) => {
         const {idx, name } = repl
         this.legendIdx = this.legendIdx + 1
+        const {mouseOverReplId, mouseOverReplCB, width} = this.props
 
        const res = <LegendField
             key={"replicate-legend-" + idx}
@@ -67,23 +68,28 @@ class Merged2DLegends extends Component {
             text={name} legend={this.replSymbol}>
         </LegendField>
 
-
-
         return res
     }
 
-    plotSample = (sample, x, y, width, height, mouseOverSampleCB, mouseOverSampleId, mouseOverReplId, mouseOverReplCB) => {
+    mouseOverSample = (sampleId) => {
+        this.props.mouseLeaveReplCB()
+        this.props.mouseOverSampleCB(sampleId)
+    }
+
+    plotSample = (sample, x, y, height) => {
+        const {width, mouseOverSampleId} = this.props
+
         const {idx, name } = sample
 
         const res =  <g key={"sample-legend-" + idx}>
                 <LegendField
-                    onMouseOver={mouseOverSampleCB}
+                    onMouseOver={this.mouseOverSample}
                     mouseOverId={mouseOverSampleId}
                     idx={idx}
                     x={x} y={y+(this.legendIdx)*height} width={width} height={height}
                     text={name} legend={this.sampleSymbol}>
                 </LegendField>
-                { (idx === mouseOverSampleId) && _.map(sample.replicates, (repl) => this.plotReplicate(repl, x, y, width, height, idx, mouseOverReplId, mouseOverReplCB)) }
+                { (idx === mouseOverSampleId) && _.map(sample.replicates, (repl) => this.plotReplicate(repl, x, y, height, idx)) }
         </g>
 
         this.legendIdx = this.legendIdx + 1
@@ -91,10 +97,16 @@ class Merged2DLegends extends Component {
         return res
     }
 
-    dummy = () => {console.log("yoho")}
+    plotTheoMolWeight = (x, y, legendHeight) => {
+        return  <LegendField
+            x={x} y={y} width={this.props.width} height={legendHeight}
+            onMouseOver={this.props.mouseLeaveSampleCB}
+            text={"Theo Mol Weight"} legend={this.theoMolSymbol}>
+        </LegendField>
+    }
 
     render() {
-        const { x, y, width, samples, mouseOverSampleCB, mouseOverSampleId, mouseOverReplId, mouseOverReplCB} = this.props;
+        const { x, y, width, samples, mouseOverSampleId} = this.props;
 
         const legendHeight = 20
         const nrLegends = samples.length + (mouseOverSampleId !== undefined ? samples[mouseOverSampleId].replicates.length : 0)
@@ -113,12 +125,9 @@ class Merged2DLegends extends Component {
                 strokeWidth={1}
             />
 
-            <LegendField
-                x={x + xShift} y={y+yShift} width={width} height={legendHeight}
-                text={"Theo Mol Weight"} legend={this.theoMolSymbol}>
-            </LegendField>
+            { this.plotTheoMolWeight(x + xShift, y+yShift, legendHeight) }
 
-            <g>{_.map(samples, (s) => this.plotSample(s, x+xShift, y+yShift, width, legendHeight, mouseOverSampleCB, mouseOverSampleId, mouseOverReplId, mouseOverReplCB))
+            <g>{_.map(samples, (s) => this.plotSample(s, x+xShift, y+yShift, legendHeight))
             })}</g>
 
         </g>
@@ -134,7 +143,9 @@ Merged2DLegends.propTypes = {
     mouseOverSampleId: PropTypes.number,
     mouseOverReplId: PropTypes.number,
     mouseOverSampleCB: PropTypes.func.isRequired,
-    mouseOverReplCB: PropTypes.func.isRequired
+    mouseOverReplCB: PropTypes.func.isRequired,
+    mouseLeaveReplCB: PropTypes.func.isRequired,
+    mouseLeaveSampleCB: PropTypes.func.isRequired
 };
 
 export default (Merged2DLegends);

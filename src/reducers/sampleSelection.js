@@ -1,5 +1,5 @@
 import {
-    MOUSE_OVER_SAMPLE, MOUSE_OVER_REPL ,MOUSE_LEAVE_SAMPLE
+    MOUSE_OVER_SAMPLE, MOUSE_OVER_REPL ,MOUSE_LEAVE_SAMPLE, MOUSE_LEAVE_REPL
 } from '../actions/sampleSelection'
 
 const initialState = {
@@ -14,6 +14,8 @@ const sampleSelectionReducer = (state = initialState, action) => {
             return { ...state, mouseOverSampleId: undefined, mouseOverReplId: undefined }
         case MOUSE_OVER_REPL:
             return { ...state, mouseOverReplId: action.replIdx }
+        case MOUSE_LEAVE_REPL:
+            return { ...state, mouseOverReplId: undefined }
         default:
             return state
     }
