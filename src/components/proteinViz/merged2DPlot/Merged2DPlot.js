@@ -106,7 +106,7 @@ class Merged2DPlot extends Component {
             x2={xPos}
             y2={this.state.yScale(int)}
             stroke={color}
-            strokeWidth={ 3 }
+            strokeWidth={ 2 }
         />
     }
 
@@ -119,9 +119,10 @@ class Merged2DPlot extends Component {
 
     plotOneProteinMerge = (proteinMerge, idx) => {
         const sampleCol = sampleColor(idx)
+        const highlight = (this.props.mouseOverSampleId === idx)
 
         return <polyline key={"prot-merge-" + idx} points={this.theoPosString(proteinMerge)}
-                      stroke={sampleCol} fill="transparent" strokeWidth="1"/>
+                      stroke={sampleCol} fill="transparent" strokeWidth={ highlight ? "1" : "0.5" }/>
     }
 
     render() {
