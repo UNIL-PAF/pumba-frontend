@@ -236,7 +236,7 @@ class Merged2DPlot extends Component {
         ></line>
             <rect
             x={mouseX - (rectWidth/2)}
-            y={viewHeight - this.margin.bottom + 2}
+            y={0}
             width={rectWidth}
             height={this.margin.bottom - this.margin.top - 4}
             fill={"white"}
@@ -247,7 +247,7 @@ class Merged2DPlot extends Component {
             ></rect>
             <text
                 x={mouseX - 18}
-                y={viewHeight - this.margin.top - 6}
+                y={11}
                 fontSize={"10px"}
                 fontFamily={"sans-serif"}
             >{Math.round(Math.pow(10, mouseWeightPos)) + " kDa"}</text>
