@@ -2,12 +2,17 @@ import React, {
     Component
 } from 'react'
 import PropTypes from 'prop-types'
+import {Input, Col, Row} from 'reactstrap'
 
 class ProteinSearchInput extends Component {
 
     render(){
         return <div>
-            <input onChange={this.props.onChange} placeholder={"A0A096LP01"}></input>
+            <Row>
+                <Col className="text-center" md={{ size: 4, offset: 4 }}>
+                    <Input type="search" onChange={this.props.onChange} placeholder={"e.g. P02786"}></Input>
+                </Col>
+            </Row>
         </div>
     }
 

@@ -4,12 +4,13 @@ import { connect } from 'react-redux'
 import {fetchProtein, gotoViz} from '../../actions/loadProtein'
 import ProteinSearchButton from "./ProteinSearchButton";
 import ProteinSearchInput from "./ProteinSearchInput";
+import {Form, FormGroup, Col, Row} from 'reactstrap'
 
 class ProteinSearchContainer extends React.Component{
 
     componentDidMount() {
         // Autoloading for testing
-        this.props.onLoadProtein("P02786")
+        // this.props.onLoadProtein("P02786")
     }
 
     componentDidUpdate() {
@@ -22,15 +23,29 @@ class ProteinSearchContainer extends React.Component{
 
     render(){
         return <div>
-            <div>{this.props.proteinIsLoading ? "loading" : "not loading"}</div>
-            <ProteinSearchInput onChange={this.onChangeInput}/>
-            <ProteinSearchButton onClick={() => this.props.onLoadProtein(this.state.searchString)} />
-            <div>{this.props.error}</div>
+            <br/>
+            <Row>
+                <Col className="text-center" md={{ size: 4, offset: 4 }}>
+                    <h2>Search for protein AC</h2>
+                </Col>
+            </Row>
+
+            <br/>
+            <br/>
+
+            <Form>
+                <FormGroup>
+                    <ProteinSearchInput onChange={this.onChangeInput}/>
+                </FormGroup>
+                <FormGroup>
+                        <ProteinSearchButton onClick={() => this.props.onLoadProtein(this.state.searchString)} disabled={this.props.proteinIsLoading} />
+                </FormGroup>
+                <div>{this.props.error}</div>
+            </Form>
         </div>
     }
 
     onChangeInput = (e) => {
-        console.log("new search string", e.target.value)
         this.setState({searchString: e.target.value})
     }
 
