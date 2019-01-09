@@ -85,7 +85,7 @@ class Merged2DPlot extends Component {
 
         // set the mouseX position
         this.brushG.on('mousemove', () => {
-            const [x, y] = mouse(this.svg)
+            const x = mouse(this.svg)[0]
             const xWithoutMargin = x - this.margin.left
             this.setState({mouseX: xWithoutMargin})
         })
@@ -260,7 +260,7 @@ class Merged2DPlot extends Component {
 
     render() {
         const {viewWidth, viewHeight, samples, mouseOverSampleId, mouseOverSampleCB, mouseOverReplId,
-            mouseOverReplCB, mouseLeaveSampleCB, mouseLeaveReplCB, zoomLeft, zoomRight} = this.props
+            mouseOverReplCB, mouseLeaveSampleCB, mouseLeaveReplCB} = this.props
 
 
         // the mol weight at the mouse position
