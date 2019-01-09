@@ -46,8 +46,6 @@ ProteinSearchContainer.propTypes = {
 };
 
 const mapStateToProps = (state) => {
-    console.log(state.loadProtein.proteinData)
-
     const props = {
         proteinIsLoading: state.loadProtein.proteinIsLoading,
         proteinData: state.loadProtein.proteinData,

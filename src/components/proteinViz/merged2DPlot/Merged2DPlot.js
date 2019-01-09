@@ -299,7 +299,8 @@ class Merged2DPlot extends Component {
                     <Merged2DLegends x={viewWidth-200} y={20} width={150} samples={samples}
                                      mouseOverSampleId={mouseOverSampleId} mouseOverSampleCB={mouseOverSampleCB}
                                      mouseOverReplId={mouseOverReplId} mouseOverReplCB={mouseOverReplCB}
-                                     mouseLeaveReplCB={mouseLeaveReplCB} mouseLeaveSampleCB={mouseLeaveSampleCB}>
+                                     mouseLeaveReplCB={mouseLeaveReplCB} mouseLeaveSampleCB={mouseLeaveSampleCB}
+                                     theoMolWeight={this.state.theoMolWeight}>
                     </Merged2DLegends>
                 </g>
 

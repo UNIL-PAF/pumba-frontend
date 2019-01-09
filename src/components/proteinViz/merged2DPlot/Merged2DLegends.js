@@ -98,10 +98,12 @@ class Merged2DLegends extends Component {
     }
 
     plotTheoMolWeight = (x, y, legendHeight) => {
+        const {width, mouseLeaveSampleCB, theoMolWeight} = this.props
+
         return  <LegendField
-            x={x} y={y} width={this.props.width} height={legendHeight}
-            onMouseOver={this.props.mouseLeaveSampleCB}
-            text={"Theo Mol Weight"} legend={this.theoMolSymbol}>
+            x={x} y={y} width={width} height={legendHeight}
+            onMouseOver={mouseLeaveSampleCB}
+            text={"Theo Mol Weight (" + Math.pow(10, theoMolWeight).toFixed(2) + " kDa)"} legend={this.theoMolSymbol}>
         </LegendField>
     }
 
@@ -147,7 +149,8 @@ Merged2DLegends.propTypes = {
     mouseOverSampleCB: PropTypes.func.isRequired,
     mouseOverReplCB: PropTypes.func.isRequired,
     mouseLeaveReplCB: PropTypes.func.isRequired,
-    mouseLeaveSampleCB: PropTypes.func.isRequired
+    mouseLeaveSampleCB: PropTypes.func.isRequired,
+    theoMolWeight: PropTypes.number.isRequired
 };
 
 export default (Merged2DLegends);
