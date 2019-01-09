@@ -6,7 +6,7 @@ import { scaleLinear } from 'd3-scale'
 import * as _ from 'lodash'
 import { axisLeft, axisBottom } from 'd3-axis'
 import { brushX } from 'd3-brush'
-import { select, event } from 'd3-selection'
+import { select, event, mouse } from 'd3-selection'
 import { sampleColor, lightSampleColor } from '../../common/colorSettings'
 import TheoWeightLine from './TheoWeightLine'
 import Merged2DLegends from './Merged2DLegends'
@@ -82,6 +82,13 @@ class Merged2DPlot extends Component {
             .call(yAxis)
 
         setTimeout( () => this.brushG.call(brushX(this.state.xScale).on('end', this.brushend)) )
+
+        // set the mouseX position
+        this.brushG.on('mousemove', () => {
+            const [x, y] = mouse(this.svg)
+            const xWithoutMargin = x - this.margin.left
+            this.setState({mouseX: xWithoutMargin})
+        })
     }
 
     componentDidUpdate(){
@@ -136,11 +143,11 @@ class Merged2DPlot extends Component {
         const massFits = protein.dataSet.massFitResult.massFits
         const ints = protein.intensities
 
-        // filter out entries which are not in the visual range
+        // filter out entries which are not in the visual range, in case a zoom was set
         const slices = _.zip(massFits, ints)
-        const fltSlices = _.filter(slices, (s) => {
+        const fltSlices = (zoomLeft) ? (_.filter(slices, (s) => {
             return s[0] >= zoomLeft && s[0] <= zoomRight
-        })
+        })) : slices;
 
         return _.map(fltSlices, (x, i) => {
             return this.plotOneSlice(x[0], x[1], color, keyName+i)
@@ -178,7 +185,7 @@ class Merged2DPlot extends Component {
         const sampleCol = sampleColor(idx)
         const highlight = (this.props.mouseOverSampleId === idx)
 
-        return <polyline class="merged-plot-line" key={"prot-merge-" + idx} points={this.theoPosString(proteinMerge)}
+        return <polyline className="merged-plot-line" key={"prot-merge-" + idx} points={this.theoPosString(proteinMerge)}
                       stroke={sampleCol} fill="transparent" strokeWidth={ highlight ? "1.2" : "0.7" }/>
     }
 
@@ -191,9 +198,69 @@ class Merged2DPlot extends Component {
         }
     }
 
+    plotMousePositionCircles = (mouseWeightPos) => {
+        const {proteinData, theoMergedProteins} = this.props
+        const mergedData = (theoMergedProteins) ? theoMergedProteins : proteinData
+        const {mouseX, yScale} = this.state
+
+        return <g>
+                {_.map(mergedData, (md, idx) => {
+                    // find the correct intensity
+                    const curveIdx = _.findIndex(md.theoMergedProtein.theoMolWeights, (x) => {
+                        return x > mouseWeightPos
+                    })
+                    const int = md.theoMergedProtein.intensities[curveIdx]
+
+                    if(typeof int !== 'undefined'){
+                        return <circle key={idx} cx={mouseX} cy={yScale(int) + this.margin.top} r={2} fill={sampleColor(idx)}></circle>
+                    }
+                })}
+            </g>
+
+    }
+
+    plotMousePositionLine = (mouseWeightPos) => {
+        const {mouseX} = this.state
+        const {viewHeight} = this.props
+        const rectWidth = 50
+
+        return <g>
+                <line
+            className={"mouse-pos-line"}
+            x1={mouseX}
+            y1={0}
+            x2={mouseX}
+            y2={viewHeight + this.margin.top}
+            stroke={"lightgrey"}
+            strokeWidth={ 0.5 }
+        ></line>
+            <rect
+            x={mouseX - (rectWidth/2)}
+            y={viewHeight - this.margin.bottom + 2}
+            width={rectWidth}
+            height={this.margin.bottom - this.margin.top - 4}
+            fill={"white"}
+            stroke={"grey"}
+            strokeWidth={1}
+            rx={3}
+            ry={3}
+            ></rect>
+            <text
+                x={mouseX - 18}
+                y={viewHeight - this.margin.top - 6}
+                fontSize={"10px"}
+                fontFamily={"sans-serif"}
+            >{Math.round(Math.pow(10, mouseWeightPos)) + " kDa"}</text>
+        </g>
+    }
+
     render() {
         const {viewWidth, viewHeight, samples, mouseOverSampleId, mouseOverSampleCB, mouseOverReplId,
             mouseOverReplCB, mouseLeaveSampleCB, mouseLeaveReplCB, zoomLeft, zoomRight} = this.props
+
+
+        // the mol weight at the mouse position
+        const mouseWeightPos = this.state.xScale.invert(this.state.mouseX)
 
         return <div id={"merged-2d-plot"}>
             <svg className="merged-2d-svg"
@@ -215,11 +282,15 @@ class Merged2DPlot extends Component {
 
                     {this.plotProteinMerges()}
 
+                    {this.plotMousePositionCircles(mouseWeightPos)}
+
                     <g className="y-axis" ref={r => this.yAxis = r}
                        transform={'translate(' + this.margin.left + ',' + this.margin.top + ')'}/>
 
                     <g className="x-axis" ref={r => this.xAxis = r}
                        transform={'translate(' + this.margin.left + ',' + (viewHeight - this.margin.bottom) + ')'}/>
+
+                    {this.plotMousePositionLine(mouseWeightPos)}
 
                     <Merged2DLegends x={viewWidth-200} y={20} width={150} samples={samples}
                                      mouseOverSampleId={mouseOverSampleId} mouseOverSampleCB={mouseOverSampleCB}

@@ -102,4 +102,11 @@
   pointer-events: none;
 }
 
+/* */
+.mouse-pos-line {
+  stroke-dasharray: 0.5;
+  stroke-width: 0.5;
+  stroke: grey;
+  pointer-events: none;
+}
 
