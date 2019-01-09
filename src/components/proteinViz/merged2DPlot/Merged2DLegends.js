@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import LegendField from './LegendField'
 import TheoWeightLine from './TheoWeightLine'
 import * as _ from 'lodash';
-import { sampleColor, lightSampleColor } from '../../common/colorSettings'
+import { sampleColor } from '../../common/colorSettings'
 
 class Merged2DLegends extends Component {
 
@@ -33,7 +33,7 @@ class Merged2DLegends extends Component {
      */
     sampleSymbol = (x, y, height, idx, mouseOverSampleIdx) => {
         const highlight = (idx === mouseOverSampleIdx)
-        return <circle cx={x} cy={y-height/3} r={(highlight) ? height/4 : height/6} fill={sampleColor(idx)} strokeWidth={(highlight) ? 1 : 0.5} stroke={"black"}>
+        return <circle cx={x} cy={y-height/3} r={(highlight) ? height/4 : height/6} fill={sampleColor(idx)} >
         </circle>
     }
 
@@ -48,8 +48,8 @@ class Merged2DLegends extends Component {
         y1={y}
         x2={x}
         y2={y-height+10}
-        stroke={ highlight ? sampleColor(sampleIdx) : lightSampleColor(sampleIdx) }
-        strokeWidth={ highlight ? 2 : 1 }
+        stroke={sampleColor(sampleIdx)}
+        strokeWidth={ highlight ? 2 : 0.5 }
         />
     }
 
@@ -110,7 +110,7 @@ class Merged2DLegends extends Component {
 
         const legendHeight = 20
         const nrLegends = samples.length + (mouseOverSampleId !== undefined ? samples[mouseOverSampleId].replicates.length : 0)
-        const xShift = 10
+        const xShift = 12
         const yShift = 10
 
         return <g>

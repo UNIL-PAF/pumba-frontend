@@ -7,7 +7,7 @@ import * as _ from 'lodash'
 import { axisLeft, axisBottom } from 'd3-axis'
 import { brushX } from 'd3-brush'
 import { select, event, mouse } from 'd3-selection'
-import { sampleColor, lightSampleColor } from '../../common/colorSettings'
+import { sampleColor } from '../../common/colorSettings'
 import TheoWeightLine from './TheoWeightLine'
 import Merged2DLegends from './Merged2DLegends'
 
@@ -133,11 +133,12 @@ class Merged2DPlot extends Component {
         const col = sampleColor(idx)
 
         return  <g key={"slice-bars-"+idx}>
-            { this.plotOneProtein(proteins.proteins[mouseOverReplId], col, "slice-bar-"+idx+"-") }
+                { _.map(proteins.proteins, (p) => { return this.plotOneProtein(p, col, "slice-bar-"+idx+"-", false) }) }
+                { mouseOverReplId !== undefined && this.plotOneProtein(proteins.proteins[mouseOverReplId], col, "slice-bar-"+idx+"-", true) }
         </g>
     }
 
-    plotOneProtein = (protein, color, keyName) => {
+    plotOneProtein = (protein, color, keyName, highlight) => {
         const {zoomLeft, zoomRight} = this.props
 
         const massFits = protein.dataSet.massFitResult.massFits
@@ -150,11 +151,11 @@ class Merged2DPlot extends Component {
         })) : slices;
 
         return _.map(fltSlices, (x, i) => {
-            return this.plotOneSlice(x[0], x[1], color, keyName+i)
+            return this.plotOneSlice(x[0], x[1], color, keyName+i, highlight)
         })
     }
 
-    plotOneSlice = (mass, int, color, keyName) => {
+    plotOneSlice = (mass, int, color, keyName, highlight) => {
         const xPos = this.state.xScale(mass) + this.margin.left
 
         return <line
@@ -164,7 +165,7 @@ class Merged2DPlot extends Component {
             x2={xPos}
             y2={this.state.yScale(int) + this.margin.top}
             stroke={color}
-            strokeWidth={ 2 }
+            strokeWidth={ highlight ? 2 : 0.5 }
         />
     }
 
@@ -177,7 +178,7 @@ class Merged2DPlot extends Component {
 
         return <g>
             { _.map(mergedData, (p, i) => this.plotOneProteinMerge(p.theoMergedProtein, i, mouseOverSampleId)) }
-            { mouseOverReplId !== undefined && this.plotSliceBars(proteinData[mouseOverSampleId], mouseOverSampleId, mouseOverReplId)}
+            { typeof mouseOverSampleId === "undefined" || this.plotSliceBars(proteinData[mouseOverSampleId], mouseOverSampleId, mouseOverReplId)}
         </g>
     }
 
@@ -224,34 +225,37 @@ class Merged2DPlot extends Component {
         const {viewHeight} = this.props
         const rectWidth = 50
 
-        return <g>
+        if(mouseX){
+            return <g>
                 <line
-            className={"mouse-pos-line"}
-            x1={mouseX}
-            y1={0}
-            x2={mouseX}
-            y2={viewHeight + this.margin.top}
-            stroke={"lightgrey"}
-            strokeWidth={ 0.5 }
-        ></line>
-            <rect
-            x={mouseX - (rectWidth/2)}
-            y={0}
-            width={rectWidth}
-            height={this.margin.bottom - this.margin.top - 4}
-            fill={"white"}
-            stroke={"grey"}
-            strokeWidth={1}
-            rx={3}
-            ry={3}
-            ></rect>
-            <text
-                x={mouseX - 18}
-                y={11}
-                fontSize={"10px"}
-                fontFamily={"sans-serif"}
-            >{Math.round(Math.pow(10, mouseWeightPos)) + " kDa"}</text>
-        </g>
+                    className={"mouse-pos-line"}
+                    x1={mouseX}
+                    y1={0}
+                    x2={mouseX}
+                    y2={viewHeight + this.margin.top}
+                    stroke={"lightgrey"}
+                    strokeWidth={ 0.5 }
+                ></line>
+                <rect
+                    x={mouseX - (rectWidth/2)}
+                    y={0}
+                    width={rectWidth}
+                    height={this.margin.bottom - this.margin.top - 4}
+                    fill={"white"}
+                    stroke={"grey"}
+                    strokeWidth={1}
+                    rx={3}
+                    ry={3}
+                ></rect>
+                <text
+                    x={mouseX - 18}
+                    y={11}
+                    fontSize={"10px"}
+                    fontFamily={"sans-serif"}
+                >{Math.round(Math.pow(10, mouseWeightPos)) + " kDa"}</text>
+            </g>
+        }
+
     }
 
     render() {

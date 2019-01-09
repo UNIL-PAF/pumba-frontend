@@ -1,7 +1,6 @@
-import { schemeSet1, schemePastel1 } from 'd3-scale-chromatic';
+import { schemeCategory10 } from 'd3-scale-chromatic';
 
 // prepare the colors for the samples
-let sampleColor = (sampleIdx) => { return schemeSet1[sampleIdx] }
-let lightSampleColor = (sampleIdx) => { return schemePastel1[sampleIdx] }
+let sampleColor = (sampleIdx) => { return schemeCategory10[sampleIdx] }
 
-export { sampleColor, lightSampleColor }
+export { sampleColor }
