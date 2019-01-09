@@ -35,7 +35,7 @@ class ProteinSearchContainer extends React.Component{
 
             <Form>
                 <FormGroup>
-                    <ProteinSearchInput onChange={this.onChangeInput}/>
+                    <ProteinSearchInput onChange={this.onChangeInput} disabled={this.props.proteinIsLoading}/>
                 </FormGroup>
                 <FormGroup>
                         <ProteinSearchButton onClick={() => this.props.onLoadProtein(this.state.searchString)} disabled={this.props.proteinIsLoading} />

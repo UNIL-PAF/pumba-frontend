@@ -10,7 +10,7 @@ class ProteinSearchInput extends Component {
         return <div>
             <Row>
                 <Col className="text-center" md={{ size: 4, offset: 4 }}>
-                    <Input type="search" onChange={this.props.onChange} placeholder={"e.g. P02786"}></Input>
+                    <Input type="search" onChange={this.props.onChange} placeholder={"e.g. P02786"} disabled={this.props.disabled}></Input>
                 </Col>
             </Row>
         </div>
@@ -19,7 +19,8 @@ class ProteinSearchInput extends Component {
 }
 
 ProteinSearchInput.propTypes = {
-    onChange: PropTypes.func.isRequired
+    onChange: PropTypes.func.isRequired,
+    disabled: PropTypes.bool.isRequired
 };
 
 export default ProteinSearchInput
