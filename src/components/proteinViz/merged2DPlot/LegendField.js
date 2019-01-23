@@ -40,7 +40,7 @@ class LegendField extends Component {
             />
             <text x={x+width*0.25} y={yMiddle} fontFamily="sans-serif" fontSize={defaultFontSize}>{text}</text>
             { legend(x+10, y+height-2, height+4, idx, mouseOverId, sampleIdx, isSelected) }
-            { (isSelected) && <CloseButton x={x + width} y={y + 2} onCloseCB={() => this.closeLegend(parseInt(sampleIdx), idx)}></CloseButton> }
+            { (isSelected) && <CloseButton x={x + width} y={y + 2} onCloseCB={() => this.closeLegend(parseInt(sampleIdx, 10), idx)}></CloseButton> }
         </g>
 
     }

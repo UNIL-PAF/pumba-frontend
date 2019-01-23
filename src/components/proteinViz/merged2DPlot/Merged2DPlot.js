@@ -10,6 +10,7 @@ import { select, event, mouse } from 'd3-selection'
 import { sampleColor } from '../../common/colorSettings'
 import TheoWeightLine from './TheoWeightLine'
 import Merged2DLegends from './Merged2DLegends'
+import SliceBars from "./SliceBars";
 
 
 class Merged2DPlot extends Component {
@@ -131,45 +132,6 @@ class Merged2DPlot extends Component {
         return res
     }
 
-    plotSliceBars = (proteins, idx, mouseOverReplId) => {
-        const col = sampleColor(idx)
-
-        return  <g key={idx + ':' + mouseOverReplId}>
-                { mouseOverReplId !== undefined && this.plotOneProtein(proteins.proteins[mouseOverReplId], col, "slice-bar-"+idx+"-", true) }
-        </g>
-    }
-
-    plotOneProtein = (protein, color, keyName, highlight) => {
-        const {zoomLeft, zoomRight} = this.props
-
-        const massFits = protein.dataSet.massFitResult.massFits
-        const ints = protein.intensities
-
-        // filter out entries which are not in the visual range, in case a zoom was set
-        const slices = _.zip(massFits, ints)
-        const fltSlices = (zoomLeft) ? (_.filter(slices, (s) => {
-            return s[0] >= zoomLeft && s[0] <= zoomRight
-        })) : slices;
-
-        return _.map(fltSlices, (x, i) => {
-            return this.plotOneSlice(x[0], x[1], color, keyName+i, highlight)
-        })
-    }
-
-    plotOneSlice = (mass, int, color, keyName, highlight) => {
-        const xPos = this.state.xScale(mass) + this.margin.left
-
-        return <line
-            key={keyName}
-            x1={xPos}
-            y1={this.state.yScale(0) + this.margin.top}
-            x2={xPos}
-            y2={this.state.yScale(int) + this.margin.top}
-            stroke={color}
-            strokeWidth={ highlight ? 2 : 0.5 }
-        />
-    }
-
     plotProteinMerges = () => {
         const {proteinData, mouseOverSampleId, mouseOverReplId, theoMergedProteins, clickedRepl} = this.props
 
@@ -182,6 +144,13 @@ class Merged2DPlot extends Component {
             { (typeof mouseOverSampleId === "undefined") || this.plotSliceBars(proteinData[mouseOverSampleId], mouseOverSampleId, mouseOverReplId)}
             { (clickedRepl.length === 0) || _.map(clickedRepl, (v) => {return this.plotSliceBars(proteinData[v.sampleIdx], v.sampleIdx, v.replIdx)}) }
         </g>
+    }
+
+    plotSliceBars = (proteins, sampleIdx, replIdx) => {
+        const {zoomLeft, zoomRight} = this.props
+
+        return <SliceBars sampleIdx={sampleIdx} replIdx={replIdx} margin={this.margin} xScale={this.state.xScale}
+                          yScale={this.state.yScale} zoomLeft={zoomLeft} zoomRight={zoomRight} proteins={proteins}/>
     }
 
     plotOneProteinMerge = (proteinMerge, idx) => {
