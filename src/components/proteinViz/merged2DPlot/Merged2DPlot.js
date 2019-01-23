@@ -262,7 +262,7 @@ class Merged2DPlot extends Component {
 
     render() {
         const {viewWidth, viewHeight, samples, mouseOverSampleId, mouseOverSampleCB, mouseOverReplId,
-            mouseOverReplCB, mouseLeaveSampleCB, mouseLeaveReplCB, mouseClickReplCB, clickedRepl} = this.props
+            mouseOverReplCB, mouseLeaveSampleCB, mouseLeaveReplCB, mouseClickReplCB, clickedRepl, removeSelectedReplCB} = this.props
 
 
         // the mol weight at the mouse position
@@ -303,7 +303,7 @@ class Merged2DPlot extends Component {
                                      mouseOverReplId={mouseOverReplId} mouseOverReplCB={mouseOverReplCB}
                                      mouseLeaveReplCB={mouseLeaveReplCB} mouseLeaveSampleCB={mouseLeaveSampleCB}
                                      theoMolWeight={this.state.theoMolWeight} mouseClickReplCB={mouseClickReplCB}
-                                     clickedRepl={clickedRepl}
+                                     clickedRepl={clickedRepl} removeSelectedReplCB={removeSelectedReplCB}
                     >
                     </Merged2DLegends>
                 </g>
@@ -325,6 +325,7 @@ Merged2DPlot.propTypes = {
     mouseLeaveSampleCB: PropTypes.func.isRequired,
     mouseLeaveReplCB: PropTypes.func.isRequired,
     mouseClickReplCB: PropTypes.func.isRequired,
+    removeSelectedReplCB: PropTypes.func.isRequired,
     mouseOverSampleId: PropTypes.number,
     mouseOverReplId: PropTypes.number,
     changeZoomRangeCB: PropTypes.func.isRequired,

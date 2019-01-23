@@ -3,6 +3,7 @@ export const MOUSE_OVER_REPL = 'MOUSE_OVER_REPL'
 export const MOUSE_LEAVE_SAMPLE = 'MOUSE_LEAVES_SAMPLE'
 export const MOUSE_LEAVE_REPL = 'MOUSE_LEAVE_REPL'
 export const MOUSE_CLICK_REPL = 'MOUSE_CLICK_REPL'
+export const REMOVE_REPL = 'REMOVE_REPL'
 
 export const mouseOverSample = (sampleIdx) => ({
     type: MOUSE_OVER_SAMPLE, sampleIdx: sampleIdx
@@ -22,6 +23,10 @@ export const mouseLeaveRepl = () => ({
 
 export const mouseClickRepl = (sampleIdx, replIdx) => ({
     type: MOUSE_CLICK_REPL, sampleIdx: sampleIdx, replIdx: replIdx
+})
+
+export const removeRepl = (sampleIdx, replIdx) => ({
+    type: REMOVE_REPL, sampleIdx: sampleIdx, replIdx: replIdx
 })
 
 

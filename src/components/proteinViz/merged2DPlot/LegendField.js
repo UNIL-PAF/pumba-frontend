@@ -2,6 +2,7 @@ import React, {
     Component,
 } from 'react';
 import PropTypes from 'prop-types';
+import CloseButton from '../../common/CloseButton'
 
 const defaultFontSize = "8px"
 
@@ -13,6 +14,10 @@ class LegendField extends Component {
         if(clickeablePointer){
             mouseClickReplCB(sampleIdx, idx)
         }
+    }
+
+    closeLegend = (sampleIdx, replIdx) => {
+        this.props.removeSelectedReplCB(sampleIdx, replIdx)
     }
 
 
@@ -35,6 +40,7 @@ class LegendField extends Component {
             />
             <text x={x+width*0.25} y={yMiddle} fontFamily="sans-serif" fontSize={defaultFontSize}>{text}</text>
             { legend(x+10, y+height-2, height+4, idx, mouseOverId, sampleIdx, isSelected) }
+            { (isSelected) && <CloseButton x={x + width} y={y + 2} onCloseCB={() => this.closeLegend(parseInt(sampleIdx), idx)}></CloseButton> }
         </g>
 
     }
@@ -50,6 +56,7 @@ LegendField.propTypes = {
     idx: PropTypes.number,
     onMouseOver: PropTypes.func,
     mouseClickReplCB: PropTypes.func,
+    removeSelectedReplCB: PropTypes.func,
     mouseOverId: PropTypes.number,
     sampleIdx: PropTypes.number,
     clickeablePointer: PropTypes.bool,

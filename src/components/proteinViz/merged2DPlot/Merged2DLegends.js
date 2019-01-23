@@ -6,7 +6,6 @@ import LegendField from './LegendField'
 import TheoWeightLine from './TheoWeightLine'
 import * as _ from 'lodash';
 import { sampleColor } from '../../common/colorSettings'
-import {mouseOverSample} from "../../../actions/sampleSelection";
 
 class Merged2DLegends extends Component {
 
@@ -64,7 +63,7 @@ class Merged2DLegends extends Component {
     plotReplicate = (repl, x, y, height, sampleIdx) => {
         const {idx, name } = repl
         this.legendIdx = this.legendIdx + 1
-        const {mouseOverReplId, mouseOverSampleId, width, mouseClickReplCB, clickedRepl} = this.props
+        const {mouseOverReplId, mouseOverSampleId, width, mouseClickReplCB, clickedRepl, removeSelectedReplCB} = this.props
 
         // check if it is selected
         const isSelected = _.some(clickedRepl, (x) => {return x.sampleIdx === sampleIdx && x.replIdx === idx})
@@ -73,6 +72,7 @@ class Merged2DLegends extends Component {
             key={idx}
             clickeablePointer={true}
             mouseClickReplCB={mouseClickReplCB}
+            removeSelectedReplCB={removeSelectedReplCB}
             onMouseOver={this.mouseOverReplicate}
             mouseOverId={(sampleIdx === mouseOverSampleId) ? mouseOverReplId : undefined}
             idx={idx}
@@ -167,6 +167,7 @@ Merged2DLegends.propTypes = {
     mouseLeaveReplCB: PropTypes.func.isRequired,
     mouseLeaveSampleCB: PropTypes.func.isRequired,
     mouseClickReplCB: PropTypes.func.isRequired,
+    removeSelectedReplCB: PropTypes.func.isRequired,
     theoMolWeight: PropTypes.number.isRequired,
     clickedRepl: PropTypes.array.isRequired
 };
