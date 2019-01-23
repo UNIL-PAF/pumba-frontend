@@ -102,6 +102,10 @@
   pointer-events: none;
 }
 
+.merged-sample-legend {
+  cursor: pointer;
+}
+
 /* */
 .mouse-pos-line {
   stroke-dasharray: 0.5;

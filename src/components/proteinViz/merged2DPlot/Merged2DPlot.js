@@ -16,7 +16,7 @@ class Merged2DPlot extends Component {
 
     constructor(props) {
         super(props)
-        const {proteinData } = this.props
+        const {proteinData} = this.props
 
         const minMolWeightDa = Math.pow(10, _.min(_.map(proteinData, function(p){
             return p.theoMergedProtein.theoMolWeights[0]
@@ -109,6 +109,8 @@ class Merged2DPlot extends Component {
             this.setState({zoomLeft: zoomLeft, zoomRight: zoomRight})
         }
 
+        // update scales if new data was loaded
+
     }
 
     // set the margins
@@ -132,8 +134,7 @@ class Merged2DPlot extends Component {
     plotSliceBars = (proteins, idx, mouseOverReplId) => {
         const col = sampleColor(idx)
 
-        return  <g key={"slice-bars-"+idx}>
-                { _.map(proteins.proteins, (p) => { return this.plotOneProtein(p, col, "slice-bar-"+idx+"-", false) }) }
+        return  <g key={idx + ':' + mouseOverReplId}>
                 { mouseOverReplId !== undefined && this.plotOneProtein(proteins.proteins[mouseOverReplId], col, "slice-bar-"+idx+"-", true) }
         </g>
     }
@@ -170,7 +171,7 @@ class Merged2DPlot extends Component {
     }
 
     plotProteinMerges = () => {
-        const {proteinData, mouseOverSampleId, mouseOverReplId, theoMergedProteins} = this.props
+        const {proteinData, mouseOverSampleId, mouseOverReplId, theoMergedProteins, clickedRepl} = this.props
 
         // theoMergedProteins contain the filtered values, based on the given zoom range
         // they were filtered in the merged2DPlotActions
@@ -178,7 +179,8 @@ class Merged2DPlot extends Component {
 
         return <g>
             { _.map(mergedData, (p, i) => this.plotOneProteinMerge(p.theoMergedProtein, i, mouseOverSampleId)) }
-            { typeof mouseOverSampleId === "undefined" || this.plotSliceBars(proteinData[mouseOverSampleId], mouseOverSampleId, mouseOverReplId)}
+            { (typeof mouseOverSampleId === "undefined") || this.plotSliceBars(proteinData[mouseOverSampleId], mouseOverSampleId, mouseOverReplId)}
+            { (clickedRepl.length === 0) || _.map(clickedRepl, (v) => {return this.plotSliceBars(proteinData[v.sampleIdx], v.sampleIdx, v.replIdx)}) }
         </g>
     }
 
@@ -186,7 +188,7 @@ class Merged2DPlot extends Component {
         const sampleCol = sampleColor(idx)
         const highlight = (this.props.mouseOverSampleId === idx)
 
-        return <polyline className="merged-plot-line" key={"prot-merge-" + idx} points={this.theoPosString(proteinMerge)}
+        return <polyline className="merged-plot-line" key={idx} points={this.theoPosString(proteinMerge)}
                       stroke={sampleCol} fill="transparent" strokeWidth={ highlight ? "1.2" : "0.7" }/>
     }
 
@@ -260,7 +262,7 @@ class Merged2DPlot extends Component {
 
     render() {
         const {viewWidth, viewHeight, samples, mouseOverSampleId, mouseOverSampleCB, mouseOverReplId,
-            mouseOverReplCB, mouseLeaveSampleCB, mouseLeaveReplCB} = this.props
+            mouseOverReplCB, mouseLeaveSampleCB, mouseLeaveReplCB, mouseClickReplCB, clickedRepl} = this.props
 
 
         // the mol weight at the mouse position
@@ -300,7 +302,9 @@ class Merged2DPlot extends Component {
                                      mouseOverSampleId={mouseOverSampleId} mouseOverSampleCB={mouseOverSampleCB}
                                      mouseOverReplId={mouseOverReplId} mouseOverReplCB={mouseOverReplCB}
                                      mouseLeaveReplCB={mouseLeaveReplCB} mouseLeaveSampleCB={mouseLeaveSampleCB}
-                                     theoMolWeight={this.state.theoMolWeight}>
+                                     theoMolWeight={this.state.theoMolWeight} mouseClickReplCB={mouseClickReplCB}
+                                     clickedRepl={clickedRepl}
+                    >
                     </Merged2DLegends>
                 </g>
 
@@ -320,11 +324,13 @@ Merged2DPlot.propTypes = {
     mouseOverReplCB: PropTypes.func.isRequired,
     mouseLeaveSampleCB: PropTypes.func.isRequired,
     mouseLeaveReplCB: PropTypes.func.isRequired,
+    mouseClickReplCB: PropTypes.func.isRequired,
     mouseOverSampleId: PropTypes.number,
     mouseOverReplId: PropTypes.number,
     changeZoomRangeCB: PropTypes.func.isRequired,
     zoomLeft: PropTypes.number,
-    zoomRight: PropTypes.number
+    zoomRight: PropTypes.number,
+    clickedRepl: PropTypes.array.isRequired
 };
 
 export default Merged2DPlot

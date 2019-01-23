@@ -1,5 +1,7 @@
 import fetch from 'cross-fetch'
 import pumbaConfig from '../config'
+import { mouseLeaveSample } from "./sampleSelection"
+import { changeTheoMergedProteins, changeZoomRange } from "./merged2DPlotActions"
 
 export const PROTEIN_IS_LOADED = 'PROTEIN_IS_LOADED'
 export const REQUEST_PROTEIN = 'REQUEST_PROTEIN'
@@ -20,9 +22,16 @@ export function fetchProtein(proteinId){
                 return response.json()
             })
             .then(json => {
+                    // add timestamp
+                    json.timeStamp = Date.now()
+                    console.log(json)
+
                     dispatch(addProteinData(json))
                     dispatch(proteinIsLoaded())
                     dispatch(gotoViz(true))
+                    dispatch(mouseLeaveSample())
+                    dispatch(changeTheoMergedProteins(null))
+                    dispatch(changeZoomRange(undefined, undefined))
                 }
             )
             .catch(err => {

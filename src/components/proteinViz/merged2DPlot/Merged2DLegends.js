@@ -6,6 +6,7 @@ import LegendField from './LegendField'
 import TheoWeightLine from './TheoWeightLine'
 import * as _ from 'lodash';
 import { sampleColor } from '../../common/colorSettings'
+import {mouseOverSample} from "../../../actions/sampleSelection";
 
 class Merged2DLegends extends Component {
 
@@ -24,46 +25,59 @@ class Merged2DLegends extends Component {
      * plot the symbol for the theo weight line
      */
     theoMolSymbol = (x, y, height) => {
-        return <TheoWeightLine xPos={x} yTop={y} height={height+10}>
+        return <TheoWeightLine xPos={x} yTop={y-1} height={height+10}>
         </TheoWeightLine>
     }
 
     /**
      * plot the sample dots
      */
-    sampleSymbol = (x, y, height, idx, mouseOverSampleIdx) => {
-        const highlight = (idx === mouseOverSampleIdx)
-        return <circle cx={x} cy={y-height/3} r={(highlight) ? height/4 : height/6} fill={sampleColor(idx)} >
+    sampleSymbol = (x, y, height, idx, mouseOverSampleIdx, sampleIdx) => {
+        const highlight = (sampleIdx === mouseOverSampleIdx)
+        return <circle cx={x} cy={y-height/3} r={(highlight) ? height/4 : height/6} fill={sampleColor(sampleIdx)} >
         </circle>
     }
 
     /**
      *
      */
-    replSymbol = (x, y, height, idx, mouseOverReplIdx, sampleIdx) => {
+    replSymbol = (x, y, height, idx, mouseOverReplIdx, sampleIdx, isSelected) => {
         const highlight = (idx === mouseOverReplIdx)
 
         return <line
         x1={x}
-        y1={y}
+        y1={y-2}
         x2={x}
         y2={y-height+10}
         stroke={sampleColor(sampleIdx)}
-        strokeWidth={ highlight ? 2 : 0.5 }
+        strokeWidth={ (highlight || isSelected) ? 2 : 0.5 }
         />
+    }
+
+    mouseOverReplicate = (sampleIdx, replIdx) => {
+        const {mouseOverReplCB} = this.props
+
+        this.mouseOverSample(sampleIdx)
+        mouseOverReplCB(replIdx)
     }
 
     plotReplicate = (repl, x, y, height, sampleIdx) => {
         const {idx, name } = repl
         this.legendIdx = this.legendIdx + 1
-        const {mouseOverReplId, mouseOverReplCB, width} = this.props
+        const {mouseOverReplId, mouseOverSampleId, width, mouseClickReplCB, clickedRepl} = this.props
+
+        // check if it is selected
+        const isSelected = _.some(clickedRepl, (x) => {return x.sampleIdx === sampleIdx && x.replIdx === idx})
 
        const res = <LegendField
-            key={"replicate-legend-" + idx}
-            onMouseOver={mouseOverReplCB}
-            mouseOverId={mouseOverReplId}
+            key={idx}
+            clickeablePointer={true}
+            mouseClickReplCB={mouseClickReplCB}
+            onMouseOver={this.mouseOverReplicate}
+            mouseOverId={(sampleIdx === mouseOverSampleId) ? mouseOverReplId : undefined}
             idx={idx}
             sampleIdx={sampleIdx}
+            isSelected={isSelected}
             x={x+5} y={y+(this.legendIdx)*height} width={width} height={height}
             text={name} legend={this.replSymbol}>
         </LegendField>
@@ -77,19 +91,20 @@ class Merged2DLegends extends Component {
     }
 
     plotSample = (sample, x, y, height) => {
-        const {width, mouseOverSampleId} = this.props
+        const {width, mouseOverSampleId, clickedRepl} = this.props
 
         const {idx, name } = sample
+        const isSampleSelected = _.some(clickedRepl, (x) => {return x.sampleIdx === idx})
 
-        const res =  <g key={"sample-legend-" + idx}>
+        const res =  <g key={idx}>
                 <LegendField
                     onMouseOver={this.mouseOverSample}
                     mouseOverId={mouseOverSampleId}
-                    idx={idx}
+                    sampleIdx={idx}
                     x={x} y={y+(this.legendIdx)*height} width={width} height={height}
                     text={name} legend={this.sampleSymbol}>
                 </LegendField>
-                { (idx === mouseOverSampleId) && _.map(sample.replicates, (repl) => this.plotReplicate(repl, x, y, height, idx)) }
+                { (idx === mouseOverSampleId || isSampleSelected) && _.map(sample.replicates, (repl) => this.plotReplicate(repl, x, y, height, idx)) }
         </g>
 
         this.legendIdx = this.legendIdx + 1
@@ -108,10 +123,12 @@ class Merged2DLegends extends Component {
     }
 
     render() {
-        const { x, y, width, samples, mouseOverSampleId} = this.props;
+        const { x, y, width, samples, mouseOverSampleId, clickedRepl} = this.props;
 
         const legendHeight = 20
-        const nrLegends = samples.length + (mouseOverSampleId !== undefined ? samples[mouseOverSampleId].replicates.length : 0)
+        const selectedSampleIdx = _.countBy(clickedRepl, "sampleIdx")
+        const mouseOverReplNr = (mouseOverSampleId !== undefined && (! selectedSampleIdx[mouseOverSampleId])) ? samples[mouseOverSampleId].replicates.length : 0
+        const nrLegends = samples.length + mouseOverReplNr + _.reduce(selectedSampleIdx, (res, v, k) => {return res + samples[k].replicates.length}, 0)
         const xShift = 12
         const yShift = 10
 
@@ -131,8 +148,7 @@ class Merged2DLegends extends Component {
 
             { this.plotTheoMolWeight(x + xShift, y+yShift, legendHeight) }
 
-            <g>{_.map(samples, (s) => this.plotSample(s, x+xShift, y+yShift, legendHeight))
-            })}</g>
+            <g>{_.map(samples, (s) => this.plotSample(s, x+xShift, y+yShift, legendHeight))}</g>
 
         </g>
 
@@ -150,7 +166,9 @@ Merged2DLegends.propTypes = {
     mouseOverReplCB: PropTypes.func.isRequired,
     mouseLeaveReplCB: PropTypes.func.isRequired,
     mouseLeaveSampleCB: PropTypes.func.isRequired,
-    theoMolWeight: PropTypes.number.isRequired
+    mouseClickReplCB: PropTypes.func.isRequired,
+    theoMolWeight: PropTypes.number.isRequired,
+    clickedRepl: PropTypes.array.isRequired
 };
 
 export default (Merged2DLegends);
