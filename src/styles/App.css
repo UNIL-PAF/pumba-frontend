@@ -106,6 +106,15 @@
   cursor: pointer;
 }
 
+.merged-position-circle {
+  pointer-events: none;
+}
+
+.slice-bar:hover {
+  stroke-width: 5;
+  cursor: pointer;
+}
+
 /* */
 .mouse-pos-line {
   stroke-dasharray: 0.5;

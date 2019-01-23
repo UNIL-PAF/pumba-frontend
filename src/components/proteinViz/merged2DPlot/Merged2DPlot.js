@@ -141,7 +141,7 @@ class Merged2DPlot extends Component {
 
         return <g>
             { _.map(mergedData, (p, i) => this.plotOneProteinMerge(p.theoMergedProtein, i, mouseOverSampleId)) }
-            { (typeof mouseOverSampleId === "undefined") || this.plotSliceBars(proteinData[mouseOverSampleId], mouseOverSampleId, mouseOverReplId)}
+            { typeof mouseOverReplId !== "undefined" && this.plotSliceBars(proteinData[mouseOverSampleId], mouseOverSampleId, mouseOverReplId)}
             { (clickedRepl.length === 0) || _.map(clickedRepl, (v) => {return this.plotSliceBars(proteinData[v.sampleIdx], v.sampleIdx, v.replIdx)}) }
         </g>
     }
@@ -149,7 +149,7 @@ class Merged2DPlot extends Component {
     plotSliceBars = (proteins, sampleIdx, replIdx) => {
         const {zoomLeft, zoomRight} = this.props
 
-        return <SliceBars sampleIdx={sampleIdx} replIdx={replIdx} margin={this.margin} xScale={this.state.xScale}
+        return <SliceBars key={sampleIdx + ':' + replIdx} sampleIdx={sampleIdx} replIdx={replIdx} margin={this.margin} xScale={this.state.xScale}
                           yScale={this.state.yScale} zoomLeft={zoomLeft} zoomRight={zoomRight} proteins={proteins}/>
     }
 
@@ -184,7 +184,7 @@ class Merged2DPlot extends Component {
                     const int = md.theoMergedProtein.intensities[curveIdx]
 
                     if(typeof int !== 'undefined'){
-                        return <circle key={idx} cx={mouseX} cy={yScale(int) + this.margin.top} r={2} fill={sampleColor(idx)}></circle>
+                        return <circle key={idx} className={"merged-position-circle"} cx={mouseX} cy={yScale(int) + this.margin.top} r={2} fill={sampleColor(idx)}></circle>
                     }
                 })}
             </g>
