@@ -49,6 +49,13 @@ class Peptide extends Component {
             const [x,y] = mouse(svgParent)
             this.props.clickOnPep(this.rectDom.id, x, y)
         })
+
+        setTimeout(()=>{
+            console.log("componentDidMount Peptide")
+            console.log(this.rectDom)
+            console.log(select(this.rectDom))
+
+        }, 1000)
     }
 
     render() {

@@ -5,12 +5,12 @@ import PropTypes from 'prop-types'
 import { scaleLinear } from 'd3-scale'
 import * as _ from 'lodash'
 import { axisLeft, axisBottom } from 'd3-axis'
-import { brushX } from 'd3-brush'
+import {brush, brushX} from 'd3-brush'
 import { select, event, mouse } from 'd3-selection'
 import { sampleColor } from '../../common/colorSettings'
 import TheoWeightLine from './TheoWeightLine'
 import Merged2DLegends from './Merged2DLegends'
-import SliceBars from "./SliceBars";
+import ProteinSliceBars from "./ProteinSliceBars";
 
 
 class Merged2DPlot extends Component {
@@ -149,8 +149,8 @@ class Merged2DPlot extends Component {
     plotSliceBars = (proteins, sampleIdx, replIdx) => {
         const {zoomLeft, zoomRight} = this.props
 
-        return <SliceBars key={sampleIdx + ':' + replIdx} sampleIdx={sampleIdx} replIdx={replIdx} margin={this.margin} xScale={this.state.xScale}
-                          yScale={this.state.yScale} zoomLeft={zoomLeft} zoomRight={zoomRight} proteins={proteins}/>
+        return <ProteinSliceBars key={sampleIdx + ':' + replIdx} sampleIdx={sampleIdx} replIdx={replIdx} margin={this.margin} xScale={this.state.xScale}
+                          yScale={this.state.yScale} zoomLeft={zoomLeft} zoomRight={zoomRight} proteins={proteins} svgParent={this.svg}/>
     }
 
     plotOneProteinMerge = (proteinMerge, idx) => {
@@ -255,8 +255,6 @@ class Merged2DPlot extends Component {
 
                     {this.plotTheoMolWeightLine()}
 
-                    {this.plotProteinMerges()}
-
                     {this.plotMousePositionCircles(mouseWeightPos)}
 
                     <g className="y-axis" ref={r => this.yAxis = r}
@@ -275,6 +273,8 @@ class Merged2DPlot extends Component {
                                      clickedRepl={clickedRepl} removeSelectedReplCB={removeSelectedReplCB}
                     >
                     </Merged2DLegends>
+
+                    {this.plotProteinMerges()}
                 </g>
 
             </svg>

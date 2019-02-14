@@ -123,3 +123,25 @@
   pointer-events: none;
 }
 
+/*****
+popover
+ */
+
+.pop-over.shadow {
+  fill:black
+}
+
+.pop-over {
+  fill: white;
+  fill-opacity: 0.9;
+  stroke: black;
+  stroke-width: 0.5;
+}
+
+.pop-over-title {
+  font-weight:normal;
+}
+
+.pop-over-value {
+  font-weight:bold;
+}
