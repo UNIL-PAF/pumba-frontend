@@ -16,6 +16,8 @@ import ProteinSliceBars from "./ProteinSliceBars";
 class Merged2DPlot extends Component {
 
     constructor(props) {
+        console.log("construct Merged2DPlot ? ")
+
         super(props)
         const {proteinData} = this.props
 
@@ -70,6 +72,9 @@ class Merged2DPlot extends Component {
     }
 
     componentDidMount(){
+
+        console.log("Merged2DPlot didMount ?")
+
         // add the x-axis
         const xAxis = axisBottom(this.state.xScale)
             .tickFormat((d) => { return Math.round(Math.pow(10,d)) + ' kDa'; })
@@ -90,6 +95,9 @@ class Merged2DPlot extends Component {
             const xWithoutMargin = x - this.margin.left
             this.setState({mouseX: xWithoutMargin})
         })
+
+        // we have to update after the "this.svg" has been set
+        this.forceUpdate()
     }
 
     componentDidUpdate(){
@@ -274,7 +282,7 @@ class Merged2DPlot extends Component {
                     >
                     </Merged2DLegends>
 
-                    {this.plotProteinMerges()}
+                    {this.svg && this.plotProteinMerges()}
                 </g>
 
             </svg>
