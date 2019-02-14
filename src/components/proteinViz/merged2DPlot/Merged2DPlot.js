@@ -158,7 +158,7 @@ class Merged2DPlot extends Component {
         const highlight = (this.props.mouseOverSampleId === idx)
 
         return <polyline className="merged-plot-line" key={idx} points={this.theoPosString(proteinMerge)}
-                      stroke={sampleCol} fill="transparent" strokeWidth={ highlight ? "1.2" : "0.7" }/>
+                      stroke={sampleCol} fill="transparent" strokeWidth={ highlight ? "2" : "1" }/>
     }
 
     plotTheoMolWeightLine = () => {
@@ -184,7 +184,7 @@ class Merged2DPlot extends Component {
                     const int = md.theoMergedProtein.intensities[curveIdx]
 
                     if(typeof int !== 'undefined'){
-                        return <circle key={idx} className={"merged-position-circle"} cx={mouseX} cy={yScale(int) + this.margin.top} r={2} fill={sampleColor(idx)}></circle>
+                        return <circle key={idx} className={"merged-position-circle"} cx={mouseX} cy={yScale(int) + this.margin.top} r={3} fill={sampleColor(idx)}></circle>
                     }
                 })}
             </g>

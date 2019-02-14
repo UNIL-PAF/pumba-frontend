@@ -11,7 +11,7 @@ class ProteinVizContainer extends Component {
         const {proteinData} = this.props
 
         return <div id={"protein-viz"}>
-            { proteinData && <Merged2DContainer proteinData={proteinData} /> }
+            { proteinData && <Merged2DContainer proteinData={proteinData}/> }
         </div>
     }
 
@@ -28,10 +28,5 @@ const mapStateToProps = (state) => {
     return props
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(ProteinVizContainer)
+export default connect(mapStateToProps, undefined)(ProteinVizContainer)
 

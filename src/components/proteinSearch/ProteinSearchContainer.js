@@ -10,7 +10,7 @@ class ProteinSearchContainer extends React.Component{
 
     componentDidMount() {
         // Autoloading for testing
-        // this.props.onLoadProtein("P02786")
+         this.props.onLoadProtein("P02786")
     }
 
     componentDidUpdate() {

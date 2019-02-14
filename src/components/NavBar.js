@@ -15,12 +15,17 @@ const NavBar = () => (
               <Nav className="ml-auto" navbar>
                   <NavItem>
                       <LinkContainer to="/" exact={true}>
-                          <NavLink tag={Link} to="/">Search</NavLink>
+                          <NavLink tag={Link} to="/">Search protein</NavLink>
                       </LinkContainer>
                   </NavItem>
                   <NavItem>
                       <LinkContainer to="/proteins">
-                        <NavLink tag={Link} to="/proteins">Proteins</NavLink>
+                        <NavLink tag={Link} to="/proteins">Protein view</NavLink>
+                      </LinkContainer>
+                  </NavItem>
+                  <NavItem>
+                      <LinkContainer to="/peptides">
+                          <NavLink tag={Link} to="/peptides">Peptide view</NavLink>
                       </LinkContainer>
                   </NavItem>
               </Nav>

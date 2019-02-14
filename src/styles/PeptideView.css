@@ -1,0 +1,37 @@
+.pep-x-axis {
+    font-size: 50%;
+    font-weight: lighter;
+}
+
+.pep-x-axis line {
+    stroke: #404040;
+    stroke-width: 0.5;
+}
+
+.pep-x-axis path {
+    stroke: #404040;
+    stroke-width: 0.5;
+}
+
+.pep-x-axis text {
+    fill: #404040
+}
+
+.pep-y-axis {
+    font-size: 50%;
+    font-weight: lighter;
+}
+
+.pep-y-axis line {
+    stroke: #404040;
+    stroke-width: 0.5;
+}
+
+.pep-y-axis path {
+    stroke: #404040;
+    stroke-width: 0.5;
+}
+
+.pep-y-axis text {
+    fill: #404040
+}

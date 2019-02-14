@@ -8,6 +8,7 @@ export const REQUEST_PROTEIN = 'REQUEST_PROTEIN'
 export const ADD_PROTEIN_DATA = 'ADD_PROTEIN_DATA'
 export const PROTEIN_LOAD_ERROR = 'PROTEIN_LOAD_ERROR'
 export const GOTO_VIZ = 'GOTO_VIZ'
+export const ADD_SEQUENCE_DATA = 'ADD_SEQUENCE_DATA'
 
 export function fetchProtein(proteinId){
     return function (dispatch) {
@@ -24,7 +25,11 @@ export function fetchProtein(proteinId){
             .then(json => {
                     // add timestamp
                     json.timeStamp = Date.now()
-                    console.log(json)
+                    console.log("fetchProtein", json)
+
+                    // let's take the FASTA data from the first entry (should always be OK)
+                    const dataBaseName = json[0].proteins[0].dataSet.dataBaseName
+                    dispatch(fetchSequence(proteinId, dataBaseName))
 
                     dispatch(addProteinData(json))
                     dispatch(proteinIsLoaded())
@@ -47,6 +52,31 @@ export function fetchProtein(proteinId){
     }
 }
 
+export function fetchSequence(proteinId, dataBaseName){
+    return function (dispatch){
+        return fetch(pumbaConfig.urlBackend + "/sequence/" + proteinId + "/database/" + dataBaseName)
+            .then( response => {
+                if (!response.ok) { throw response }
+                return response.json()
+            })
+            .then(json => {
+                    dispatch(addSequenceData(json))
+                }
+            )
+            .catch(err => {
+                // we have to catch error messages differently for if backend is on or off.
+                if(err.message){
+                    dispatch(proteinLoadError(err.message))
+                }else{
+                    err.text().then(message => {
+                        dispatch(proteinLoadError(err.statusText + ": " + message))
+                    })
+                }
+            })
+    }
+}
+
+
 export const addProteinData = (proteinData) => ({
     type: ADD_PROTEIN_DATA, proteinData: proteinData
 })
@@ -65,4 +95,8 @@ export const proteinLoadError = (error) => ({
 
 export const gotoViz = (gotoViz) => ({
     type: GOTO_VIZ, gotoViz: gotoViz
+})
+
+export const addSequenceData = (sequenceData) => ({
+    type: ADD_SEQUENCE_DATA, sequenceData: sequenceData
 })

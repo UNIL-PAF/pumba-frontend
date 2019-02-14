@@ -1,6 +1,6 @@
 import {
     REQUEST_PROTEIN, PROTEIN_IS_LOADED, ADD_PROTEIN_DATA, PROTEIN_LOAD_ERROR,
-    GOTO_VIZ
+    GOTO_VIZ, ADD_SEQUENCE_DATA
 } from '../actions/loadProtein'
 
 const initialState = {
@@ -16,6 +16,8 @@ const loadProteinReducer = (state = initialState, action) => {
             return { ...state, proteinIsLoading: false, finishedLoading: true}
         case ADD_PROTEIN_DATA:
             return { ...state, proteinData: action.proteinData}
+        case ADD_SEQUENCE_DATA:
+            return { ...state, sequenceData: action.sequenceData}
         case PROTEIN_LOAD_ERROR:
             return { ...state, error: action.error}
         case GOTO_VIZ:
