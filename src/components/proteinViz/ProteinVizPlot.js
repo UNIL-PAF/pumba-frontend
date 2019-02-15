@@ -114,7 +114,7 @@ class ProteinVizPlot extends Component {
             this.setState({zoomLeft: zoomLeft, zoomRight: zoomRight})
         }
 
-        // update scales if new data was loaded
+        // TODO: update scales only if new data was loaded
 
     }
 
@@ -151,11 +151,13 @@ class ProteinVizPlot extends Component {
     }
 
     plotSliceBars = (proteins, sampleIdx, replIdx) => {
-        const {zoomLeft, zoomRight, showPopupCB, removePopupCB} = this.props
+        const {zoomLeft, zoomRight, showPopupCB, removePopupCB, clickSliceCB, unclickSliceCB, clickedSlices, popup} = this.props
 
         return <ProteinSliceBars key={sampleIdx + ':' + replIdx} sampleIdx={sampleIdx} replIdx={replIdx} margin={this.margin} xScale={this.state.xScale}
                           yScale={this.state.yScale} zoomLeft={zoomLeft} zoomRight={zoomRight} proteins={proteins}
-                          svgParent={this.svg} showPopupCB={showPopupCB} removePopupCB={removePopupCB}/>
+                          svgParent={this.svg} showPopupCB={showPopupCB} removePopupCB={removePopupCB}
+                          clickSliceCB={clickSliceCB} unclickSliceCB={unclickSliceCB} clickedSlices={clickedSlices} mouseOverTag={popup ? popup.tag : undefined}
+        />
     }
 
     plotOneProteinMerge = (proteinMerge, idx) => {
@@ -247,8 +249,7 @@ class ProteinVizPlot extends Component {
     render() {
         const {viewWidth, viewHeight, samples, mouseOverSampleId, mouseOverSampleCB, mouseOverReplId,
             mouseOverReplCB, mouseLeaveSampleCB, mouseLeaveReplCB, mouseClickReplCB, clickedRepl,
-            removeSelectedReplCB, popup} = this.props
-
+            removeSelectedReplCB, popup, clickedSlices} = this.props
 
         // the mol weight at the mouse position
         const mouseWeightPos = this.state.xScale.invert(this.state.mouseX)
@@ -281,6 +282,8 @@ class ProteinVizPlot extends Component {
 
                     {this.plotMousePositionLine(mouseWeightPos)}
 
+                    {this.svg && this.plotProteinMerges()}
+
                     <ProteinVizLegends x={viewWidth-200} y={20} width={150} samples={samples}
                                      mouseOverSampleId={mouseOverSampleId} mouseOverSampleCB={mouseOverSampleCB}
                                      mouseOverReplId={mouseOverReplId} mouseOverReplCB={mouseOverReplCB}
@@ -290,7 +293,6 @@ class ProteinVizPlot extends Component {
                     >
                     </ProteinVizLegends>
 
-                    {this.svg && this.plotProteinMerges()}
                     {popup && this.plotPopup()}
                 </g>
 
@@ -312,6 +314,8 @@ ProteinVizPlot.propTypes = {
     mouseLeaveReplCB: PropTypes.func.isRequired,
     mouseClickReplCB: PropTypes.func.isRequired,
     removeSelectedReplCB: PropTypes.func.isRequired,
+    unclickSliceCB: PropTypes.func.isRequired,
+    clickSliceCB: PropTypes.func.isRequired,
     mouseOverSampleId: PropTypes.number,
     mouseOverReplId: PropTypes.number,
     changeZoomRangeCB: PropTypes.func.isRequired,
@@ -320,7 +324,8 @@ ProteinVizPlot.propTypes = {
     clickedRepl: PropTypes.array.isRequired,
     showPopupCB: PropTypes.func.isRequired,
     removePopupCB: PropTypes.func.isRequired,
-    popup: PropTypes.object
+    popup: PropTypes.object,
+    clickedSlices: PropTypes.array.isRequired
 };
 
 export default ProteinVizPlot

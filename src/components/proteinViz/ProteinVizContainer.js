@@ -7,7 +7,7 @@ import { connect } from 'react-redux'
 import ProteinVizPlot from "./ProteinVizPlot";
 import {
     mouseClickRepl, mouseLeaveRepl, mouseLeaveSample, mouseOverRepl, mouseOverSample,
-    removeRepl
+    removeRepl, clickSlice, unclickSlice
 } from "../../actions/sampleSelection";
 import {changeZoomAndFilter, removeSlicePopup, showSlicePopup} from "../../actions/proteinVizActions";
 
@@ -18,7 +18,8 @@ class ProteinVizContainer extends Component {
         const {proteinData, mouseOverSampleId, mouseOverSampleCB,
             mouseOverReplId, mouseOverReplCB, mouseLeaveSampleCB, mouseLeaveReplCB,
             zoomLeft, zoomRight, changeZoomRangeCB, theoMergedProteins, mouseClickReplCB,
-            clickedRepl, removeSelectedReplCB, showPopupCB, removePopupCB, popup} = this.props
+            clickedRepl, removeSelectedReplCB, showPopupCB, removePopupCB, popup, clickedSlices,
+            clickSliceCB, unclickSliceCB} = this.props
 
         const samples = _.map(proteinData, (p, i) => {
             const replicates = _.map(p.proteins, (oneProt, i) => {
@@ -36,6 +37,7 @@ class ProteinVizContainer extends Component {
                              theoMergedProteins={theoMergedProteins} mouseClickReplCB={mouseClickReplCB}
                              clickedRepl={clickedRepl} removeSelectedReplCB={removeSelectedReplCB}
                              showPopupCB={showPopupCB} removePopupCB={removePopupCB} popup={popup}
+                             clickedSlices={clickedSlices} clickSliceCB={clickSliceCB} unclickSliceCB={unclickSliceCB}
         /> }
         </div>
     }
@@ -56,10 +58,13 @@ ProteinVizContainer.propTypes = {
     removeSelectedReplCB: PropTypes.func.isRequired,
     showPopupCB: PropTypes.func.isRequired,
     removePopupCB: PropTypes.func.isRequired,
+    clickSliceCB: PropTypes.func.isRequired,
+    unclickSliceCB: PropTypes.func.isRequired,
     clickedRepl: PropTypes.array.isRequired,
     zoomLeft: PropTypes.number,
     zoomRight: PropTypes.number,
-    popup: PropTypes.object
+    popup: PropTypes.object,
+    clickedSlices: PropTypes.array.isRequired
 };
 
 const mapStateToProps = (state) => {
@@ -71,7 +76,8 @@ const mapStateToProps = (state) => {
         zoomLeft: state.proteinViz.zoomLeft,
         zoomRight: state.proteinViz.zoomRight,
         theoMergedProteins: state.proteinViz.theoMergedProteins,
-        popup: state.proteinViz.popup
+        popup: state.proteinViz.popup,
+        clickedSlices: state.sampleSelection.clickedSlices
     }
     return props
 }
@@ -86,7 +92,9 @@ const mapDispatchToProps = (dispatch) => {
         changeZoomRangeCB: (left, right) => { dispatch(changeZoomAndFilter(left, right)) },
         removeSelectedReplCB: (sampleIdx, replIdx) => { dispatch(removeRepl(sampleIdx, replIdx)) },
         showPopupCB: (popup) => { dispatch(showSlicePopup(popup))},
-        removePopupCB: () => { dispatch(removeSlicePopup())}
+        removePopupCB: () => { dispatch(removeSlicePopup())},
+        clickSliceCB: (slice) => { dispatch(clickSlice(slice))},
+        unclickSliceCB: (slice) => { dispatch(unclickSlice(slice))}
     }
 }
 

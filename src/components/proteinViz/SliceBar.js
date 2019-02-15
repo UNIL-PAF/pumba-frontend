@@ -14,7 +14,6 @@ class SliceBar extends Component {
         // this event we have to call using D3 in order to get the mouse position correctly
         select(this.lineDom).on('mouseover', () => {
             const [x,y] = mouse(svgParent)
-
             // showSlicePopOverCB
             popOverCB(sliceIdx, x, y)
         })
@@ -25,23 +24,24 @@ class SliceBar extends Component {
 
         select(this.lineDom).on('click', () => {
             clickCB(sliceIdx)
-            console.log("click click click")
         })
     }
 
     render() {
-        const {mass, int, color, highlight, margin, xScale, yScale} = this.props
+        const {mass, int, color, margin, xScale, yScale, isHighlighted, mouseIsOver} = this.props
 
         const xPos = xScale(mass) + margin.left
+        const width = mouseIsOver ? 4 : 2
+        const height = yScale(0) - yScale(int)
 
-        return <line
+        return <rect
             className={"slice-bar"}
-            x1={xPos}
-            y1={yScale(0) + margin.top}
-            x2={xPos}
-            y2={yScale(int) + margin.top}
-            stroke={color}
-            strokeWidth={ highlight ? 2 : 0.5 }
+            x={xPos - width/2}
+            y={yScale(int) + margin.top}
+            width={width}
+            height={height}
+            stroke={isHighlighted ? "deeppink" : "None"}
+            fill={color}
             ref={r => this.lineDom = r}
         />
     }
@@ -60,7 +60,9 @@ SliceBar.propTypes = {
     popOverCB: PropTypes.func.isRequired,
     removePopOverCB: PropTypes.func.isRequired,
     clickCB: PropTypes.func.isRequired,
-    sliceIdx: PropTypes.number.isRequired
+    sliceIdx: PropTypes.number.isRequired,
+    isHighlighted: PropTypes.bool.isRequired,
+    mouseIsOver: PropTypes.bool
 };
 
 export default SliceBar

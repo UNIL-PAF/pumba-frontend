@@ -106,7 +106,7 @@ class PeptideViz extends Component {
     }
 
     plotPeptides = (thisZoomLeft, thisZoomRight, yZoomFactor) => {
-        const {proteinData} = this.props
+        const {proteinData, clickedRepl} = this.props
 
         // we need this variable to get the correct replIdx
         var replIdx = 0;
@@ -120,6 +120,12 @@ class PeptideViz extends Component {
                 })
 
                 return fltProt.map((peptide, k) => {
+
+                    // check if given replicate is activated on proteinViz
+                    const replIsClicked = _.some(clickedRepl, (x) => {
+                        return x.sampleIdx === i && x.replIdx === j
+                    })
+
                     return <Peptide
                         xScale={this.state.xScale}
                         yScale={this.state.yScale}
@@ -130,6 +136,7 @@ class PeptideViz extends Component {
                         pepInfo={peptide}
                         yZoomFactor={yZoomFactor}
                         key={i+':'+j+':'+k}
+                        replIsClicked={replIsClicked}
                     />
                 })
             })
@@ -185,7 +192,8 @@ PeptideViz.propTypes = {
     viewWidth: PropTypes.number.isRequired,
     viewHeight: PropTypes.number.isRequired,
     zoom: PropTypes.object,
-    changeZoomRangeCB: PropTypes.func
+    changeZoomRangeCB: PropTypes.func,
+    clickedRepl: PropTypes.array.isRequired,
 };
 
 export default (PeptideViz)

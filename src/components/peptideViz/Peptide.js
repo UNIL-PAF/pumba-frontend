@@ -52,7 +52,7 @@ class Peptide extends Component {
     }
 
     render() {
-        const {yScale, xScale, pepInfo, sliceMolWeight, sampleIdx, replIdx, yZoomFactor} = this.props;
+        const {yScale, xScale, pepInfo, sliceMolWeight, sampleIdx, replIdx, yZoomFactor, replIsClicked} = this.props;
 
         const y = yScale(sliceMolWeight[replIdx][pepInfo.sliceNr])
         const xStart = xScale(pepInfo.startPos)
@@ -61,6 +61,8 @@ class Peptide extends Component {
 
         // special settings if mouse is over this peptide
         const height = yZoomFactor * ((this.state.mouseIsOver) ? this.selRectHeight : this.defaultRectHeight)
+        const height_2 = (replIsClicked) ? height * 2 : height
+
         const stroke = this.state.mouseIsOver ? "black" : "None"
 
         return (
@@ -68,11 +70,11 @@ class Peptide extends Component {
                 className="psm"
                 id={pepInfo.id}
                 x={ (xStart < 0) ? 0 : xStart }
-                y={y - height/2}
+                y={y - height_2/2}
                 width={xDiff}
-                height={height}
+                height={height_2}
                 fill={sampleColor(sampleIdx)}
-                fillOpacity={0.5}
+                fillOpacity={replIsClicked ? 1 : 0.5}
                 stroke={stroke}
                 ref={r => this.rectDom = r}
             />
@@ -90,7 +92,8 @@ Peptide.propTypes = {
     pepInfo: PropTypes.object.isRequired,
     sliceMolWeight: PropTypes.array,
     svgParent: PropTypes.object.isRequired,
-    yZoomFactor: PropTypes.number.isRequired
+    yZoomFactor: PropTypes.number.isRequired,
+    replIsClicked: PropTypes.bool.isRequired
 };
 
 
