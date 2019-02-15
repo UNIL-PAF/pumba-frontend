@@ -4,12 +4,12 @@ import React, {
 import PropTypes from 'prop-types'
 import * as _ from 'lodash';
 import { connect } from 'react-redux'
-import Merged2DPlot from "./ProteinVizPlot";
+import ProteinVizPlot from "./ProteinVizPlot";
 import {
     mouseClickRepl, mouseLeaveRepl, mouseLeaveSample, mouseOverRepl, mouseOverSample,
     removeRepl
 } from "../../actions/sampleSelection";
-import {changeZoomAndFilter} from "../../actions/proteinVizActions";
+import {changeZoomAndFilter, removeSlicePopup, showSlicePopup} from "../../actions/proteinVizActions";
 
 class ProteinVizContainer extends Component {
 
@@ -17,7 +17,8 @@ class ProteinVizContainer extends Component {
     render(){
         const {proteinData, mouseOverSampleId, mouseOverSampleCB,
             mouseOverReplId, mouseOverReplCB, mouseLeaveSampleCB, mouseLeaveReplCB,
-            zoomLeft, zoomRight, changeZoomRangeCB, theoMergedProteins, mouseClickReplCB, clickedRepl, removeSelectedReplCB} = this.props
+            zoomLeft, zoomRight, changeZoomRangeCB, theoMergedProteins, mouseClickReplCB,
+            clickedRepl, removeSelectedReplCB, showPopupCB, removePopupCB, popup} = this.props
 
         const samples = _.map(proteinData, (p, i) => {
             const replicates = _.map(p.proteins, (oneProt, i) => {
@@ -27,13 +28,14 @@ class ProteinVizContainer extends Component {
         })
 
         return <div id={"protein-viz"}>
-        { proteinData && <Merged2DPlot proteinData={proteinData} samples={samples} viewWidth={800} viewHeight={400}
+        { proteinData && <ProteinVizPlot proteinData={proteinData} samples={samples} viewWidth={800} viewHeight={400}
                              mouseOverSampleId={mouseOverSampleId} mouseOverSampleCB={mouseOverSampleCB}
                              mouseOverReplId={mouseOverReplId} mouseOverReplCB={mouseOverReplCB}
                              mouseLeaveSampleCB={mouseLeaveSampleCB} mouseLeaveReplCB={mouseLeaveReplCB}
                              changeZoomRangeCB={changeZoomRangeCB} zoomLeft={zoomLeft} zoomRight={zoomRight}
                              theoMergedProteins={theoMergedProteins} mouseClickReplCB={mouseClickReplCB}
                              clickedRepl={clickedRepl} removeSelectedReplCB={removeSelectedReplCB}
+                             showPopupCB={showPopupCB} removePopupCB={removePopupCB} popup={popup}
         /> }
         </div>
     }
@@ -52,9 +54,12 @@ ProteinVizContainer.propTypes = {
     changeZoomRangeCB: PropTypes.func.isRequired,
     mouseClickReplCB: PropTypes.func.isRequired,
     removeSelectedReplCB: PropTypes.func.isRequired,
+    showPopupCB: PropTypes.func.isRequired,
+    removePopupCB: PropTypes.func.isRequired,
     clickedRepl: PropTypes.array.isRequired,
     zoomLeft: PropTypes.number,
-    zoomRight: PropTypes.number
+    zoomRight: PropTypes.number,
+    popup: PropTypes.object
 };
 
 const mapStateToProps = (state) => {
@@ -63,9 +68,10 @@ const mapStateToProps = (state) => {
         mouseOverSampleId : state.sampleSelection.mouseOverSampleId,
         mouseOverReplId : state.sampleSelection.mouseOverReplId,
         clickedRepl : state.sampleSelection.clickedRepl,
-        zoomLeft: state.merged2DPlot.zoomLeft,
-        zoomRight: state.merged2DPlot.zoomRight,
-        theoMergedProteins: state.merged2DPlot.theoMergedProteins
+        zoomLeft: state.proteinViz.zoomLeft,
+        zoomRight: state.proteinViz.zoomRight,
+        theoMergedProteins: state.proteinViz.theoMergedProteins,
+        popup: state.proteinViz.popup
     }
     return props
 }
@@ -79,6 +85,8 @@ const mapDispatchToProps = (dispatch) => {
         mouseClickReplCB: (sampleIdx, replIdx) => { dispatch(mouseClickRepl(sampleIdx, replIdx)) },
         changeZoomRangeCB: (left, right) => { dispatch(changeZoomAndFilter(left, right)) },
         removeSelectedReplCB: (sampleIdx, replIdx) => { dispatch(removeRepl(sampleIdx, replIdx)) },
+        showPopupCB: (popup) => { dispatch(showSlicePopup(popup))},
+        removePopupCB: () => { dispatch(removeSlicePopup())}
     }
 }
 

@@ -7,7 +7,7 @@ import TheoWeightLine from './TheoWeightLine'
 import * as _ from 'lodash';
 import { sampleColor } from '../common/colorSettings'
 
-class Merged2DLegends extends Component {
+class ProteinVizLegends extends Component {
 
     // we need the legendIdx to get the right positions of the legends when expanding the replicates
     legendIdx = 1
@@ -155,7 +155,7 @@ class Merged2DLegends extends Component {
     }
 }
 
-Merged2DLegends.propTypes = {
+ProteinVizLegends.propTypes = {
     x: PropTypes.number.isRequired,
     y: PropTypes.number.isRequired,
     width: PropTypes.number.isRequired,
@@ -172,4 +172,4 @@ Merged2DLegends.propTypes = {
     clickedRepl: PropTypes.array.isRequired
 };
 
-export default (Merged2DLegends);
+export default (ProteinVizLegends);

@@ -9,15 +9,14 @@ import {brush, brushX} from 'd3-brush'
 import { select, event, mouse } from 'd3-selection'
 import { sampleColor } from '../common/colorSettings'
 import TheoWeightLine from './TheoWeightLine'
-import Merged2DLegends from './ProteinVizLegends'
+import ProteinVizLegends from './ProteinVizLegends'
 import ProteinSliceBars from "./ProteinSliceBars";
+import PopOverSkeleton from "../common/popOverSkeleton"
 
 
-class Merged2DPlot extends Component {
+class ProteinVizPlot extends Component {
 
     constructor(props) {
-        console.log("construct Merged2DPlot ? ")
-
         super(props)
         const {proteinData} = this.props
 
@@ -72,9 +71,6 @@ class Merged2DPlot extends Component {
     }
 
     componentDidMount(){
-
-        console.log("Merged2DPlot didMount ?")
-
         // add the x-axis
         const xAxis = axisBottom(this.state.xScale)
             .tickFormat((d) => { return Math.round(Math.pow(10,d)) + ' kDa'; })
@@ -155,10 +151,11 @@ class Merged2DPlot extends Component {
     }
 
     plotSliceBars = (proteins, sampleIdx, replIdx) => {
-        const {zoomLeft, zoomRight} = this.props
+        const {zoomLeft, zoomRight, showPopupCB, removePopupCB} = this.props
 
         return <ProteinSliceBars key={sampleIdx + ':' + replIdx} sampleIdx={sampleIdx} replIdx={replIdx} margin={this.margin} xScale={this.state.xScale}
-                          yScale={this.state.yScale} zoomLeft={zoomLeft} zoomRight={zoomRight} proteins={proteins} svgParent={this.svg}/>
+                          yScale={this.state.yScale} zoomLeft={zoomLeft} zoomRight={zoomRight} proteins={proteins}
+                          svgParent={this.svg} showPopupCB={showPopupCB} removePopupCB={removePopupCB}/>
     }
 
     plotOneProteinMerge = (proteinMerge, idx) => {
@@ -237,9 +234,20 @@ class Merged2DPlot extends Component {
 
     }
 
+    plotPopup = () => {
+        const {x, y, content} = this.props.popup
+
+        const height = 60
+
+        return (
+            <PopOverSkeleton x={x+5} y={y-height} width={120} height={height} content={content} removable={false}/>
+        )
+    }
+
     render() {
         const {viewWidth, viewHeight, samples, mouseOverSampleId, mouseOverSampleCB, mouseOverReplId,
-            mouseOverReplCB, mouseLeaveSampleCB, mouseLeaveReplCB, mouseClickReplCB, clickedRepl, removeSelectedReplCB} = this.props
+            mouseOverReplCB, mouseLeaveSampleCB, mouseLeaveReplCB, mouseClickReplCB, clickedRepl,
+            removeSelectedReplCB, popup} = this.props
 
 
         // the mol weight at the mouse position
@@ -273,16 +281,17 @@ class Merged2DPlot extends Component {
 
                     {this.plotMousePositionLine(mouseWeightPos)}
 
-                    <Merged2DLegends x={viewWidth-200} y={20} width={150} samples={samples}
+                    <ProteinVizLegends x={viewWidth-200} y={20} width={150} samples={samples}
                                      mouseOverSampleId={mouseOverSampleId} mouseOverSampleCB={mouseOverSampleCB}
                                      mouseOverReplId={mouseOverReplId} mouseOverReplCB={mouseOverReplCB}
                                      mouseLeaveReplCB={mouseLeaveReplCB} mouseLeaveSampleCB={mouseLeaveSampleCB}
                                      theoMolWeight={this.state.theoMolWeight} mouseClickReplCB={mouseClickReplCB}
                                      clickedRepl={clickedRepl} removeSelectedReplCB={removeSelectedReplCB}
                     >
-                    </Merged2DLegends>
+                    </ProteinVizLegends>
 
                     {this.svg && this.plotProteinMerges()}
+                    {popup && this.plotPopup()}
                 </g>
 
             </svg>
@@ -291,7 +300,7 @@ class Merged2DPlot extends Component {
 
 }
 
-Merged2DPlot.propTypes = {
+ProteinVizPlot.propTypes = {
     proteinData: PropTypes.array.isRequired,
     theoMergedProteins: PropTypes.array,
     viewWidth: PropTypes.number.isRequired,
@@ -308,7 +317,10 @@ Merged2DPlot.propTypes = {
     changeZoomRangeCB: PropTypes.func.isRequired,
     zoomLeft: PropTypes.number,
     zoomRight: PropTypes.number,
-    clickedRepl: PropTypes.array.isRequired
+    clickedRepl: PropTypes.array.isRequired,
+    showPopupCB: PropTypes.func.isRequired,
+    removePopupCB: PropTypes.func.isRequired,
+    popup: PropTypes.object
 };
 
-export default Merged2DPlot
+export default ProteinVizPlot

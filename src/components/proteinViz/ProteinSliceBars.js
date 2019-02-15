@@ -6,7 +6,6 @@ import * as _ from 'lodash'
 import {sampleColor} from "../common/colorSettings";
 import {mouse, select} from "d3-selection";
 import SliceBar from "./SliceBar"
-import PopOverSkeleton from "../common/popOverSkeleton"
 
 
 class SliceBars extends Component {
@@ -47,17 +46,7 @@ class SliceBars extends Component {
             'Mol weight': Math.pow(10, protein.dataSet.massFitResult.massFits[sliceIdx]).toFixed(2)
         }
         const popUp = {x: x, y: y, content: popUpContent}
-        this.setState({popUp: popUp})
-    }
-
-    plotPopUp = () => {
-        const {x, y, content} = this.state.popUp
-
-        const height = 60
-
-        return (
-            <PopOverSkeleton x={x+5} y={y-height} width={120} height={height} content={content} removable={false}/>
-        )
+        this.props.showPopupCB(popUp)
     }
 
     clickCB = (protein, sliceIdx) => {
@@ -65,7 +54,7 @@ class SliceBars extends Component {
     }
 
     removePopOverCB = () => {
-        this.setState({popUp: undefined})
+        this.props.removePopupCB()
     }
 
     plotOneSlice = (mass, int, color, keyName, highlight, protein, sliceIdx) => {
@@ -87,7 +76,6 @@ class SliceBars extends Component {
 
         return  <g>
             { this.plotOneProtein(proteins.proteins[replIdx], col, "slice-bar-"+sampleIdx+"-", true) }
-            { this.state.popUp && this.plotPopUp()}
         </g>
     }
 
@@ -102,7 +90,9 @@ SliceBars.propTypes = {
     yScale: PropTypes.func.isRequired,
     zoomLeft: PropTypes.number,
     zoomRight: PropTypes.number,
-    svgParent: PropTypes.object.isRequired
+    svgParent: PropTypes.object.isRequired,
+    showPopupCB: PropTypes.func.isRequired,
+    removePopupCB: PropTypes.func.isRequired,
 };
 
 export default SliceBars

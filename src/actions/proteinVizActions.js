@@ -2,6 +2,8 @@ import * as _ from 'lodash'
 
 export const CHANGE_ZOOM_RANGE = 'CHANGE_ZOOM_RANGE'
 export const CHANGE_THEO_MERGED_PROTEINS = 'CHANGE_THEO_MERGED_PROTEINS'
+export const SHOW_SLICE_POPUP = 'SHOW_SLICE_POPUP'
+export const REMOVE_SLICE_POPUP = 'REMOVE_SLICE_POPUP'
 
 export function changeZoomAndFilter(left, right){
     return function (dispatch, getState) {
@@ -31,5 +33,12 @@ export const changeTheoMergedProteins = (theoMergedProteins) => ({
     type: CHANGE_THEO_MERGED_PROTEINS, theoMergedProteins: theoMergedProteins
 })
 
+export const showSlicePopup = (popup) => ({
+    type: SHOW_SLICE_POPUP, popup: popup
+})
+
+export const removeSlicePopup = () => ({
+    type: REMOVE_SLICE_POPUP
+})
 
 
