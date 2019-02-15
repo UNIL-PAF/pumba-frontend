@@ -2,7 +2,7 @@ import React, {
     Component,
 } from 'react';
 import PropTypes from 'prop-types';
-import CloseButton from '../../common/CloseButton'
+import CloseButton from '../common/CloseButton'
 
 const defaultFontSize = "8px"
 

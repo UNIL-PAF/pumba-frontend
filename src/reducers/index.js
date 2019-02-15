@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux'
 import loadProteinReducer from './loadProtein'
 import sampleSelectionReducer from './sampleSelection'
-import merged2DPlotReducer from "./merged2DPlotReducer";
+import merged2DPlotReducer from "./proteinVizReducer";
 import peptideVizReducer from "./peptideVizReducer"
 
 const rootReducer = combineReducers({

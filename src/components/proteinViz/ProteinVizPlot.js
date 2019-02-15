@@ -7,9 +7,9 @@ import * as _ from 'lodash'
 import { axisLeft, axisBottom } from 'd3-axis'
 import {brush, brushX} from 'd3-brush'
 import { select, event, mouse } from 'd3-selection'
-import { sampleColor } from '../../common/colorSettings'
+import { sampleColor } from '../common/colorSettings'
 import TheoWeightLine from './TheoWeightLine'
-import Merged2DLegends from './Merged2DLegends'
+import Merged2DLegends from './ProteinVizLegends'
 import ProteinSliceBars from "./ProteinSliceBars";
 
 

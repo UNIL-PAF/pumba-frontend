@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import LegendField from './LegendField'
 import TheoWeightLine from './TheoWeightLine'
 import * as _ from 'lodash';
-import { sampleColor } from '../../common/colorSettings'
+import { sampleColor } from '../common/colorSettings'
 
 class Merged2DLegends extends Component {
 

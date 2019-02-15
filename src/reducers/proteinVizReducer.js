@@ -1,7 +1,7 @@
 import {
     CHANGE_ZOOM_RANGE,
     CHANGE_THEO_MERGED_PROTEINS
-} from '../actions/merged2DPlotActions'
+} from '../actions/proteinVizActions'
 
 const initialState = {
     zoomLeft: undefined,
@@ -9,7 +9,7 @@ const initialState = {
     theoMergedProteins: null
 }
 
-const merged2DPlotReducer = (state = initialState, action) => {
+const proteinVizReducer = (state = initialState, action) => {
     switch (action.type) {
         case CHANGE_ZOOM_RANGE:
             return { ...state, zoomLeft: action.left, zoomRight: action.right }
@@ -20,4 +20,4 @@ const merged2DPlotReducer = (state = initialState, action) => {
     }
 }
 
-export default merged2DPlotReducer
+export default proteinVizReducer

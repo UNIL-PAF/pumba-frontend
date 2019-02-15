@@ -1,7 +1,7 @@
 import fetch from 'cross-fetch'
 import pumbaConfig from '../config'
 import { mouseLeaveSample } from "./sampleSelection"
-import { changeTheoMergedProteins, changeZoomRange } from "./merged2DPlotActions"
+import { changeTheoMergedProteins, changeZoomRange } from "./proteinVizActions"
 
 export const PROTEIN_IS_LOADED = 'PROTEIN_IS_LOADED'
 export const REQUEST_PROTEIN = 'REQUEST_PROTEIN'

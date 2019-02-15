@@ -3,10 +3,10 @@ import React, {
 } from 'react'
 import PropTypes from 'prop-types'
 import * as _ from 'lodash'
-import {sampleColor} from "../../common/colorSettings";
+import {sampleColor} from "../common/colorSettings";
 import {mouse, select} from "d3-selection";
 import SliceBar from "./SliceBar"
-import PopOverSkeleton from "../../common/popOverSkeleton"
+import PopOverSkeleton from "../common/popOverSkeleton"
 
 
 class SliceBars extends Component {
