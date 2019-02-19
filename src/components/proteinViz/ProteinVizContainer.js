@@ -19,7 +19,7 @@ class ProteinVizContainer extends Component {
             mouseOverReplId, mouseOverReplCB, mouseLeaveSampleCB, mouseLeaveReplCB,
             zoomLeft, zoomRight, changeZoomRangeCB, theoMergedProteins, mouseClickReplCB,
             clickedRepl, removeSelectedReplCB, showPopupCB, removePopupCB, popup, clickedSlices,
-            clickSliceCB, unclickSliceCB} = this.props
+            clickSliceCB, unclickSliceCB, history} = this.props
 
         const samples = _.map(proteinData, (p, i) => {
             const replicates = _.map(p.proteins, (oneProt, i) => {
@@ -38,6 +38,7 @@ class ProteinVizContainer extends Component {
                              clickedRepl={clickedRepl} removeSelectedReplCB={removeSelectedReplCB}
                              showPopupCB={showPopupCB} removePopupCB={removePopupCB} popup={popup}
                              clickedSlices={clickedSlices} clickSliceCB={clickSliceCB} unclickSliceCB={unclickSliceCB}
+                             history={history}
         /> }
         </div>
     }
@@ -64,7 +65,8 @@ ProteinVizContainer.propTypes = {
     zoomLeft: PropTypes.number,
     zoomRight: PropTypes.number,
     popup: PropTypes.object,
-    clickedSlices: PropTypes.array.isRequired
+    clickedSlices: PropTypes.array.isRequired,
+    history: PropTypes.object.isRequired
 };
 
 const mapStateToProps = (state) => {

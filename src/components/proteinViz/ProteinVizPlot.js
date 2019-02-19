@@ -151,12 +151,13 @@ class ProteinVizPlot extends Component {
     }
 
     plotSliceBars = (proteins, sampleIdx, replIdx) => {
-        const {zoomLeft, zoomRight, showPopupCB, removePopupCB, clickSliceCB, unclickSliceCB, clickedSlices, popup} = this.props
+        const {zoomLeft, zoomRight, showPopupCB, removePopupCB, clickSliceCB, unclickSliceCB, clickedSlices, popup, history} = this.props
 
         return <ProteinSliceBars key={sampleIdx + ':' + replIdx} sampleIdx={sampleIdx} replIdx={replIdx} margin={this.margin} xScale={this.state.xScale}
                           yScale={this.state.yScale} zoomLeft={zoomLeft} zoomRight={zoomRight} proteins={proteins}
                           svgParent={this.svg} showPopupCB={showPopupCB} removePopupCB={removePopupCB}
                           clickSliceCB={clickSliceCB} unclickSliceCB={unclickSliceCB} clickedSlices={clickedSlices} mouseOverTag={popup ? popup.tag : undefined}
+                          history={history}
         />
     }
 
@@ -299,7 +300,6 @@ class ProteinVizPlot extends Component {
             </svg>
         </div>
     }
-
 }
 
 ProteinVizPlot.propTypes = {
@@ -325,7 +325,8 @@ ProteinVizPlot.propTypes = {
     showPopupCB: PropTypes.func.isRequired,
     removePopupCB: PropTypes.func.isRequired,
     popup: PropTypes.object,
-    clickedSlices: PropTypes.array.isRequired
+    clickedSlices: PropTypes.array.isRequired,
+    history: PropTypes.object.isRequired
 };
 
 export default ProteinVizPlot

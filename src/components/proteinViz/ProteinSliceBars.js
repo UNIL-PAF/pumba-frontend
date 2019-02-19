@@ -28,7 +28,7 @@ class SliceBars extends Component {
             return s[0] >= zoomLeft && s[0] <= zoomRight && s[1]
         })) : slices;
 
-        return _.map(fltSlices, (x, i) => {
+        return _.map(fltSlices, (x) => {
             return this.plotOneSlice(x[0], x[1], color, keyName+x[2], highlight, protein, x[2])
         })
     }
@@ -38,18 +38,21 @@ class SliceBars extends Component {
             return pep.sliceNr === (sliceIdx + 1)
         })
 
-        const popUpContent = {
+        var popUpContent = {
             Sample: protein.dataSet.sample,
             Replicate: protein.dataSet.name,
             '# Peptides': peptides.length,
             Slice: sliceIdx + 1,
             'Mol weight': Math.pow(10, protein.dataSet.massFitResult.massFits[sliceIdx]).toFixed(2)
         }
+
         const popUp = {x: x, y: y, content: popUpContent, tag: protein.dataSet.sample + ':' + protein.dataSet.name + ':' + sliceIdx}
         this.props.showPopupCB(popUp)
     }
 
     clickCB = (protein, sliceIdx) => {
+        const {clickSliceCB, history} = this.props
+
         const peptides = _.filter(protein.peptides, (pep) => {
             return pep.sliceNr === (sliceIdx + 1)
         })
@@ -64,7 +67,8 @@ class SliceBars extends Component {
             idx: sliceIdx,
             peptides: peptides
         }
-        this.props.clickSliceCB(slice)
+        clickSliceCB(slice)
+        history.push('/peptides')
     }
 
     removePopOverCB = () => {

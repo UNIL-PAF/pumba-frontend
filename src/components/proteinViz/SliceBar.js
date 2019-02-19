@@ -9,41 +9,59 @@ class SliceBar extends Component {
 
     componentDidMount(){
 
-        const {svgParent, popOverCB, sliceIdx, removePopOverCB, clickCB} = this.props;
+        const {svgParent, popOverCB, sliceIdx, removePopOverCB, clickCB, mouseIsOver, isHighlighted} = this.props;
 
         // this event we have to call using D3 in order to get the mouse position correctly
-        select(this.lineDom).on('mouseover', () => {
+        select(this.rectDom).on('mouseover', () => {
+            console.log("mouse over slice")
             const [x,y] = mouse(svgParent)
             // showSlicePopOverCB
-            popOverCB(sliceIdx, x, y)
+            const showRemoveMessage = mouseIsOver & isHighlighted
+            popOverCB(sliceIdx, x, y, showRemoveMessage)
         })
 
-        select(this.lineDom).on('mouseout', () => {
+        select(this.rectDom).on('mouseout', () => {
             removePopOverCB()
         })
 
-        select(this.lineDom).on('click', () => {
+        select(this.rectDom).on('click', () => {
             clickCB(sliceIdx)
         })
+    }
+
+    plotBackgroundRect = (xPos, yPos, width, height) => {
+        return <rect
+            className={"slice-bar-background"}
+            x={xPos}
+            y={yPos}
+            width={width}
+            height={height}
+            stroke={"white"}
+            fill={"white"}
+            ref={r => this.rectDom = r}
+        />
     }
 
     render() {
         const {mass, int, color, margin, xScale, yScale, isHighlighted, mouseIsOver} = this.props
 
-        const xPos = xScale(mass) + margin.left
         const width = mouseIsOver ? 4 : 2
         const height = yScale(0) - yScale(int)
+        const xPos = xScale(mass) + margin.left - width/2
+        const yPos = yScale(int) + margin.top
 
-        return <rect
-            className={"slice-bar"}
-            x={xPos - width/2}
-            y={yScale(int) + margin.top}
-            width={width}
-            height={height}
-            stroke={isHighlighted ? "deeppink" : "None"}
-            fill={color}
-            ref={r => this.lineDom = r}
-        />
+        return <g>
+            {this.plotBackgroundRect(xPos, yPos, width, height)}
+            <rect
+                className={"slice-bar"}
+                x={xPos }
+                y={yPos}
+                width={width}
+                height={height}
+                stroke={isHighlighted ? "deeppink" : "None"}
+                fill={color}
+            />
+        </g>
     }
 
 }

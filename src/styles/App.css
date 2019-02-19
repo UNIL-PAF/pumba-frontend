@@ -110,7 +110,11 @@
   pointer-events: none;
 }
 
-.slice-bar:hover {
+.slice-bar{
+  pointer-events: none;
+}
+
+.slice-bar-background:hover {
   cursor: pointer;
 }
 
