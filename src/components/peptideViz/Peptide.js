@@ -63,8 +63,14 @@ class Peptide extends Component {
         const height = yZoomFactor * ((this.state.mouseIsOver) ? this.selRectHeight : this.defaultRectHeight)
         const height_2 = (replIsClicked) ? height * 2 : height
 
-        var stroke = sliceIsClicked ? "deeppink" : "None"
-        stroke = this.state.mouseIsOver ? "black" : stroke
+        var stroke = this.state.mouseIsOver ? sampleColor(sampleIdx) : "None"
+        stroke = (sliceIsClicked) ? "deeppink" : stroke
+
+        var fill = sampleColor(sampleIdx)
+        fill = (this.state.mouseIsOver && sliceIsClicked) ? "deeppink" : fill
+
+        var fillOpacity = replIsClicked ? 0.7 : 0.5
+        fillOpacity = this.state.mouseIsOver ? 1 : fillOpacity
 
         return (
             <rect
@@ -74,8 +80,8 @@ class Peptide extends Component {
                 y={y - height_2/2}
                 width={xDiff}
                 height={height_2}
-                fill={sampleColor(sampleIdx)}
-                fillOpacity={replIsClicked ? 1 : 0.5}
+                fill={fill}
+                fillOpacity={fillOpacity}
                 stroke={stroke}
                 ref={r => this.rectDom = r}
             />

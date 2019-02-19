@@ -9,6 +9,7 @@ import {brush} from "d3-brush";
 import * as _ from 'lodash'
 import AminoAcidBar from './AminoAcidBar'
 import Peptide from './Peptide'
+import ProteinVizLegends from '../proteinViz/ProteinVizLegends'
 
 class PeptideViz extends Component {
 
@@ -157,7 +158,8 @@ class PeptideViz extends Component {
 
 
     render(){
-        const {viewWidth, viewHeight, zoom, sequenceData} = this.props
+        const {viewWidth, viewHeight, zoom, sequenceData, samples, clickedRepl, mouseOverSampleCB, mouseOverReplId,
+            mouseOverReplCB, mouseLeaveReplCB, mouseLeaveSampleCB, mouseClickReplCB, removeSelectedReplCB, mouseOverSampleId} = this.props
 
         const thisZoomLeft = (zoom === undefined) ? 1 : zoom.left;
         const thisZoomRight = (zoom === undefined) ? sequenceData.length : zoom.right;
@@ -173,8 +175,8 @@ class PeptideViz extends Component {
 
         console.log(this.yRange, thisZoomTop, thisZoomBottom, yZoomFactor)
 
-        return <div>
-            <svg className="merged-2d-svg"
+        return <div id={"peptide-plot"}>
+            <svg className="peptide-svg"
                  viewBox={`0 0 ${viewWidth} ${viewHeight}`}
                  width="100%"
                  height="100%"
@@ -185,6 +187,7 @@ class PeptideViz extends Component {
                 <g className="pep-x-axis" ref={r => this.xAxis = r}
                    transform={'translate(' + this.margin.left + ',' + (viewHeight - this.margin.bottom) + ')'}/>
                 <g className="brush-g" ref={r => this.brushG = select(r)} onDoubleClick={this.zoomOut}
+                   onMouseEnter={() => mouseLeaveSampleCB()}
                    transform={'translate(' + this.margin.left + ',' + this.margin.top + ')'}/>
                 <g className="peptide-viz-g"
                    transform={'translate(' + this.margin.left + ',' + this.margin.top + ')'}
@@ -193,11 +196,27 @@ class PeptideViz extends Component {
                     { this.plotAminAcidBar(thisZoomLeft, thisZoomRight) }
                     { this.svg && this.plotPeptides(thisZoomLeft, thisZoomRight, yZoomFactor) }
                 </g>
+                <ProteinVizLegends x={viewWidth-200} y={20} width={150} samples={samples}
+                                   theoMolWeight={this.state.theoMolWeight} clickedRepl={clickedRepl}
+                                   mouseOverSampleId={mouseOverSampleId} mouseOverSampleCB={mouseOverSampleCB}
+                                   mouseOverReplId={mouseOverReplId} mouseOverReplCB={mouseOverReplCB}
+                                   mouseLeaveReplCB={mouseLeaveReplCB} mouseLeaveSampleCB={mouseLeaveSampleCB}
+                                   mouseClickReplCB={mouseClickReplCB} removeSelectedReplCB={removeSelectedReplCB}
+                >
+                </ProteinVizLegends>
             </svg>
         </div>
     }
 
 }
+
+/*
+          mouseOverSampleId={mouseOverSampleId} mouseOverSampleCB={mouseOverSampleCB}
+                                   mouseOverReplId={mouseOverReplId} mouseOverReplCB={mouseOverReplCB}
+                                   mouseLeaveReplCB={mouseLeaveReplCB} mouseLeaveSampleCB={mouseLeaveSampleCB}
+                                    mouseClickReplCB={mouseClickReplCB}
+                                   removeSelectedReplCB={removeSelectedReplCB}
+ */
 
 PeptideViz.propTypes = {
     proteinData: PropTypes.array.isRequired,
@@ -206,7 +225,17 @@ PeptideViz.propTypes = {
     zoom: PropTypes.object,
     changeZoomRangeCB: PropTypes.func,
     clickedRepl: PropTypes.array.isRequired,
-    clickedSlices: PropTypes.array.isRequired
+    clickedSlices: PropTypes.array.isRequired,
+    samples: PropTypes.array.isRequired,
+    sequenceData: PropTypes.object,
+    mouseOverSampleId: PropTypes.number,
+    mouseOverReplId: PropTypes.number,
+    mouseOverSampleCB: PropTypes.func.isRequired,
+    mouseOverReplCB: PropTypes.func.isRequired,
+    mouseLeaveSampleCB: PropTypes.func.isRequired,
+    mouseLeaveReplCB: PropTypes.func.isRequired,
+    mouseClickReplCB: PropTypes.func.isRequired,
+    removeSelectedReplCB: PropTypes.func.isRequired,
 };
 
 export default (PeptideViz)

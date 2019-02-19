@@ -1,3 +1,14 @@
+#peptide-viz {
+    height: calc(100% - 60px);
+    width: 100%;
+    /*padding-bottom: 60px;*/
+}
+
+#peptide-plot {
+    height: 100%;
+    width: 100%;
+}
+
 .pep-x-axis {
     font-size: 50%;
     font-weight: lighter;

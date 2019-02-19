@@ -250,13 +250,13 @@ class ProteinVizPlot extends Component {
     render() {
         const {viewWidth, viewHeight, samples, mouseOverSampleId, mouseOverSampleCB, mouseOverReplId,
             mouseOverReplCB, mouseLeaveSampleCB, mouseLeaveReplCB, mouseClickReplCB, clickedRepl,
-            removeSelectedReplCB, popup, clickedSlices} = this.props
+            removeSelectedReplCB, popup} = this.props
 
         // the mol weight at the mouse position
         const mouseWeightPos = this.state.xScale.invert(this.state.mouseX)
 
-        return <div id={"merged-2d-plot"}>
-            <svg className="merged-2d-svg"
+        return <div id={"protein-plot"}>
+            <svg className="protein-svg"
                  viewBox={`0 0 ${viewWidth} ${viewHeight}`}
                  width="100%"
                  height="100%"
@@ -269,7 +269,7 @@ class ProteinVizPlot extends Component {
                    onMouseEnter={() => mouseLeaveSampleCB()}
                    transform={'translate(' + this.margin.left + ',' + this.margin.top + ')'}/> }
 
-                <g className="merged-2d-main-g" transform={'translate(' + this.margin.left + ',' + this.margin.top + ')'}>
+                <g className="protein-main-g" transform={'translate(' + this.margin.left + ',' + this.margin.top + ')'}>
 
                     {this.plotTheoMolWeightLine()}
 

@@ -2,14 +2,28 @@ import React, {
     Component
 } from 'react'
 import PropTypes from 'prop-types'
+import * as _ from 'lodash';
 import { connect } from 'react-redux'
 import PeptideViz from './PeptideViz'
 import {changePepZoomRange} from "../../actions/peptideVizActions";
+import {
+    mouseClickRepl, mouseLeaveRepl, mouseLeaveSample, mouseOverRepl,
+    mouseOverSample, removeRepl
+} from "../../actions/sampleSelection";
 
 class PeptideVizContainer extends Component {
 
     render(){
-        const {proteinData, sequenceData, zoom, changeZoomRangeCB, clickedRepl, clickedSlices} = this.props
+        const {proteinData, sequenceData, zoom, changeZoomRangeCB, clickedRepl, clickedSlices, mouseOverSampleId,
+            mouseOverSampleCB, mouseOverReplId, mouseOverReplCB, mouseLeaveReplCB, mouseLeaveSampleCB,
+            mouseClickReplCB, removeSelectedReplCB} = this.props
+
+        const samples = _.map(proteinData, (p, i) => {
+            const replicates = _.map(p.proteins, (oneProt, i) => {
+                return { idx: i, name: oneProt.dataSet.name }
+            })
+            return { idx: i, name: p.sample, replicates: replicates }
+        })
 
         return <div id={"peptide-viz"}>
             { proteinData && <PeptideViz proteinData={proteinData}
@@ -21,6 +35,11 @@ class PeptideVizContainer extends Component {
                                          changeZoomRangeCB={changeZoomRangeCB}
                                          clickedRepl={clickedRepl}
                                          clickedSlices={clickedSlices}
+                                         samples={samples}
+                                         mouseOverSampleId={mouseOverSampleId} mouseOverSampleCB={mouseOverSampleCB}
+                                         mouseOverReplId={mouseOverReplId} mouseOverReplCB={mouseOverReplCB}
+                                         mouseLeaveReplCB={mouseLeaveReplCB} mouseLeaveSampleCB={mouseLeaveSampleCB}
+                                         mouseClickReplCB={mouseClickReplCB} removeSelectedReplCB={removeSelectedReplCB}
                             /> }
         </div>
     }
@@ -32,7 +51,15 @@ PeptideVizContainer.propTypes = {
     sequenceData: PropTypes.object,
     zoom: PropTypes.object,
     clickedRepl: PropTypes.array.isRequired,
-    clickedSlices: PropTypes.array.isRequired
+    clickedSlices: PropTypes.array.isRequired,
+    mouseOverSampleId: PropTypes.number,
+    mouseOverReplId: PropTypes.number,
+    mouseOverSampleCB: PropTypes.func.isRequired,
+    mouseOverReplCB: PropTypes.func.isRequired,
+    mouseLeaveSampleCB: PropTypes.func.isRequired,
+    mouseLeaveReplCB: PropTypes.func.isRequired,
+    mouseClickReplCB: PropTypes.func.isRequired,
+    removeSelectedReplCB: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => {
@@ -41,14 +68,22 @@ const mapStateToProps = (state) => {
         sequenceData: state.loadProtein.sequenceData,
         zoom: state.peptideViz.zoom,
         clickedRepl : state.sampleSelection.clickedRepl,
-        clickedSlices: state.sampleSelection.clickedSlices
+        clickedSlices: state.sampleSelection.clickedSlices,
+        mouseOverSampleId : state.sampleSelection.mouseOverSampleId,
+        mouseOverReplId : state.sampleSelection.mouseOverReplId,
     }
     return props
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        changeZoomRangeCB: (left, right, top, bottom) => dispatch(changePepZoomRange(left, right, top, bottom))
+        changeZoomRangeCB: (left, right, top, bottom) => dispatch(changePepZoomRange(left, right, top, bottom)),
+        mouseOverSampleCB: sampleIdx => { dispatch(mouseOverSample(sampleIdx)) },
+        mouseOverReplCB: replIdx => { dispatch(mouseOverRepl(replIdx)) },
+        mouseLeaveSampleCB: () => { dispatch(mouseLeaveSample()) },
+        mouseLeaveReplCB: () => { dispatch(mouseLeaveRepl()) },
+        mouseClickReplCB: (sampleIdx, replIdx) => { dispatch(mouseClickRepl(sampleIdx, replIdx)) },
+        removeSelectedReplCB: (sampleIdx, replIdx) => { dispatch(removeRepl(sampleIdx, replIdx)) },
     }
 }
 
