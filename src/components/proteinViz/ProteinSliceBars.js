@@ -51,7 +51,7 @@ class SliceBars extends Component {
     }
 
     clickCB = (protein, sliceIdx) => {
-        const {clickSliceCB, history} = this.props
+        const {clickSliceCB, history, removePopupCB} = this.props
 
         const peptides = _.filter(protein.peptides, (pep) => {
             return pep.sliceNr === (sliceIdx + 1)
@@ -68,6 +68,7 @@ class SliceBars extends Component {
             peptides: peptides
         }
         clickSliceCB(slice)
+        removePopupCB()
         history.push('/peptides')
     }
 
@@ -118,7 +119,8 @@ SliceBars.propTypes = {
     unclickSliceCB: PropTypes.func.isRequired,
     clickSliceCB: PropTypes.func.isRequired,
     mouseOverTag: PropTypes.string,
-    clickedSlices: PropTypes.array.isRequired
+    clickedSlices: PropTypes.array.isRequired,
+    history: PropTypes.object.isRequired
 };
 
 export default SliceBars

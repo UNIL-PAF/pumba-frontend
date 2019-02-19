@@ -71,6 +71,38 @@ class PeptideViz extends Component {
         this.forceUpdate()
     }
 
+    componentDidUpdate(){
+        const {zoom, sequenceData} = this.props
+
+        const zoomLeft = (zoom === undefined) ? 1 : zoom.left;
+        const zoomRight = (zoom === undefined) ? sequenceData.length : zoom.right;
+        const zoomTop = (zoom === undefined) ? this.maxMolWeight : zoom.top
+        const zoomBottom = (zoom === undefined) ? this.minMolWeight : zoom.bottom
+
+        // we only update the axis and stuff if the zoom changed
+        if(zoomLeft && this.state.zoomLeft !== zoomLeft && this.state.zoomRight !== zoomRight){
+            // change the scale after zooming
+            this.state.xScale.domain([zoomLeft, zoomRight]);
+            this.state.yScale.domain([zoomTop, zoomBottom])
+
+            // update y-axis
+            const yAxis = axisLeft(this.state.yScale)
+                .tickFormat((d) => { return Math.round(Math.pow(10,d)) + ' kDa'; })
+            select(this.yAxis).call(yAxis)
+
+            // and x-axis
+            const xAxis = axisBottom(this.state.xScale)
+            select(this.xAxis)
+                .call(xAxis)
+
+            // remember the current zoom state
+            this.setState({zoomLeft: zoomLeft, zoomRight: zoomRight})
+        }
+
+        // TODO: update scales only if new data was loaded
+
+    }
+
     brushend = () => {
         var s = event.selection;
         if(s){
@@ -107,10 +139,7 @@ class PeptideViz extends Component {
     }
 
     plotPeptides = (thisZoomLeft, thisZoomRight, yZoomFactor) => {
-        const {proteinData, clickedRepl, clickedSlices} = this.props
-
-        console.log("plotPeptides", clickedSlices)
-        console.log(proteinData)
+        const {proteinData, clickedRepl, clickedSlices, mouseOverSampleId, mouseOverReplId} = this.props
 
         // we need this variable to get the correct replIdx
         var replIdx = 0;
@@ -138,6 +167,8 @@ class PeptideViz extends Component {
                         return sliceFromReplIsClicked & (slice.idx+1) === peptide.sliceNr
                     })
 
+                    const highlightRepl = (i === mouseOverSampleId && j === mouseOverReplId)
+
                     return <Peptide
                         xScale={this.state.xScale}
                         yScale={this.state.yScale}
@@ -148,7 +179,7 @@ class PeptideViz extends Component {
                         pepInfo={peptide}
                         yZoomFactor={yZoomFactor}
                         key={i+':'+j+':'+k}
-                        replIsClicked={replIsClicked}
+                        highlightRepl={replIsClicked || highlightRepl}
                         sliceIsClicked={sliceIsClicked}
                     />
                 })

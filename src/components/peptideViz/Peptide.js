@@ -52,7 +52,7 @@ class Peptide extends Component {
     }
 
     render() {
-        const {yScale, xScale, pepInfo, sliceMolWeight, sampleIdx, replIdx, yZoomFactor, replIsClicked, sliceIsClicked} = this.props;
+        const {yScale, xScale, pepInfo, sliceMolWeight, sampleIdx, replIdx, yZoomFactor, highlightRepl, sliceIsClicked} = this.props;
 
         const y = yScale(sliceMolWeight[replIdx][pepInfo.sliceNr])
         const xStart = xScale(pepInfo.startPos)
@@ -60,8 +60,8 @@ class Peptide extends Component {
         const xDiff = xEnd - xStart;
 
         // special settings if mouse is over this peptide
-        const height = yZoomFactor * ((this.state.mouseIsOver) ? this.selRectHeight : this.defaultRectHeight)
-        const height_2 = (replIsClicked) ? height * 2 : height
+        const height = ((this.state.mouseIsOver) ? this.selRectHeight : this.defaultRectHeight) // * yZoomFactor
+        const height_2 = (highlightRepl) ? height * 2 : height
 
         var stroke = this.state.mouseIsOver ? sampleColor(sampleIdx) : "None"
         stroke = (sliceIsClicked) ? "deeppink" : stroke
@@ -69,7 +69,7 @@ class Peptide extends Component {
         var fill = sampleColor(sampleIdx)
         fill = (this.state.mouseIsOver && sliceIsClicked) ? "deeppink" : fill
 
-        var fillOpacity = replIsClicked ? 0.7 : 0.5
+        var fillOpacity = highlightRepl ? 0.7 : 0.5
         fillOpacity = this.state.mouseIsOver ? 1 : fillOpacity
 
         return (
@@ -100,7 +100,7 @@ Peptide.propTypes = {
     sliceMolWeight: PropTypes.array,
     svgParent: PropTypes.object.isRequired,
     yZoomFactor: PropTypes.number.isRequired,
-    replIsClicked: PropTypes.bool.isRequired,
+    highlightRepl: PropTypes.bool.isRequired,
     sliceIsClicked: PropTypes.bool.isRequired
 };
 
