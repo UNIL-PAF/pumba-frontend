@@ -1,5 +1,5 @@
 import {
-    CHANGE_PEP_ZOOM_RANGE,
+    CHANGE_PEP_ZOOM_RANGE, REMOVE_PEP_POPUP, SHOW_PEP_POPUP,
 } from '../actions/peptideVizActions'
 
 const initialState = {
@@ -18,6 +18,10 @@ const peptideVizReducer = (state = initialState, action) => {
             }
 
             return {...state, zoom: (action.left ? newZoomRange : undefined) }
+        case SHOW_PEP_POPUP:
+            return { ...state, popup: action.popup}
+        case REMOVE_PEP_POPUP:
+            return { ...state, popup: undefined}
         default:
             return state
     }

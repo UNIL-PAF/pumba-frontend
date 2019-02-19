@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 import * as _ from 'lodash';
 import { connect } from 'react-redux'
 import PeptideViz from './PeptideViz'
-import {changePepZoomRange} from "../../actions/peptideVizActions";
+import {changePepZoomRange, removePepPopup, showPepPopup} from "../../actions/peptideVizActions";
 import {
     mouseClickRepl, mouseLeaveRepl, mouseLeaveSample, mouseOverRepl,
     mouseOverSample, removeRepl
@@ -16,7 +16,7 @@ class PeptideVizContainer extends Component {
     render(){
         const {proteinData, sequenceData, zoom, changeZoomRangeCB, clickedRepl, clickedSlices, mouseOverSampleId,
             mouseOverSampleCB, mouseOverReplId, mouseOverReplCB, mouseLeaveReplCB, mouseLeaveSampleCB,
-            mouseClickReplCB, removeSelectedReplCB} = this.props
+            mouseClickReplCB, removeSelectedReplCB, showPopupCB, removePopupCB, popup} = this.props
 
         const samples = _.map(proteinData, (p, i) => {
             const replicates = _.map(p.proteins, (oneProt, i) => {
@@ -40,6 +40,7 @@ class PeptideVizContainer extends Component {
                                          mouseOverReplId={mouseOverReplId} mouseOverReplCB={mouseOverReplCB}
                                          mouseLeaveReplCB={mouseLeaveReplCB} mouseLeaveSampleCB={mouseLeaveSampleCB}
                                          mouseClickReplCB={mouseClickReplCB} removeSelectedReplCB={removeSelectedReplCB}
+                                         showPopupCB={showPopupCB} removePopupCB={removePopupCB} popup={popup}
                             /> }
         </div>
     }
@@ -60,6 +61,9 @@ PeptideVizContainer.propTypes = {
     mouseLeaveReplCB: PropTypes.func.isRequired,
     mouseClickReplCB: PropTypes.func.isRequired,
     removeSelectedReplCB: PropTypes.func.isRequired,
+    showPopupCB: PropTypes.func.isRequired,
+    removePopupCB: PropTypes.func.isRequired,
+    popup: PropTypes.object,
 };
 
 const mapStateToProps = (state) => {
@@ -71,6 +75,7 @@ const mapStateToProps = (state) => {
         clickedSlices: state.sampleSelection.clickedSlices,
         mouseOverSampleId : state.sampleSelection.mouseOverSampleId,
         mouseOverReplId : state.sampleSelection.mouseOverReplId,
+        popup: state.peptideViz.popup,
     }
     return props
 }
@@ -84,6 +89,8 @@ const mapDispatchToProps = (dispatch) => {
         mouseLeaveReplCB: () => { dispatch(mouseLeaveRepl()) },
         mouseClickReplCB: (sampleIdx, replIdx) => { dispatch(mouseClickRepl(sampleIdx, replIdx)) },
         removeSelectedReplCB: (sampleIdx, replIdx) => { dispatch(removeRepl(sampleIdx, replIdx)) },
+        showPopupCB: (popup) => { dispatch(showPepPopup(popup))},
+        removePopupCB: () => { dispatch(removePepPopup())},
     }
 }
 

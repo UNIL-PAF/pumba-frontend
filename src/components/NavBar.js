@@ -15,7 +15,7 @@ const NavBar = () => (
               <Nav className="ml-auto" navbar>
                   <NavItem>
                       <LinkContainer to="/" exact={true}>
-                          <NavLink tag={Link} to="/">Search protein</NavLink>
+                          <NavLink tag={Link} to="/">Search</NavLink>
                       </LinkContainer>
                   </NavItem>
                   <NavItem>

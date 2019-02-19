@@ -32,23 +32,35 @@ class Peptide extends Component {
     }
 
     componentDidMount(){
-        const {svgParent} = this.props;
+        const {svgParent, pepInfo, showPopupCB} = this.props;
 
         // this event we have to call using D3 in order to get the mouse position correctly
         select(this.rectDom).on('mouseenter', () => {
+            this.setState({'mouseIsOver': true})
             const [x,y] = mouse(svgParent)
-            this.setState({mouseIsOver: true})
-            console.log("mouse over", x, y)
+            var popUpContent = {
+                Sample: "sample",
+                Replicate: "repli",
+                Sequence: pepInfo.aminoAcidBefore + "." + pepInfo.sequence + "." + pepInfo.aminoAcidAfter,
+                "Start pos" : pepInfo.startPos,
+                "End pos" : pepInfo.endPos,
+                "Mol weight": Math.pow(10, pepInfo.theoMass).toFixed(2),
+                "Razor pep": pepInfo.isRazor ? "True": "False",
+                "Gel slice": pepInfo.sliceNr
+            }
+            const popUp = {x: x, y: y, content: popUpContent}
+            showPopupCB(popUp)
         })
 
         select(this.rectDom).on('mouseout', () => {
-            this.mouseOutPep()
+            this.setState({'mouseIsOver': false})
+            this.props.removePopupCB()
         })
 
-        select(this.rectDom).on('click', () => {
-            const [x,y] = mouse(svgParent)
-            this.props.clickOnPep(this.rectDom.id, x, y)
-        })
+        // select(this.rectDom).on('click', () => {
+        //     const [x,y] = mouse(svgParent)
+        //     this.props.clickOnPep(this.rectDom.id, x, y)
+        // })
     }
 
     render() {
@@ -101,7 +113,9 @@ Peptide.propTypes = {
     svgParent: PropTypes.object.isRequired,
     yZoomFactor: PropTypes.number.isRequired,
     highlightRepl: PropTypes.bool.isRequired,
-    sliceIsClicked: PropTypes.bool.isRequired
+    sliceIsClicked: PropTypes.bool.isRequired,
+    showPopupCB: PropTypes.func.isRequired,
+    removePopupCB: PropTypes.func.isRequired,
 };
 
 

@@ -51,7 +51,10 @@ class SliceBars extends Component {
     }
 
     clickCB = (protein, sliceIdx) => {
-        const {clickSliceCB, history, removePopupCB} = this.props
+        const {clickSliceCB, history, removePopupCB, clickedSlices, unclickSliceCB} = this.props
+
+        // first remove the old selection, currently we should only have one
+        unclickSliceCB(clickedSlices[0])
 
         const peptides = _.filter(protein.peptides, (pep) => {
             return pep.sliceNr === (sliceIdx + 1)

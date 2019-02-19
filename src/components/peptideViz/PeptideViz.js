@@ -10,6 +10,7 @@ import * as _ from 'lodash'
 import AminoAcidBar from './AminoAcidBar'
 import Peptide from './Peptide'
 import ProteinVizLegends from '../proteinViz/ProteinVizLegends'
+import PopOverSkeleton from "../common/popOverSkeleton"
 
 class PeptideViz extends Component {
 
@@ -139,7 +140,8 @@ class PeptideViz extends Component {
     }
 
     plotPeptides = (thisZoomLeft, thisZoomRight, yZoomFactor) => {
-        const {proteinData, clickedRepl, clickedSlices, mouseOverSampleId, mouseOverReplId} = this.props
+        const {proteinData, clickedRepl, clickedSlices, mouseOverSampleId, mouseOverReplId,
+            showPopupCB, removePopupCB} = this.props
 
         // we need this variable to get the correct replIdx
         var replIdx = 0;
@@ -181,16 +183,31 @@ class PeptideViz extends Component {
                         key={i+':'+j+':'+k}
                         highlightRepl={replIsClicked || highlightRepl}
                         sliceIsClicked={sliceIsClicked}
+                        showPopupCB={showPopupCB}
+                        removePopupCB={removePopupCB}
                     />
                 })
             })
         })
     }
 
+    plotPopup = () => {
+        const {x, y, content} = this.props.popup
+
+        const seqLen = content.Sequence.length
+        const height = 90
+        const defWidth = 130
+        const width = seqLen > 11 ? (seqLen - 11) * 5 + defWidth : defWidth
+
+        return (
+            <PopOverSkeleton x={x+5} y={y-height} width={width} height={height} content={content} removable={false}/>
+        )
+    }
 
     render(){
         const {viewWidth, viewHeight, zoom, sequenceData, samples, clickedRepl, mouseOverSampleCB, mouseOverReplId,
-            mouseOverReplCB, mouseLeaveReplCB, mouseLeaveSampleCB, mouseClickReplCB, removeSelectedReplCB, mouseOverSampleId} = this.props
+            mouseOverReplCB, mouseLeaveReplCB, mouseLeaveSampleCB, mouseClickReplCB, removeSelectedReplCB, mouseOverSampleId,
+            popup} = this.props
 
         const thisZoomLeft = (zoom === undefined) ? 1 : zoom.left;
         const thisZoomRight = (zoom === undefined) ? sequenceData.length : zoom.right;
@@ -203,8 +220,6 @@ class PeptideViz extends Component {
 
         // compute the current factor of yZoom
         const yZoomFactor = this.yRange / (thisZoomTop - thisZoomBottom)
-
-        console.log(this.yRange, thisZoomTop, thisZoomBottom, yZoomFactor)
 
         return <div id={"peptide-plot"}>
             <svg className="peptide-svg"
@@ -235,6 +250,7 @@ class PeptideViz extends Component {
                                    mouseClickReplCB={mouseClickReplCB} removeSelectedReplCB={removeSelectedReplCB}
                 >
                 </ProteinVizLegends>
+                {popup && this.plotPopup()}
             </svg>
         </div>
     }
@@ -267,6 +283,9 @@ PeptideViz.propTypes = {
     mouseLeaveReplCB: PropTypes.func.isRequired,
     mouseClickReplCB: PropTypes.func.isRequired,
     removeSelectedReplCB: PropTypes.func.isRequired,
+    showPopupCB: PropTypes.func.isRequired,
+    removePopupCB: PropTypes.func.isRequired,
+    popup: PropTypes.object,
 };
 
 export default (PeptideViz)
