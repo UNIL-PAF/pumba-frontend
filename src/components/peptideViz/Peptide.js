@@ -52,7 +52,7 @@ class Peptide extends Component {
     }
 
     render() {
-        const {yScale, xScale, pepInfo, sliceMolWeight, sampleIdx, replIdx, yZoomFactor, replIsClicked} = this.props;
+        const {yScale, xScale, pepInfo, sliceMolWeight, sampleIdx, replIdx, yZoomFactor, replIsClicked, sliceIsClicked} = this.props;
 
         const y = yScale(sliceMolWeight[replIdx][pepInfo.sliceNr])
         const xStart = xScale(pepInfo.startPos)
@@ -63,7 +63,8 @@ class Peptide extends Component {
         const height = yZoomFactor * ((this.state.mouseIsOver) ? this.selRectHeight : this.defaultRectHeight)
         const height_2 = (replIsClicked) ? height * 2 : height
 
-        const stroke = this.state.mouseIsOver ? "black" : "None"
+        var stroke = sliceIsClicked ? "deeppink" : "None"
+        stroke = this.state.mouseIsOver ? "black" : stroke
 
         return (
             <rect
@@ -93,7 +94,8 @@ Peptide.propTypes = {
     sliceMolWeight: PropTypes.array,
     svgParent: PropTypes.object.isRequired,
     yZoomFactor: PropTypes.number.isRequired,
-    replIsClicked: PropTypes.bool.isRequired
+    replIsClicked: PropTypes.bool.isRequired,
+    sliceIsClicked: PropTypes.bool.isRequired
 };
 
 

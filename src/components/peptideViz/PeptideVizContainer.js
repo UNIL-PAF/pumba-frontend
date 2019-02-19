@@ -9,7 +9,7 @@ import {changePepZoomRange} from "../../actions/peptideVizActions";
 class PeptideVizContainer extends Component {
 
     render(){
-        const {proteinData, sequenceData, zoom, changeZoomRangeCB, clickedRepl} = this.props
+        const {proteinData, sequenceData, zoom, changeZoomRangeCB, clickedRepl, clickedSlices} = this.props
 
         return <div id={"peptide-viz"}>
             { proteinData && <PeptideViz proteinData={proteinData}
@@ -20,6 +20,7 @@ class PeptideVizContainer extends Component {
                                          zoom={zoom}
                                          changeZoomRangeCB={changeZoomRangeCB}
                                          clickedRepl={clickedRepl}
+                                         clickedSlices={clickedSlices}
                             /> }
         </div>
     }
@@ -30,7 +31,8 @@ PeptideVizContainer.propTypes = {
     proteinData: PropTypes.array,
     sequenceData: PropTypes.object,
     zoom: PropTypes.object,
-    clickedRepl: PropTypes.array.isRequired
+    clickedRepl: PropTypes.array.isRequired,
+    clickedSlices: PropTypes.array.isRequired
 };
 
 const mapStateToProps = (state) => {
@@ -38,7 +40,8 @@ const mapStateToProps = (state) => {
         proteinData: state.loadProtein.proteinData,
         sequenceData: state.loadProtein.sequenceData,
         zoom: state.peptideViz.zoom,
-        clickedRepl : state.sampleSelection.clickedRepl
+        clickedRepl : state.sampleSelection.clickedRepl,
+        clickedSlices: state.sampleSelection.clickedSlices
     }
     return props
 }

@@ -117,7 +117,8 @@ SliceBars.propTypes = {
     removePopupCB: PropTypes.func.isRequired,
     unclickSliceCB: PropTypes.func.isRequired,
     clickSliceCB: PropTypes.func.isRequired,
-    mouseOverTag: PropTypes.string
+    mouseOverTag: PropTypes.string,
+    clickedSlices: PropTypes.array.isRequired
 };
 
 export default SliceBars
