@@ -28,7 +28,6 @@ class PeptideVizContainer extends Component {
         return <div id={"peptide-viz"}>
             { proteinData && <PeptideViz proteinData={proteinData}
                                          sequenceData={sequenceData}
-                                         clickedRepl={clickedRepl}
                                          viewWidth={800}
                                          viewHeight={400}
                                          zoom={zoom}

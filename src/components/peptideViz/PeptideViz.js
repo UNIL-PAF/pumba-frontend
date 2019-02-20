@@ -3,7 +3,7 @@ import React, {
 } from 'react'
 import PropTypes from 'prop-types'
 import { scaleLinear } from 'd3-scale'
-import { select, event, mouse } from 'd3-selection'
+import { select, event } from 'd3-selection'
 import {axisBottom, axisLeft} from "d3-axis";
 import {brush} from "d3-brush";
 import * as _ from 'lodash'

@@ -9,7 +9,6 @@ import {
     mouseClickRepl, mouseLeaveRepl, mouseLeaveSample, mouseOverRepl, mouseOverSample,
     removeRepl, clickSlice, unclickSlice
 } from "../../actions/sampleSelection";
-import {setTimestamp} from "../../actions/loadProtein";
 import {changeZoomAndFilter, removeSlicePopup, showSlicePopup} from "../../actions/proteinVizActions";
 
 class ProteinVizContainer extends Component {

@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 import { scaleLinear } from 'd3-scale'
 import * as _ from 'lodash'
 import { axisLeft, axisBottom } from 'd3-axis'
-import {brush, brushX} from 'd3-brush'
+import {brushX} from 'd3-brush'
 import { select, event, mouse } from 'd3-selection'
 import { sampleColor } from '../common/colorSettings'
 import TheoWeightLine from './TheoWeightLine'
@@ -45,11 +45,11 @@ class ProteinVizPlot extends Component {
         // just take the theoretical weight of the first protein, it should always be the same.
         const theoMolWeight = Math.log10(proteinData[0].proteins[0].theoMolWeight)
 
-        this.state = {
+        this.setState({
             xScale: scaleLinear().range([0, this.props.viewWidth - this.margin.left - this.margin.right]).domain([this.minMolWeight, this.maxMolWeight]),
             yScale: scaleLinear().range([this.props.viewHeight - this.margin.top - this.margin.bottom, 0]).domain([0, maxInt]),
             theoMolWeight: theoMolWeight
-        }
+        })
     }
 
     brushend = () => {

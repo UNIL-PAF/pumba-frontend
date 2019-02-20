@@ -4,7 +4,6 @@ import React, {
 import PropTypes from 'prop-types'
 import * as _ from 'lodash'
 import {sampleColor} from "../common/colorSettings";
-import {mouse, select} from "d3-selection";
 import SliceBar from "./SliceBar"
 
 

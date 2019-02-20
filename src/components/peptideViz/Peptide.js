@@ -2,7 +2,7 @@ import React, {
     Component,
 } from 'react'
 import PropTypes from 'prop-types'
-import { select, event, mouse } from 'd3-selection'
+import { select, mouse } from 'd3-selection'
 import { sampleColor } from '../common/colorSettings'
 
 class Peptide extends Component {
@@ -64,7 +64,7 @@ class Peptide extends Component {
     }
 
     render() {
-        const {yScale, xScale, pepInfo, sliceMolWeight, sampleIdx, replIdx, yZoomFactor, highlightRepl, sliceIsClicked} = this.props;
+        const {yScale, xScale, pepInfo, sliceMolWeight, sampleIdx, replIdx, highlightRepl, sliceIsClicked} = this.props;
 
         const y = yScale(sliceMolWeight[replIdx][pepInfo.sliceNr])
         const xStart = xScale(pepInfo.startPos)
