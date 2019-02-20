@@ -204,22 +204,36 @@ class PeptideViz extends Component {
         )
     }
 
+    plotTheoWeightLine = () => {
+        const {yScale, theoMolWeight} = this.state
+
+        const y = yScale(theoMolWeight)
+
+        return <line
+            className="theo-weight-line"
+            x1={0}
+            y1={y}
+            x2={this.props.viewWidth}
+            y2={ y }
+        />
+    }
+
     render(){
         const {viewWidth, viewHeight, zoom, sequenceData, samples, clickedRepl, mouseOverSampleCB, mouseOverReplId,
             mouseOverReplCB, mouseLeaveReplCB, mouseLeaveSampleCB, mouseClickReplCB, removeSelectedReplCB, mouseOverSampleId,
             popup} = this.props
 
-        const thisZoomLeft = (zoom === undefined) ? 1 : zoom.left;
-        const thisZoomRight = (zoom === undefined) ? sequenceData.length : zoom.right;
-        const thisZoomTop = (zoom === undefined) ? this.maxMolWeight : zoom.top
-        const thisZoomBottom = (zoom === undefined) ? this.minMolWeight : zoom.bottom
+        const zoomLeft = (zoom === undefined) ? 1 : zoom.left;
+        const zoomRight = (zoom === undefined) ? sequenceData.length : zoom.right;
+        const zoomTop = (zoom === undefined) ? this.maxMolWeight : zoom.top
+        const zoomBottom = (zoom === undefined) ? this.minMolWeight : zoom.bottom
 
         // change the scale after zooming
-        this.state.xScale.domain([thisZoomLeft, thisZoomRight])
-        this.state.yScale.domain([thisZoomTop, thisZoomBottom])
+        this.state.xScale.domain([zoomLeft, zoomRight])
+        this.state.yScale.domain([zoomTop, zoomBottom])
 
         // compute the current factor of yZoom
-        const yZoomFactor = this.yRange / (thisZoomTop - thisZoomBottom)
+        const yZoomFactor = this.yRange / (zoomTop - zoomBottom)
 
         return <div id={"peptide-plot"}>
             <svg className="peptide-svg"
@@ -239,8 +253,9 @@ class PeptideViz extends Component {
                    transform={'translate(' + this.margin.left + ',' + this.margin.top + ')'}
                    onDoubleClick={this.zoomOut}
                 >
-                    { this.plotAminAcidBar(thisZoomLeft, thisZoomRight) }
-                    { this.svg && this.plotPeptides(thisZoomLeft, thisZoomRight, yZoomFactor) }
+                    { this.plotTheoWeightLine() }
+                    { this.plotAminAcidBar(zoomLeft, zoomRight) }
+                    { this.svg && this.plotPeptides(zoomLeft, zoomRight, yZoomFactor) }
                 </g>
                 <ProteinVizLegends x={viewWidth-200} y={20} width={150} samples={samples}
                                    theoMolWeight={this.state.theoMolWeight} clickedRepl={clickedRepl}

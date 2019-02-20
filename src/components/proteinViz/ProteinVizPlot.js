@@ -18,10 +18,7 @@ class ProteinVizPlot extends Component {
 
     constructor(props) {
         super(props)
-        this.setInitialState()
-    }
 
-    setInitialState = () => {
         const {proteinData} = this.props
 
         const minMolWeightDa = Math.pow(10, _.min(_.map(proteinData, function(p){
@@ -45,11 +42,11 @@ class ProteinVizPlot extends Component {
         // just take the theoretical weight of the first protein, it should always be the same.
         const theoMolWeight = Math.log10(proteinData[0].proteins[0].theoMolWeight)
 
-        this.setState({
+        this.state = {
             xScale: scaleLinear().range([0, this.props.viewWidth - this.margin.left - this.margin.right]).domain([this.minMolWeight, this.maxMolWeight]),
             yScale: scaleLinear().range([this.props.viewHeight - this.margin.top - this.margin.bottom, 0]).domain([0, maxInt]),
             theoMolWeight: theoMolWeight
-        })
+        }
     }
 
     brushend = () => {

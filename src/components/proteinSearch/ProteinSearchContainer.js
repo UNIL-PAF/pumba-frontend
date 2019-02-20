@@ -31,7 +31,6 @@ class ProteinSearchContainer extends React.Component{
             </Row>
 
             <br/>
-            <br/>
 
             <Form>
                 <FormGroup>
