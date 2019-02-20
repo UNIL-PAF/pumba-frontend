@@ -11,6 +11,7 @@ import AminoAcidBar from './AminoAcidBar'
 import Peptide from './Peptide'
 import ProteinVizLegends from '../proteinViz/ProteinVizLegends'
 import PopOverSkeleton from "../common/popOverSkeleton"
+import ProteinTitle from "../common/ProteinTitle"
 
 class PeptideViz extends Component {
 
@@ -221,7 +222,7 @@ class PeptideViz extends Component {
     render(){
         const {viewWidth, viewHeight, zoom, sequenceData, samples, clickedRepl, mouseOverSampleCB, mouseOverReplId,
             mouseOverReplCB, mouseLeaveReplCB, mouseLeaveSampleCB, mouseClickReplCB, removeSelectedReplCB, mouseOverSampleId,
-            popup} = this.props
+            popup, proteinData} = this.props
 
         const zoomLeft = (zoom === undefined) ? 1 : zoom.left;
         const zoomRight = (zoom === undefined) ? sequenceData.length : zoom.right;
@@ -254,6 +255,7 @@ class PeptideViz extends Component {
                    onDoubleClick={this.zoomOut}
                 >
                     { this.plotTheoWeightLine() }
+                    <ProteinTitle proteinData={proteinData}/>
                     { this.plotAminAcidBar(zoomLeft, zoomRight) }
                     { this.svg && this.plotPeptides(zoomLeft, zoomRight, yZoomFactor) }
                 </g>
@@ -271,14 +273,6 @@ class PeptideViz extends Component {
     }
 
 }
-
-/*
-          mouseOverSampleId={mouseOverSampleId} mouseOverSampleCB={mouseOverSampleCB}
-                                   mouseOverReplId={mouseOverReplId} mouseOverReplCB={mouseOverReplCB}
-                                   mouseLeaveReplCB={mouseLeaveReplCB} mouseLeaveSampleCB={mouseLeaveSampleCB}
-                                    mouseClickReplCB={mouseClickReplCB}
-                                   removeSelectedReplCB={removeSelectedReplCB}
- */
 
 PeptideViz.propTypes = {
     proteinData: PropTypes.array.isRequired,

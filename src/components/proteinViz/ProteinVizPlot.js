@@ -12,6 +12,7 @@ import TheoWeightLine from './TheoWeightLine'
 import ProteinVizLegends from './ProteinVizLegends'
 import ProteinSliceBars from "./ProteinSliceBars";
 import PopOverSkeleton from "../common/popOverSkeleton"
+import ProteinTitle from "../common/ProteinTitle"
 
 
 class ProteinVizPlot extends Component {
@@ -247,7 +248,7 @@ class ProteinVizPlot extends Component {
     render() {
         const {viewWidth, viewHeight, samples, mouseOverSampleId, mouseOverSampleCB, mouseOverReplId,
             mouseOverReplCB, mouseLeaveSampleCB, mouseLeaveReplCB, mouseClickReplCB, clickedRepl,
-            removeSelectedReplCB, popup} = this.props
+            removeSelectedReplCB, popup, proteinData} = this.props
 
         // the mol weight at the mouse position
         const mouseWeightPos = this.state.xScale.invert(this.state.mouseX)
@@ -269,6 +270,8 @@ class ProteinVizPlot extends Component {
                 <g className="protein-main-g" transform={'translate(' + this.margin.left + ',' + this.margin.top + ')'}>
 
                     {this.plotTheoMolWeightLine()}
+
+                    <ProteinTitle proteinData={proteinData}/>
 
                     {this.plotMousePositionCircles(mouseWeightPos)}
 

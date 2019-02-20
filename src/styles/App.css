@@ -148,3 +148,10 @@ popover
 .pop-over-value {
   font-weight:bold;
 }
+
+/****
+protein title
+ */
+.protein-title {
+  font-size: 90%
+}
