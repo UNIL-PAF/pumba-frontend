@@ -8,10 +8,10 @@ import {Form, FormGroup, Col, Row} from 'reactstrap'
 
 class ProteinSearchContainer extends React.Component{
 
-    componentDidMount() {
-        // Autoloading for testing
-         this.props.onLoadProtein("P02786")
-    }
+    // componentDidMount() {
+    //     // Autoloading for testing
+    //      this.props.onLoadProtein("P02786")
+    // }
 
     componentDidUpdate() {
         // let's move to the ProteinViz, but only once

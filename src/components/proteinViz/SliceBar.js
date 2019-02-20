@@ -13,7 +13,6 @@ class SliceBar extends Component {
 
         // this event we have to call using D3 in order to get the mouse position correctly
         select(this.rectDom).on('mouseover', () => {
-            console.log("mouse over slice")
             const [x,y] = mouse(svgParent)
             // showSlicePopOverCB
             const showRemoveMessage = mouseIsOver & isHighlighted

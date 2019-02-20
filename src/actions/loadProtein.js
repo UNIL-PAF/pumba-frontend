@@ -9,6 +9,7 @@ export const ADD_PROTEIN_DATA = 'ADD_PROTEIN_DATA'
 export const PROTEIN_LOAD_ERROR = 'PROTEIN_LOAD_ERROR'
 export const GOTO_VIZ = 'GOTO_VIZ'
 export const ADD_SEQUENCE_DATA = 'ADD_SEQUENCE_DATA'
+export const SET_TIMESTAMP = 'SET_TIMESTAMP'
 
 export function fetchProtein(proteinId){
     return function (dispatch) {
@@ -24,7 +25,7 @@ export function fetchProtein(proteinId){
             })
             .then(json => {
                     // add timestamp
-                    json.timeStamp = Date.now()
+                    json.timestamp = Date.now()
                     // let's take the FASTA data from the first entry (should always be OK)
                     const dataBaseName = json[0].proteins[0].dataSet.dataBaseName
                     dispatch(fetchSequence(proteinId, dataBaseName))
@@ -97,4 +98,8 @@ export const gotoViz = (gotoViz) => ({
 
 export const addSequenceData = (sequenceData) => ({
     type: ADD_SEQUENCE_DATA, sequenceData: sequenceData
+})
+
+export const setTimestamp = (timestamp) => ({
+    type: SET_TIMESTAMP, timestamp: timestamp
 })
