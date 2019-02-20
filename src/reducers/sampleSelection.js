@@ -1,11 +1,14 @@
 import {
     MOUSE_OVER_SAMPLE, MOUSE_OVER_REPL, MOUSE_LEAVE_SAMPLE, MOUSE_LEAVE_REPL, MOUSE_CLICK_REPL,
-    REMOVE_REPL, UNCLICK_SLICE, CLICK_SLICE
+    REMOVE_REPL, UNCLICK_SLICE, CLICK_SLICE, RESET_SAMPLE_SELECTION
 } from '../actions/sampleSelection'
 import * as _ from 'lodash';
 
 const initialState = {
-    mouseOverSampleId: undefined, mouseOverReplId: undefined, clickedRepl: [], clickedSlices: []
+    mouseOverSampleId: undefined,
+    mouseOverReplId: undefined,
+    clickedRepl: [],
+    clickedSlices: []
 }
 
 const sampleSelectionReducer = (state = initialState, action) => {
@@ -36,6 +39,8 @@ const sampleSelectionReducer = (state = initialState, action) => {
         case UNCLICK_SLICE:
             const clickedSliceRemoved = _.filter(state.clickedSlices, (x) => { return x.tag !== action.slice.tag })
             return { ...state, clickedSlices: clickedSliceRemoved}
+        case RESET_SAMPLE_SELECTION:
+            return initialState
         default:
             return state
     }

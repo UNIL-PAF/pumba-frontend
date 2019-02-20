@@ -4,6 +4,7 @@ export const CHANGE_ZOOM_RANGE = 'CHANGE_ZOOM_RANGE'
 export const CHANGE_THEO_MERGED_PROTEINS = 'CHANGE_THEO_MERGED_PROTEINS'
 export const SHOW_SLICE_POPUP = 'SHOW_SLICE_POPUP'
 export const REMOVE_SLICE_POPUP = 'REMOVE_SLICE_POPUP'
+export const RESET_PROTEIN_VIEW = 'RESET_PROTEIN_VIEW'
 
 export function changeZoomAndFilter(left, right){
     return function (dispatch, getState) {
@@ -41,4 +42,7 @@ export const removeSlicePopup = () => ({
     type: REMOVE_SLICE_POPUP
 })
 
+export const resetProteinView = () => ({
+    type: RESET_PROTEIN_VIEW
+})
 

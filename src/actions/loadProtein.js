@@ -1,7 +1,8 @@
 import fetch from 'cross-fetch'
 import pumbaConfig from '../config'
-import { mouseLeaveSample } from "./sampleSelection"
-import { changeTheoMergedProteins, changeZoomRange } from "./proteinVizActions"
+import { resetSampleSelection } from "./sampleSelection"
+import { resetProteinView } from "./proteinVizActions"
+import {resetPeptideView} from "./peptideVizActions";
 
 export const PROTEIN_IS_LOADED = 'PROTEIN_IS_LOADED'
 export const REQUEST_PROTEIN = 'REQUEST_PROTEIN'
@@ -9,7 +10,6 @@ export const ADD_PROTEIN_DATA = 'ADD_PROTEIN_DATA'
 export const PROTEIN_LOAD_ERROR = 'PROTEIN_LOAD_ERROR'
 export const GOTO_VIZ = 'GOTO_VIZ'
 export const ADD_SEQUENCE_DATA = 'ADD_SEQUENCE_DATA'
-export const SET_TIMESTAMP = 'SET_TIMESTAMP'
 
 export function fetchProtein(proteinId){
     return function (dispatch) {
@@ -17,6 +17,11 @@ export function fetchProtein(proteinId){
 
         // we reset the error message to undefined
         dispatch(proteinLoadError(undefined))
+
+        // and reset settings from the views
+        dispatch(resetProteinView())
+        dispatch(resetPeptideView())
+        dispatch(resetSampleSelection())
 
         return fetch(pumbaConfig.urlBackend + "/merge-protein/" + proteinId )
             .then( response => {
@@ -33,9 +38,6 @@ export function fetchProtein(proteinId){
                     dispatch(addProteinData(json))
                     dispatch(proteinIsLoaded())
                     dispatch(gotoViz(true))
-                    dispatch(mouseLeaveSample())
-                    dispatch(changeTheoMergedProteins(null))
-                    dispatch(changeZoomRange(undefined, undefined))
                 }
             )
             .catch(err => {
@@ -98,8 +100,4 @@ export const gotoViz = (gotoViz) => ({
 
 export const addSequenceData = (sequenceData) => ({
     type: ADD_SEQUENCE_DATA, sequenceData: sequenceData
-})
-
-export const setTimestamp = (timestamp) => ({
-    type: SET_TIMESTAMP, timestamp: timestamp
 })

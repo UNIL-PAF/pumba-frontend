@@ -6,6 +6,7 @@ export const MOUSE_CLICK_REPL = 'MOUSE_CLICK_REPL'
 export const REMOVE_REPL = 'REMOVE_REPL'
 export const CLICK_SLICE = 'CLICK_SLICE'
 export const UNCLICK_SLICE = 'UNCLICK_SLICE'
+export const RESET_SAMPLE_SELECTION = 'RESET_SAMPLE_SELECTION'
 
 export const mouseOverSample = (sampleIdx) => ({
     type: MOUSE_OVER_SAMPLE, sampleIdx: sampleIdx
@@ -37,4 +38,8 @@ export const clickSlice = (slice) => ({
 
 export const unclickSlice = (slice) => ({
     type: UNCLICK_SLICE, slice: slice
+})
+
+export const resetSampleSelection = () => ({
+    type: RESET_SAMPLE_SELECTION
 })

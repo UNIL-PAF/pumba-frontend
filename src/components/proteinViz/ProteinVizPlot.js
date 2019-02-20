@@ -22,7 +22,7 @@ class ProteinVizPlot extends Component {
     }
 
     setInitialState = () => {
-        const {proteinData, zoomLeft, zoomRight, timestamp, setTimestampCB} = this.props
+        const {proteinData} = this.props
 
         const minMolWeightDa = Math.pow(10, _.min(_.map(proteinData, function(p){
             return p.theoMergedProtein.theoMolWeights[0]
@@ -45,21 +45,11 @@ class ProteinVizPlot extends Component {
         // just take the theoretical weight of the first protein, it should always be the same.
         const theoMolWeight = Math.log10(proteinData[0].proteins[0].theoMolWeight)
 
-        var stateObj = {
+        this.state = {
             xScale: scaleLinear().range([0, this.props.viewWidth - this.margin.left - this.margin.right]).domain([this.minMolWeight, this.maxMolWeight]),
             yScale: scaleLinear().range([this.props.viewHeight - this.margin.top - this.margin.bottom, 0]).domain([0, maxInt]),
             theoMolWeight: theoMolWeight
         }
-
-        // in case data was updated, we have to reset the zoom
-        if(proteinData.timestamp !== timestamp){
-            stateObj.zoomLeft = zoomLeft
-            stateObj.zoomRight = zoomRight
-            setTimestampCB(proteinData.timestamp)
-        }
-
-        this.state = stateObj
-
     }
 
     brushend = () => {
@@ -337,8 +327,6 @@ ProteinVizPlot.propTypes = {
     popup: PropTypes.object,
     clickedSlices: PropTypes.array.isRequired,
     history: PropTypes.object.isRequired,
-    timestamp: PropTypes.number,
-    setTimestampCB: PropTypes.func.isRequired
 };
 
 export default ProteinVizPlot

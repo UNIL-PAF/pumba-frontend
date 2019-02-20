@@ -20,7 +20,7 @@ class ProteinVizContainer extends Component {
             mouseOverReplId, mouseOverReplCB, mouseLeaveSampleCB, mouseLeaveReplCB,
             zoomLeft, zoomRight, changeZoomRangeCB, theoMergedProteins, mouseClickReplCB,
             clickedRepl, removeSelectedReplCB, showPopupCB, removePopupCB, popup, clickedSlices,
-            clickSliceCB, unclickSliceCB, history, timestamp, setTimestampCB} = this.props
+            clickSliceCB, unclickSliceCB, history} = this.props
 
         const samples = _.map(proteinData, (p, i) => {
             const replicates = _.map(p.proteins, (oneProt, i) => {
@@ -39,7 +39,7 @@ class ProteinVizContainer extends Component {
                              clickedRepl={clickedRepl} removeSelectedReplCB={removeSelectedReplCB}
                              showPopupCB={showPopupCB} removePopupCB={removePopupCB} popup={popup}
                              clickedSlices={clickedSlices} clickSliceCB={clickSliceCB} unclickSliceCB={unclickSliceCB}
-                             history={history} timestamp={timestamp} setTimestampCB={setTimestampCB}
+                             history={history}
         /> }
         </div>
     }
@@ -68,8 +68,6 @@ ProteinVizContainer.propTypes = {
     popup: PropTypes.object,
     clickedSlices: PropTypes.array.isRequired,
     history: PropTypes.object.isRequired,
-    timestamp: PropTypes.number,
-    setTimestampCB: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => {
@@ -83,7 +81,6 @@ const mapStateToProps = (state) => {
         theoMergedProteins: state.proteinViz.theoMergedProteins,
         popup: state.proteinViz.popup,
         clickedSlices: state.sampleSelection.clickedSlices,
-        timestamp: state.loadProtein.timestamp
     }
     return props
 }
@@ -101,7 +98,6 @@ const mapDispatchToProps = (dispatch) => {
         removePopupCB: () => { dispatch(removeSlicePopup())},
         clickSliceCB: (slice) => { dispatch(clickSlice(slice))},
         unclickSliceCB: (slice) => { dispatch(unclickSlice(slice))},
-        setTimestampCB: (timestamp) => {dispatch(setTimestamp(timestamp))}
     }
 }
 
