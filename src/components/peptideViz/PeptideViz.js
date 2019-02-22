@@ -78,8 +78,8 @@ class PeptideViz extends Component {
 
         const zoomLeft = (zoom === undefined) ? 1 : zoom.left;
         const zoomRight = (zoom === undefined) ? sequenceData.length : zoom.right;
-        const zoomTop = (zoom === undefined) ? this.maxMolWeight : zoom.top
-        const zoomBottom = (zoom === undefined) ? this.minMolWeight : zoom.bottom
+        const zoomTop = (zoom === undefined) ? this.minMolWeight : zoom.top
+        const zoomBottom = (zoom === undefined) ? this.maxMolWeight : zoom.bottom
 
         // we only update the axis and stuff if the zoom changed
         if(zoomLeft && this.state.zoomLeft !== zoomLeft && this.state.zoomRight !== zoomRight){
