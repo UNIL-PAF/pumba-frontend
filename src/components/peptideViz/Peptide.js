@@ -47,7 +47,7 @@ class Peptide extends Component {
                 "End pos" : pepInfo.endPos,
                 //"Pep mol weight": Math.pow(10, pepInfo.theoMass).toFixed(2),
                 "Razor pep": pepInfo.isRazor ? "True": "False",
-                "Mol weight": Math.pow(10, sliceMolWeight).toFixed(2),
+                "Mol weight": Math.pow(10, sliceMolWeight).toFixed(2) + " kDa",
                 "Gel slice": pepInfo.sliceNr,
             }
             const popUp = {x: x, y: y, content: popUpContent}
@@ -67,6 +67,7 @@ class Peptide extends Component {
 
     render() {
         const {yScale, xScale, pepInfo, sliceMolWeight, sampleIdx, highlightRepl, sliceIsClicked} = this.props;
+        const {mouseIsOver} = this.state
 
         const y = yScale(sliceMolWeight)
         const xStart = xScale(pepInfo.startPos)
@@ -74,20 +75,19 @@ class Peptide extends Component {
         const xDiff = xEnd - xStart;
 
         // special settings if mouse is over this peptide
-        const height = ((this.state.mouseIsOver) ? this.selRectHeight : this.defaultRectHeight)
+        const height = ((mouseIsOver) ? this.selRectHeight : this.defaultRectHeight)
         const height_2 = (highlightRepl) ? height * 2 : height
 
-        var stroke = this.state.mouseIsOver ? (sliceIsClicked ? "deeppink" : sampleColor(sampleIdx)) : "None"
+        var stroke = mouseIsOver ? sampleColor(sampleIdx) : "None"
 
         var fill = sampleColor(sampleIdx)
-        fill = (sliceIsClicked) ? "deeppink" : fill
 
         var fillOpacity = highlightRepl ? 0.7 : 0.5
         fillOpacity = this.state.mouseIsOver ? 1 : fillOpacity
 
         return (
             <rect
-                className="psm"
+                className={"psm" + (sliceIsClicked ? " highlighted" : "") + (mouseIsOver && sliceIsClicked ? " active" : "")}
                 id={pepInfo.id}
                 x={ (xStart < 0) ? 0 : xStart }
                 y={y - height_2/2}

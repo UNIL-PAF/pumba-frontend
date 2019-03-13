@@ -114,8 +114,21 @@
   pointer-events: none;
 }
 
+.slice-bar.highlighted{
+  fill: deeppink;
+  stroke: deeppink;
+}
+
 .slice-bar-background:hover {
   cursor: pointer;
+}
+
+.psm.highlighted {
+  fill: deeppink;
+}
+
+.psm.active {
+  stroke:deeppink;
 }
 
 /* */

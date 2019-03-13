@@ -151,7 +151,12 @@ class PeptideViz extends Component {
             return sample.proteins.map((protein, j) => {
                 replIdx = replIdx + 1
 
-                const fltProt = _.filter(protein.peptides, (pep) => {
+                const pepWithIdx = _.map(protein.peptides, function(p, i){
+                    p.idx = i
+                    return p
+                })
+
+                const fltProt = _.filter(pepWithIdx, (pep) => {
                     return pep.endPos > zoomLeft && pep.startPos < zoomRight
                 })
 
@@ -162,7 +167,6 @@ class PeptideViz extends Component {
                 const massFits = protein.dataSet.massFitResult.massFits
 
                 return fltProt.map((peptide, k) => {
-
                     // check if given replicate is activated on proteinViz
                     const replIsClicked = _.some(clickedRepl, (x) => {
                         return x.sampleIdx === i && x.replIdx === j
@@ -184,7 +188,7 @@ class PeptideViz extends Component {
                         svgParent={this.svg}
                         sliceMolWeight={massFits[peptide.sliceNr-1]}
                         pepInfo={peptide}
-                        key={i+':'+j+':'+k}
+                        key={i+':'+j+':'+ peptide.idx}
                         highlightRepl={replIsClicked || highlightRepl}
                         sliceIsClicked={sliceIsClicked}
                         showPopupCB={showPopupCB}

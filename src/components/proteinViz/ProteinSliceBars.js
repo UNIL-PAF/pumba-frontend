@@ -41,7 +41,7 @@ class SliceBars extends Component {
             Sample: protein.dataSet.sample,
             Replicate: protein.dataSet.name,
             '# Peptides': peptides.length,
-            'Mol weight': Math.pow(10, protein.dataSet.massFitResult.massFits[sliceIdx]).toFixed(2),
+            'Mol weight': Math.pow(10, protein.dataSet.massFitResult.massFits[sliceIdx]).toFixed(2) + " kDa",
             'Gel slice': sliceIdx + 1
         }
 

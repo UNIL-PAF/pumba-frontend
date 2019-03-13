@@ -52,13 +52,13 @@ class SliceBar extends Component {
         return <g>
             {this.plotBackgroundRect(xPos, yPos, width, height)}
             <rect
-                className={"slice-bar"}
+                className={"slice-bar" + (isHighlighted ? " highlighted" : "")}
                 x={xPos }
                 y={yPos}
                 width={width}
                 height={height}
                 stroke={isHighlighted ? "deeppink" : "None"}
-                fill={color}
+                fill={isHighlighted ? "deeppink" : color}
             />
         </g>
     }
