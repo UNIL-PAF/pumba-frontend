@@ -72,7 +72,7 @@ class Peptide extends Component {
         const xDiff = xEnd - xStart;
 
         // special settings if mouse is over this peptide
-        const height = ((this.state.mouseIsOver) ? this.selRectHeight : this.defaultRectHeight) // * yZoomFactor
+        const height = ((this.state.mouseIsOver) ? this.selRectHeight : this.defaultRectHeight)
         const height_2 = (highlightRepl) ? height * 2 : height
 
         var stroke = this.state.mouseIsOver ? sampleColor(sampleIdx) : "None"
@@ -111,7 +111,6 @@ Peptide.propTypes = {
     pepInfo: PropTypes.object.isRequired,
     sliceMolWeight: PropTypes.array,
     svgParent: PropTypes.object.isRequired,
-    yZoomFactor: PropTypes.number.isRequired,
     highlightRepl: PropTypes.bool.isRequired,
     sliceIsClicked: PropTypes.bool.isRequired,
     showPopupCB: PropTypes.func.isRequired,

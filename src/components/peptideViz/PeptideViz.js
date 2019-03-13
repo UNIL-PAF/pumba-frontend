@@ -18,7 +18,7 @@ class PeptideViz extends Component {
     constructor(props) {
         super(props)
 
-        const {proteinData, viewWidth, viewHeight} = this.props
+        const {proteinData, viewWidth, viewHeight, zoom, sequenceData} = this.props
 
         const minMolWeightDa = Math.pow(10, _.min(_.map(proteinData, function(p){
             return p.theoMergedProtein.theoMolWeights[0]
@@ -43,11 +43,18 @@ class PeptideViz extends Component {
             })
         })
 
+        const zoomLeft = (zoom === undefined) ? 1 : zoom.left;
+        const zoomRight = (zoom === undefined) ? sequenceData.length : zoom.right;
+        const zoomTop = (zoom === undefined) ? this.minMolWeight : zoom.top
+        const zoomBottom = (zoom === undefined) ? this.maxMolWeight : zoom.bottom
+
         this.state = {
-            xScale: scaleLinear().range([0, viewWidth - this.margin.left - this.margin.right]),
-            yScale: scaleLinear().range([viewHeight - this.margin.top - this.margin.bottom, 0]),
+            xScale: scaleLinear().range([0, viewWidth - this.margin.left - this.margin.right]).domain([zoomLeft, zoomRight]),
+            yScale: scaleLinear().range([viewHeight - this.margin.top - this.margin.bottom, 0]).domain([zoomTop, zoomBottom]),
             theoMolWeight: theoMolWeight,
-            sliceMolWeight: sliceMolWeight
+            sliceMolWeight: sliceMolWeight,
+            zoomLeft: zoomLeft,
+            zoomRight: zoomRight
         }
     }
 
@@ -101,8 +108,6 @@ class PeptideViz extends Component {
             this.setState({zoomLeft: zoomLeft, zoomRight: zoomRight})
         }
 
-        // TODO: update scales only if new data was loaded
-
     }
 
     brushend = () => {
@@ -128,21 +133,26 @@ class PeptideViz extends Component {
         this.props.changeZoomRangeCB(undefined, undefined, undefined, undefined)
     }
 
-    plotAminAcidBar = (thisZoomLeft, thisZoomRight) => {
+    plotAminoAcidBar = () => {
         const {viewHeight, sequenceData} = this.props
+        const {zoomLeft, zoomRight} = this.state
 
         return <AminoAcidBar
-            zoomLeft={thisZoomLeft}
-            zoomRight={thisZoomRight}
+            zoomLeft={zoomLeft}
+            zoomRight={zoomRight}
             sequence={sequenceData.sequence}
             xScale={this.state.xScale}
             yPos={viewHeight - this.margin.bottom + 18}
         />
     }
 
-    plotPeptides = (thisZoomLeft, thisZoomRight, yZoomFactor) => {
+    plotPeptides = () => {
         const {proteinData, clickedRepl, clickedSlices, mouseOverSampleId, mouseOverReplId,
             showPopupCB, removePopupCB} = this.props
+
+        const {zoomLeft, zoomRight} = this.state
+
+        console.log(zoomLeft, zoomRight)
 
         // we need this variable to get the correct replIdx
         var replIdx = 0;
@@ -152,7 +162,7 @@ class PeptideViz extends Component {
                 replIdx = replIdx + 1
 
                 const fltProt = _.filter(protein.peptides, (pep) => {
-                    return pep.endPos > thisZoomLeft && pep.startPos < thisZoomRight
+                    return pep.endPos > zoomLeft && pep.startPos < zoomRight
                 })
 
                 const sliceFromReplIsClicked = _.some(clickedSlices, (slice) => {
@@ -180,7 +190,6 @@ class PeptideViz extends Component {
                         svgParent={this.svg}
                         sliceMolWeight={this.state.sliceMolWeight}
                         pepInfo={peptide}
-                        yZoomFactor={yZoomFactor}
                         key={i+':'+j+':'+k}
                         highlightRepl={replIsClicked || highlightRepl}
                         sliceIsClicked={sliceIsClicked}
@@ -220,21 +229,9 @@ class PeptideViz extends Component {
     }
 
     render(){
-        const {viewWidth, viewHeight, zoom, sequenceData, samples, clickedRepl, mouseOverSampleCB, mouseOverReplId,
+        const {viewWidth, viewHeight, samples, clickedRepl, mouseOverSampleCB, mouseOverReplId,
             mouseOverReplCB, mouseLeaveReplCB, mouseLeaveSampleCB, mouseClickReplCB, removeSelectedReplCB, mouseOverSampleId,
             popup, proteinData} = this.props
-
-        const zoomLeft = (zoom === undefined) ? 1 : zoom.left;
-        const zoomRight = (zoom === undefined) ? sequenceData.length : zoom.right;
-        const zoomTop = (zoom === undefined) ? this.maxMolWeight : zoom.top
-        const zoomBottom = (zoom === undefined) ? this.minMolWeight : zoom.bottom
-
-        // change the scale after zooming
-        this.state.xScale.domain([zoomLeft, zoomRight])
-        this.state.yScale.domain([zoomTop, zoomBottom])
-
-        // compute the current factor of yZoom
-        const yZoomFactor = this.yRange / (zoomTop - zoomBottom)
 
         return <div id={"peptide-plot"}>
             <svg className="peptide-svg"
@@ -256,8 +253,8 @@ class PeptideViz extends Component {
                 >
                     { this.plotTheoWeightLine() }
                     <ProteinTitle proteinData={proteinData}/>
-                    { this.plotAminAcidBar(zoomLeft, zoomRight) }
-                    { this.svg && this.plotPeptides(zoomLeft, zoomRight, yZoomFactor) }
+                    { this.plotAminoAcidBar() }
+                    { this.svg && this.plotPeptides() }
                 </g>
                 <ProteinVizLegends x={viewWidth-200} y={20} width={150} samples={samples}
                                    theoMolWeight={this.state.theoMolWeight} clickedRepl={clickedRepl}
