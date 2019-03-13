@@ -49,6 +49,7 @@ export function fetchProtein(proteinId){
                         dispatch(proteinLoadError(err.statusText + ": " + message))
                     })
                 }
+                dispatch(proteinIsLoaded())
             })
     }
 }

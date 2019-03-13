@@ -14,14 +14,18 @@ class ProteinSearchContainer extends React.Component{
     // }
 
     componentDidUpdate() {
+        const {gotoViz, history, gotoProteinViz} = this.props
+
         // let's move to the ProteinViz, but only once
-        if (this.props.gotoViz){
-            this.props.history.push('/proteins')
-            this.props.gotoProteinViz(false)
+        if (gotoViz){
+            history.push('/proteins')
+            gotoProteinViz(false)
         }
     }
 
     render(){
+        const {proteinIsLoading, onLoadProtein, error} = this.props
+
         return <div>
             <br/>
             <Row>
@@ -36,17 +40,17 @@ class ProteinSearchContainer extends React.Component{
                 <FormGroup>
                     <ProteinSearchInput
                         onChange={this.onChangeInput}
-                        disabled={this.props.proteinIsLoading}
-                        onEnterClicked={() => this.props.onLoadProtein(this.state.searchString)}
+                        disabled={proteinIsLoading}
+                        onEnterClicked={() => onLoadProtein(this.state.searchString)}
                     />
                 </FormGroup>
                 <FormGroup>
                         <ProteinSearchButton
-                            onClick={() => this.props.onLoadProtein(this.state.searchString)}
-                            disabled={this.props.proteinIsLoading}
+                            onClick={() => onLoadProtein(this.state.searchString)}
+                            disabled={proteinIsLoading}
                         />
                 </FormGroup>
-                <div>{this.props.error}</div>
+                <div>{error}</div>
             </Form>
         </div>
     }
@@ -61,7 +65,10 @@ ProteinSearchContainer.propTypes = {
     proteinIsLoading: PropTypes.bool.isRequired,
     proteinData: PropTypes.array,
     error: PropTypes.string,
-    gotoViz: PropTypes.bool
+    gotoViz: PropTypes.bool,
+    onLoadProtein: PropTypes.func.isRequired,
+    gotoProteinViz: PropTypes.func.isRequired,
+    history: PropTypes.object.isRequired
 };
 
 const mapStateToProps = (state) => {
