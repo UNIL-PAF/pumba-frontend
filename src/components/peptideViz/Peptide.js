@@ -32,21 +32,23 @@ class Peptide extends Component {
     }
 
     componentDidMount(){
-        const {svgParent, pepInfo, showPopupCB} = this.props;
+        const {svgParent, pepInfo, showPopupCB, sampleName, replName, sliceMolWeight} = this.props;
 
         // this event we have to call using D3 in order to get the mouse position correctly
         select(this.rectDom).on('mouseenter', () => {
             this.setState({'mouseIsOver': true})
             const [x,y] = mouse(svgParent)
+
             var popUpContent = {
-                Sample: "sample",
-                Replicate: "repli",
+                Sample: sampleName,
+                Replicate: replName,
                 Sequence: pepInfo.aminoAcidBefore + "." + pepInfo.sequence + "." + pepInfo.aminoAcidAfter,
                 "Start pos" : pepInfo.startPos,
                 "End pos" : pepInfo.endPos,
-                "Mol weight": Math.pow(10, pepInfo.theoMass).toFixed(2),
+                //"Pep mol weight": Math.pow(10, pepInfo.theoMass).toFixed(2),
                 "Razor pep": pepInfo.isRazor ? "True": "False",
-                "Gel slice": pepInfo.sliceNr
+                "Mol weight": Math.pow(10, sliceMolWeight).toFixed(2),
+                "Gel slice": pepInfo.sliceNr,
             }
             const popUp = {x: x, y: y, content: popUpContent}
             showPopupCB(popUp)
@@ -64,9 +66,9 @@ class Peptide extends Component {
     }
 
     render() {
-        const {yScale, xScale, pepInfo, sliceMolWeight, sampleIdx, replIdx, highlightRepl, sliceIsClicked} = this.props;
+        const {yScale, xScale, pepInfo, sliceMolWeight, sampleIdx, highlightRepl, sliceIsClicked} = this.props;
 
-        const y = yScale(sliceMolWeight[replIdx][pepInfo.sliceNr])
+        const y = yScale(sliceMolWeight)
         const xStart = xScale(pepInfo.startPos)
         const xEnd = xScale(pepInfo.endPos);
         const xDiff = xEnd - xStart;
@@ -75,11 +77,10 @@ class Peptide extends Component {
         const height = ((this.state.mouseIsOver) ? this.selRectHeight : this.defaultRectHeight)
         const height_2 = (highlightRepl) ? height * 2 : height
 
-        var stroke = this.state.mouseIsOver ? sampleColor(sampleIdx) : "None"
-        stroke = (sliceIsClicked) ? "deeppink" : stroke
+        var stroke = this.state.mouseIsOver ? (sliceIsClicked ? "deeppink" : sampleColor(sampleIdx)) : "None"
 
         var fill = sampleColor(sampleIdx)
-        fill = (this.state.mouseIsOver && sliceIsClicked) ? "deeppink" : fill
+        fill = (sliceIsClicked) ? "deeppink" : fill
 
         var fillOpacity = highlightRepl ? 0.7 : 0.5
         fillOpacity = this.state.mouseIsOver ? 1 : fillOpacity
@@ -106,10 +107,11 @@ Peptide.propTypes = {
     xScale: PropTypes.func.isRequired,
     yScale: PropTypes.func.isRequired,
     sampleIdx: PropTypes.number.isRequired,
-    replIdx: PropTypes.number.isRequired,
+    sampleName: PropTypes.string.isRequired,
+    replName: PropTypes.string.isRequired,
     actions: PropTypes.object,
     pepInfo: PropTypes.object.isRequired,
-    sliceMolWeight: PropTypes.array,
+    sliceMolWeight: PropTypes.number,
     svgParent: PropTypes.object.isRequired,
     highlightRepl: PropTypes.bool.isRequired,
     sliceIsClicked: PropTypes.bool.isRequired,

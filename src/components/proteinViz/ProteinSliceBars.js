@@ -41,8 +41,8 @@ class SliceBars extends Component {
             Sample: protein.dataSet.sample,
             Replicate: protein.dataSet.name,
             '# Peptides': peptides.length,
-            Slice: sliceIdx + 1,
-            'Mol weight': Math.pow(10, protein.dataSet.massFitResult.massFits[sliceIdx]).toFixed(2)
+            'Mol weight': Math.pow(10, protein.dataSet.massFitResult.massFits[sliceIdx]).toFixed(2),
+            'Gel slice': sliceIdx + 1
         }
 
         const popUp = {x: x, y: y, content: popUpContent, tag: protein.dataSet.sample + ':' + protein.dataSet.name + ':' + sliceIdx}

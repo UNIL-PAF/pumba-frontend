@@ -36,13 +36,6 @@ class PeptideViz extends Component {
         // just take the theoretical weight of the first protein, it should always be the same.
         const theoMolWeight = Math.log10(proteinData[0].proteins[0].theoMolWeight)
 
-        // get the molWeights for each slice for each sample
-        const sliceMolWeight = _.flatMap(proteinData, (oneSample) => {
-            return _.map(oneSample.proteins, (protein) => {
-                return protein.dataSet.massFitResult.massFits
-            })
-        })
-
         const zoomLeft = (zoom === undefined) ? 1 : zoom.left;
         const zoomRight = (zoom === undefined) ? sequenceData.length : zoom.right;
         const zoomTop = (zoom === undefined) ? this.minMolWeight : zoom.top
@@ -52,7 +45,6 @@ class PeptideViz extends Component {
             xScale: scaleLinear().range([0, viewWidth - this.margin.left - this.margin.right]).domain([zoomLeft, zoomRight]),
             yScale: scaleLinear().range([viewHeight - this.margin.top - this.margin.bottom, 0]).domain([zoomTop, zoomBottom]),
             theoMolWeight: theoMolWeight,
-            sliceMolWeight: sliceMolWeight,
             zoomLeft: zoomLeft,
             zoomRight: zoomRight
         }
@@ -152,8 +144,6 @@ class PeptideViz extends Component {
 
         const {zoomLeft, zoomRight} = this.state
 
-        console.log(zoomLeft, zoomRight)
-
         // we need this variable to get the correct replIdx
         var replIdx = 0;
 
@@ -168,6 +158,8 @@ class PeptideViz extends Component {
                 const sliceFromReplIsClicked = _.some(clickedSlices, (slice) => {
                     return sample.sample === slice.sample && protein.dataSet.name === slice.replicate
                 })
+
+                const massFits = protein.dataSet.massFitResult.massFits
 
                 return fltProt.map((peptide, k) => {
 
@@ -187,8 +179,10 @@ class PeptideViz extends Component {
                         yScale={this.state.yScale}
                         sampleIdx={i}
                         replIdx={replIdx-1}
+                        sampleName={sample.sample}
+                        replName={protein.dataSet.name}
                         svgParent={this.svg}
-                        sliceMolWeight={this.state.sliceMolWeight}
+                        sliceMolWeight={massFits[peptide.sliceNr-1]}
                         pepInfo={peptide}
                         key={i+':'+j+':'+k}
                         highlightRepl={replIsClicked || highlightRepl}
