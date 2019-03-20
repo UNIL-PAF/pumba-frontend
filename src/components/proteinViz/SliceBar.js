@@ -44,7 +44,7 @@ class SliceBar extends Component {
     render() {
         const {mass, int, color, margin, xScale, yScale, isHighlighted, mouseIsOver} = this.props
 
-        const width = mouseIsOver ? 4 : 2
+        const width = mouseIsOver ? 3 : 1
         const height = yScale(0) - yScale(int)
         const xPos = xScale(mass) + margin.left - width/2
         const yPos = yScale(int) + margin.top
