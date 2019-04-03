@@ -1,17 +1,29 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import {fetchProtein, gotoViz} from '../../actions/loadProtein'
+import {fetchProtein, gotoViz, fetchDatasets, setDatasets} from '../../actions/loadProtein'
 import ProteinSearchButton from "./ProteinSearchButton";
 import ProteinSearchInput from "./ProteinSearchInput";
-import {Form, FormGroup, Col, Row} from 'reactstrap'
+import {Form, FormGroup, Col, Row, Label, Input} from 'reactstrap'
+import * as _ from 'lodash';
 
 class ProteinSearchContainer extends React.Component{
 
-    // componentDidMount() {
-    //     // Autoloading for testing
-    //      this.props.onLoadProtein("P02786")
-    // }
+    constructor(props) {
+        super(props);
+        this.changeSampleActive = this.changeSampleActive.bind(this);
+    }
+
+    componentDidMount() {
+        const {datasets, loadDatasets} = this.props
+
+        // Autoloading for testing
+        // this.props.onLoadProtein("P02786")
+
+        // load the list of datasets
+        if(! datasets) loadDatasets()
+
+    }
 
     componentDidUpdate() {
         const {gotoViz, history, gotoProteinViz} = this.props
@@ -23,8 +35,41 @@ class ProteinSearchContainer extends React.Component{
         }
     }
 
+    oneSample(sample, isActive) {
+        return <FormGroup check inline key={sample}>
+                <Label check>
+                    <Input
+                        id={sample}
+                        type="checkbox"
+                        checked={isActive}
+                        onChange={this.changeSampleActive} />{sample}
+                </Label>
+            </FormGroup>
+    }
+
+    changeSampleActive(event) {
+        const {datasets, setDatasets} = this.props
+        const newDataset = {...datasets, [event.target.id]: {
+                isActive: !datasets[event.target.id].isActive,
+                datasets: datasets[event.target.id].datasets
+            }
+        }
+        setDatasets(newDataset)
+    }
+
+    loadProtein() {
+        const {onLoadProtein, datasets} = this.props
+
+        const activeDatasets = _.reduce(datasets, (res, val) => {
+            if(val.isActive) res = res.concat(_.map(val.datasets, 'id'))
+            return res
+        }, [])
+
+        onLoadProtein(this.state.searchString, activeDatasets)
+    }
+
     render(){
-        const {proteinIsLoading, onLoadProtein, error} = this.props
+        const {proteinIsLoading, onLoadProtein, error, datasets} = this.props
 
         return <div>
             <br/>
@@ -44,13 +89,21 @@ class ProteinSearchContainer extends React.Component{
                         onEnterClicked={() => onLoadProtein(this.state.searchString)}
                     />
                 </FormGroup>
+                <Row>
+                    <Col className="text-center" md={{ size: 4, offset: 4 }}>
+                        {datasets && _.map(datasets, (val, key) => {
+                            return this.oneSample(key, val.isActive)
+                        })}
+                    </Col>
+                </Row>
+                <br/>
                 <FormGroup>
                         <ProteinSearchButton
-                            onClick={() => onLoadProtein(this.state.searchString)}
+                            onClick={() => this.loadProtein()}
                             disabled={proteinIsLoading}
                         />
                 </FormGroup>
-                <div>{error}</div>
+                {error && <div>{error}</div>}
             </Form>
         </div>
     }
@@ -68,7 +121,10 @@ ProteinSearchContainer.propTypes = {
     gotoViz: PropTypes.bool,
     onLoadProtein: PropTypes.func.isRequired,
     gotoProteinViz: PropTypes.func.isRequired,
-    history: PropTypes.object.isRequired
+    history: PropTypes.object.isRequired,
+    loadDatasets: PropTypes.func.isRequired,
+    setDatasets: PropTypes.func.isRequired,
+    datasets: PropTypes.object
 };
 
 const mapStateToProps = (state) => {
@@ -76,18 +132,25 @@ const mapStateToProps = (state) => {
         proteinIsLoading: state.loadProtein.proteinIsLoading,
         proteinData: state.loadProtein.proteinData,
         error: state.loadProtein.error,
-        gotoViz: state.loadProtein.gotoViz
+        gotoViz: state.loadProtein.gotoViz,
+        datasets: state.loadProtein.datasets
     }
     return props
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onLoadProtein: proteinId => {
-            dispatch(fetchProtein(proteinId))
+        onLoadProtein: (proteinId, activeDatasets) => {
+            dispatch(fetchProtein(proteinId, activeDatasets))
         },
         gotoProteinViz: (letsGo) => {
             dispatch(gotoViz(letsGo))
+        },
+        loadDatasets: () => {
+            dispatch(fetchDatasets())
+        },
+        setDatasets: (datasets) => {
+            dispatch(setDatasets(datasets))
         }
 
     }

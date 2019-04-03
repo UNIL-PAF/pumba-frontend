@@ -3,6 +3,7 @@ import pumbaConfig from '../config'
 import { resetSampleSelection } from "./sampleSelection"
 import { resetProteinView } from "./proteinVizActions"
 import {resetPeptideView} from "./peptideVizActions";
+import * as _ from 'lodash';
 
 export const PROTEIN_IS_LOADED = 'PROTEIN_IS_LOADED'
 export const REQUEST_PROTEIN = 'REQUEST_PROTEIN'
@@ -10,8 +11,11 @@ export const ADD_PROTEIN_DATA = 'ADD_PROTEIN_DATA'
 export const PROTEIN_LOAD_ERROR = 'PROTEIN_LOAD_ERROR'
 export const GOTO_VIZ = 'GOTO_VIZ'
 export const ADD_SEQUENCE_DATA = 'ADD_SEQUENCE_DATA'
+export const SET_DATASETS = 'SET_DATASETS'
 
-export function fetchProtein(proteinId){
+export function fetchProtein(proteinId, activeDatasets){
+    const datasetIds = activeDatasets.join(',')
+
     return function (dispatch) {
         dispatch(requestProtein(proteinId))
 
@@ -23,7 +27,7 @@ export function fetchProtein(proteinId){
         dispatch(resetPeptideView())
         dispatch(resetSampleSelection())
 
-        return fetch(pumbaConfig.urlBackend + "/merge-protein/" + proteinId )
+        return fetch(pumbaConfig.urlBackend + "/merge-protein/" + proteinId + '?dataSetsString=' + datasetIds)
             .then( response => {
                 if (!response.ok) { throw response }
                 return response.json()
@@ -78,6 +82,43 @@ export function fetchSequence(proteinId, dataBaseName){
     }
 }
 
+export function fetchDatasets(){
+    return function (dispatch){
+        return fetch(pumbaConfig.urlBackend + "/dataset")
+            .then( response => {
+                if (!response.ok) { throw response }
+                return response.json()
+            })
+            .then(json => {
+                // parse a list of datasets and add them
+                const samples = _.reduce(json, (res, val) => {
+                    if(! res[val.sample]){
+                        res[val.sample] = {}
+                        res[val.sample].isActive = true
+                        res[val.sample].datasets = []
+                    }
+                    res[val.sample].datasets.push({id: val.id, name: val.name, isActive: true})
+                    return res
+                }, {})
+                dispatch(setDatasets(samples))
+            })
+            .catch(err => {
+                // we have to catch error messages differently for if backend is on or off.
+                if(err.message){
+                    dispatch(proteinLoadError(err.message))
+                }else{
+                    err.text().then(message => {
+                        dispatch(proteinLoadError(err.statusText + ": " + message))
+                    })
+                }
+            })
+    }
+}
+
+
+export const setDatasets = (datasets) => ({
+    type: SET_DATASETS, datasets: datasets
+})
 
 export const addProteinData = (proteinData) => ({
     type: ADD_PROTEIN_DATA, proteinData: proteinData

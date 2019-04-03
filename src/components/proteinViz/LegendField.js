@@ -3,6 +3,7 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import CloseButton from '../common/CloseButton'
+import SvgCheckbox from '../common/svgCheckbox'
 
 const defaultFontSize = "8px"
 
@@ -38,6 +39,7 @@ class LegendField extends Component {
                 rx={5}
                 ry={5}
             />
+            <SvgCheckbox x={x + 6} y={y + 2}></SvgCheckbox>
             <text x={x+width*0.25} y={yMiddle} fontFamily="sans-serif" fontSize={defaultFontSize}>{text}</text>
             { legend(x+10, y+height-2, height+4, idx, mouseOverId, sampleIdx, isSelected) }
             { (isSelected) && <CloseButton x={x + width} y={y + 2} onCloseCB={() => this.closeLegend(parseInt(sampleIdx, 10), idx)}></CloseButton> }
