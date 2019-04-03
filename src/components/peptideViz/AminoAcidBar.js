@@ -1,9 +1,9 @@
 import React, {
-    Component,
+    PureComponent,
 } from 'react';
 import PropTypes from 'prop-types';
 
-class AminoAcidBar extends Component {
+class AminoAcidBar extends PureComponent {
 
 
     render() {

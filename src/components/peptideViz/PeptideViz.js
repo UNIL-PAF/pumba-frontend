@@ -1,5 +1,5 @@
 import React, {
-    Component,
+    PureComponent,
 } from 'react'
 import PropTypes from 'prop-types'
 import { scaleLinear } from 'd3-scale'
@@ -13,7 +13,7 @@ import ProteinVizLegends from '../proteinViz/ProteinVizLegends'
 import PopOverSkeleton from "../common/popOverSkeleton"
 import ProteinTitle from "../common/ProteinTitle"
 
-class PeptideViz extends Component {
+class PeptideViz extends PureComponent {
 
     constructor(props) {
         super(props)
