@@ -12,6 +12,7 @@ class ProteinSearchContainer extends React.Component{
     constructor(props) {
         super(props);
         this.changeSampleActive = this.changeSampleActive.bind(this);
+        this.loadProtein = this.loadProtein.bind(this);
     }
 
     componentDidMount() {
@@ -34,6 +35,13 @@ class ProteinSearchContainer extends React.Component{
             gotoProteinViz(false)
         }
     }
+    
+    keyClicked = (e) => {
+        if(e.key === "Enter"){
+            this.loadProtein()
+            e.preventDefault();
+        }
+    }
 
     oneSample(sample, isActive) {
         return <FormGroup check inline key={sample}>
@@ -42,7 +50,9 @@ class ProteinSearchContainer extends React.Component{
                         id={sample}
                         type="checkbox"
                         checked={isActive}
-                        onChange={this.changeSampleActive} />{sample}
+                        onChange={this.changeSampleActive}
+                        onKeyPress={this.keyClicked}
+                    />{sample}
                 </Label>
             </FormGroup>
     }
@@ -86,7 +96,7 @@ class ProteinSearchContainer extends React.Component{
                     <ProteinSearchInput
                         onChange={this.onChangeInput}
                         disabled={proteinIsLoading}
-                        onEnterClicked={() => onLoadProtein(this.state.searchString)}
+                        onEnterClicked={this.loadProtein}
                     />
                 </FormGroup>
                 <Row>
@@ -99,7 +109,7 @@ class ProteinSearchContainer extends React.Component{
                 <br/>
                 <FormGroup>
                         <ProteinSearchButton
-                            onClick={() => this.loadProtein()}
+                            onClick={this.loadProtein}
                             disabled={proteinIsLoading}
                         />
                 </FormGroup>
