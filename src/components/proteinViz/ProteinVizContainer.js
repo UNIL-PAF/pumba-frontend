@@ -13,7 +13,6 @@ import {changeZoomAndFilter, removeSlicePopup, showSlicePopup} from "../../actio
 
 class ProteinVizContainer extends Component {
 
-
     render(){
         const {proteinData, mouseOverSampleId, mouseOverSampleCB,
             mouseOverReplId, mouseOverReplCB, mouseLeaveSampleCB, mouseLeaveReplCB,
