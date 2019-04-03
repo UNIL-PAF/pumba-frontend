@@ -38,18 +38,17 @@ class ProteinMerges extends PureComponent {
 
     plotSliceBars = (proteins, sampleIdx, replIdx) => {
         const {zoomLeft, zoomRight, showPopupCB, removePopupCB, clickSliceCB, unclickSliceCB, clickedSlices, popup,
-            history, margin, xScale, yScale, svgParent} = this.props
+            history, margin, xScale, yScale, svgParent, scaleChanged} = this.props
 
         return <ProteinSliceBars key={sampleIdx + ':' + replIdx} sampleIdx={sampleIdx} replIdx={replIdx} margin={margin} xScale={xScale}
                                  yScale={yScale} zoomLeft={zoomLeft} zoomRight={zoomRight} proteins={proteins}
                                  svgParent={svgParent} showPopupCB={showPopupCB} removePopupCB={removePopupCB}
                                  clickSliceCB={clickSliceCB} unclickSliceCB={unclickSliceCB} clickedSlices={clickedSlices} mouseOverTag={popup ? popup.tag : undefined}
-                                 history={history}
+                                 history={history} scaleChanged={scaleChanged}
         />
     }
 
     render() {
-        console.log("render")
         const {proteinData, mouseOverSampleId, mouseOverReplId, theoMergedProteins, clickedRepl} = this.props
 
         // theoMergedProteins contain the filtered values, based on the given zoom range

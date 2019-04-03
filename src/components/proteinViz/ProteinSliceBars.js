@@ -122,7 +122,8 @@ SliceBars.propTypes = {
     clickSliceCB: PropTypes.func.isRequired,
     mouseOverTag: PropTypes.string,
     clickedSlices: PropTypes.array.isRequired,
-    history: PropTypes.object.isRequired
+    history: PropTypes.object.isRequired,
+    scaleChanged: PropTypes.number.isRequired
 };
 
 export default SliceBars
