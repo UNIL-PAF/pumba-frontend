@@ -35,7 +35,7 @@ class ProteinSearchContainer extends React.Component{
             gotoProteinViz(false)
         }
     }
-    
+
     keyClicked = (e) => {
         if(e.key === "Enter"){
             this.loadProtein()

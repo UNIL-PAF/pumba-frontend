@@ -1,5 +1,5 @@
 import React, {
-    Component,
+    PureComponent,
 } from 'react'
 import PropTypes from 'prop-types'
 import * as _ from 'lodash'
@@ -7,7 +7,7 @@ import {sampleColor} from "../common/colorSettings";
 import SliceBar from "./SliceBar"
 
 
-class SliceBars extends Component {
+class SliceBars extends PureComponent {
 
     constructor(props) {
         super(props)

@@ -1,9 +1,9 @@
 import React, {
-    Component,
+    PureComponent,
 } from 'react';
 import PropTypes from 'prop-types';
 
-class ProteinTitle extends Component {
+class ProteinTitle extends PureComponent {
 
     render() {
         const { proteinData } = this.props;

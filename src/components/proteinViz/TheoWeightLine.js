@@ -1,9 +1,9 @@
 import React, {
-    Component,
+    PureComponent,
 } from 'react';
 import PropTypes from 'prop-types';
 
-class TheoWeightLine extends Component {
+class TheoWeightLine extends PureComponent {
 
     render() {
         const { xPos, yTop, height } = this.props;

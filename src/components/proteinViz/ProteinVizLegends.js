@@ -1,5 +1,5 @@
 import React, {
-    Component,
+    PureComponent,
 } from 'react';
 import PropTypes from 'prop-types';
 import LegendField from './LegendField'
@@ -7,7 +7,7 @@ import TheoWeightLine from './TheoWeightLine'
 import * as _ from 'lodash';
 import { sampleColor } from '../common/colorSettings'
 
-class ProteinVizLegends extends Component {
+class ProteinVizLegends extends PureComponent {
 
     // we need the legendIdx to get the right positions of the legends when expanding the replicates
     legendIdx = 1

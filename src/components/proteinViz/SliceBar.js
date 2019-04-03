@@ -1,14 +1,13 @@
 import React, {
-    Component,
+    PureComponent,
 } from 'react'
 import PropTypes from 'prop-types'
 import {mouse, select} from "d3-selection";
 
 
-class SliceBar extends Component {
+class SliceBar extends PureComponent {
 
     componentDidMount(){
-
         const {svgParent, popOverCB, sliceIdx, removePopOverCB, clickCB, mouseIsOver, isHighlighted} = this.props;
 
         // this event we have to call using D3 in order to get the mouse position correctly
