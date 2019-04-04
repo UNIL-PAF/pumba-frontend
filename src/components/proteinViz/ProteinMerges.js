@@ -4,7 +4,6 @@ import React, {
 import PropTypes from 'prop-types'
 import {sampleColor} from "../common/colorSettings";
 import * as _ from 'lodash'
-import shallowCompare from 'react-addons-shallow-compare'
 
 import ProteinSliceBars from "./ProteinSliceBars";
 

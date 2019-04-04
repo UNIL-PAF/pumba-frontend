@@ -3,7 +3,6 @@ import React, {
 } from 'react'
 import PropTypes from 'prop-types'
 import * as _ from 'lodash'
-import {sampleColor} from "../common/colorSettings";
 import SliceBar from "./SliceBar"
 
 
@@ -90,7 +89,7 @@ class SliceBars extends PureComponent {
         })
 
         return <SliceBar
-            key={keyName} mass={mass} int={int} color={color} xScale={xScale} yScale={yScale} margin={margin} color={color}
+            key={keyName} mass={mass} int={int} color={color} xScale={xScale} yScale={yScale} margin={margin}
             highlight={highlight} svgParent={svgParent} popOverCB={showSlicePopOverCB} removePopOverCB={this.removePopOverCB}
             sliceIdx={sliceIdx} clickCB={clickSliceCB} isHighlighted={isHighlighted} mouseIsOver={mouseOverTag === sliceTag}/>
     }

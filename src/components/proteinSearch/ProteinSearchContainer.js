@@ -61,7 +61,8 @@ class ProteinSearchContainer extends React.Component{
         const {datasets, setDatasets} = this.props
         const newDataset = {...datasets, [event.target.id]: {
                 isActive: !datasets[event.target.id].isActive,
-                datasets: datasets[event.target.id].datasets
+                datasets: datasets[event.target.id].datasets,
+                idx: datasets[event.target.id].idx
             }
         }
         setDatasets(newDataset)
@@ -79,7 +80,7 @@ class ProteinSearchContainer extends React.Component{
     }
 
     render(){
-        const {proteinIsLoading, onLoadProtein, error, datasets} = this.props
+        const {proteinIsLoading, error, datasets} = this.props
 
         return <div>
             <br/>

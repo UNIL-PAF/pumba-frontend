@@ -55,7 +55,6 @@ class ProteinVizPlot extends Component {
         // look for a d3 event
         var s = event.selection;
         if(s){
-
             // if there is an event we take its coordinates and remove the margin
             const newDomain = _.map(s, (x) => { return this.state.xScale.invert(x - this.margin.left) })
 
