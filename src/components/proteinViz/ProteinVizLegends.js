@@ -80,7 +80,9 @@ class ProteinVizLegends extends PureComponent {
             colorIdx={colorIdx}
             isSelected={isSelected}
             x={x+5} y={y+(this.legendIdx)*height} width={width} height={height}
-            text={name} legend={this.replSymbol}>
+            text={name} legend={this.replSymbol}
+            isUnactiveable={true}
+       >
         </LegendField>
 
         return res
@@ -105,7 +107,9 @@ class ProteinVizLegends extends PureComponent {
                     sampleIdx={sampleIdx}
                     colorIdx={colorIdx}
                     x={x} y={y+(this.legendIdx)*height} width={width} height={height}
-                    text={sampleName} legend={this.sampleSymbol}>
+                    text={sampleName} legend={this.sampleSymbol}
+                    isUnactiveable={true}
+                >
                 </LegendField>
                 { (sampleIdx === mouseOverSampleId || isSampleSelected) && _.map(sample.replicates, (repl) => this.plotReplicate(repl, x, y, height, sampleIdx, colorIdx)) }
         </g>
@@ -121,7 +125,10 @@ class ProteinVizLegends extends PureComponent {
         return  <LegendField
             x={x} y={y} width={width} height={legendHeight}
             onMouseOver={mouseLeaveSampleCB}
-            text={"Theo Mol Weight (" + Math.pow(10, theoMolWeight).toFixed(2) + " kDa)"} legend={this.theoMolSymbol}>
+            text={"Theo Mol Weight (" + Math.pow(10, theoMolWeight).toFixed(2) + " kDa)"}
+            legend={this.theoMolSymbol}
+            isUnactiveable={false}
+        >
         </LegendField>
     }
 
@@ -173,7 +180,7 @@ ProteinVizLegends.propTypes = {
     removeSelectedReplCB: PropTypes.func.isRequired,
     theoMolWeight: PropTypes.number.isRequired,
     clickedRepl: PropTypes.array.isRequired,
-    datasets: PropTypes.object.isRequired
+    datasets: PropTypes.object.isRequired,
 };
 
 export default (ProteinVizLegends);

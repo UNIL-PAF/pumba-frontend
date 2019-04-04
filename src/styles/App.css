@@ -168,3 +168,11 @@ protein title
 .protein-title {
   font-size: 90%
 }
+
+
+/****
+svgCheckbox
+ */
+.pumba-svg-checkbox {
+  cursor: pointer;
+}

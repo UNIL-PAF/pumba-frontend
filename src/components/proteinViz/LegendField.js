@@ -23,11 +23,15 @@ class LegendField extends Component {
 
 
     render() {
-        const { x, y, width, text, height, legend, idx, onMouseOver, mouseOverId, sampleIdx, clickeablePointer, isSelected, colorIdx} = this.props;
+        const { x, y, width, text, height, legend, idx, onMouseOver, mouseOverId, sampleIdx, clickeablePointer, isSelected, colorIdx, isUnactiveable} = this.props;
         const yMiddle = y+13
 
+        // show checkbox only if the mouse is over the element (or if it's a replicate)
+        const showCheckbox = (sampleIdx === mouseOverId) || typeof(idx) !== 'undefined'
 
-        return <g style={ (clickeablePointer) ? {cursor: 'pointer'} : {} } onMouseOver={() => { if(onMouseOver) onMouseOver(sampleIdx, idx) } } onClick={() => this.clickOnLegend()}>
+        return <g style={ (clickeablePointer) ? {cursor: 'pointer'} : {} }
+                  onMouseOver={() => { if(onMouseOver) onMouseOver(sampleIdx, idx) } }
+                  onClick={() => this.clickOnLegend()}>
             <rect
                 className="merged-legend-field"
                 x={x}
@@ -39,7 +43,7 @@ class LegendField extends Component {
                 rx={5}
                 ry={5}
             />
-            <SvgCheckbox x={x + 6} y={y + 2}></SvgCheckbox>
+            {isUnactiveable && showCheckbox && <SvgCheckbox x={x + 6} y={y + 2} changeSelection={() => {console.log("change selection")}}></SvgCheckbox>}
             <text x={x+width*0.25} y={yMiddle} fontFamily="sans-serif" fontSize={defaultFontSize}>{text}</text>
             { legend(x+10, y+height-2, height+4, idx, mouseOverId, sampleIdx, colorIdx, isSelected) }
             { (isSelected) && <CloseButton x={x + width} y={y + 2} onCloseCB={() => this.closeLegend(parseInt(sampleIdx, 10), idx)}></CloseButton> }
@@ -63,7 +67,8 @@ LegendField.propTypes = {
     sampleIdx: PropTypes.number,
     colorIdx: PropTypes.number,
     clickeablePointer: PropTypes.bool,
-    isSelected: PropTypes.bool
+    isSelected: PropTypes.bool,
+    isUnactiveable: PropTypes.bool.isRequired,
 };
 
 export default (LegendField);

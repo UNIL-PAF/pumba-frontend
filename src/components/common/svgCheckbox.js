@@ -31,7 +31,7 @@ class SvgCheckbox extends Component {
 
     onClick = (e) => {
         e.stopPropagation()
-        this.props.onCloseCB()
+        this.props.changeSelection()
     }
 
     render() {
@@ -43,7 +43,7 @@ class SvgCheckbox extends Component {
         const thisY = (y + 12 - thisHeight)
 
         // svg path for check
-        const checkPath = "M" + (thisX+1) + " " + (thisY+thisHeight/2) + " L" + (thisX+thisWidth/2) + " " + (thisY+6)  + " L" + (thisX+thisHeight-1) + " " + (thisY+1)
+        const checkPath = "M" + (thisX+2) + " " + (thisY+thisHeight/2) + " L" + (thisX+thisWidth/2-0.5) + " " + (thisY+5)  + " L" + (thisX+thisHeight-2) + " " + (thisY+2)
 
         return <g
             className="pumba-svg-checkbox"
@@ -69,7 +69,7 @@ class SvgCheckbox extends Component {
 }
 
 SvgCheckbox.propTypes = {
-    onChange: PropTypes.func,
+    changeSelection: PropTypes.func.isRequired,
     x: PropTypes.number.isRequired,
     y: PropTypes.number.isRequired,
 }
