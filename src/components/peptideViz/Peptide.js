@@ -3,7 +3,6 @@ import React, {
 } from 'react'
 import PropTypes from 'prop-types'
 import { select, mouse } from 'd3-selection'
-import { sampleColor } from '../common/colorSettings'
 
 class Peptide extends Component {
 
@@ -66,7 +65,7 @@ class Peptide extends Component {
     }
 
     render() {
-        const {yScale, xScale, pepInfo, sliceMolWeight, sampleIdx, highlightRepl, sliceIsClicked} = this.props;
+        const {yScale, xScale, pepInfo, sliceMolWeight, highlightRepl, sliceIsClicked, color} = this.props;
         const {mouseIsOver} = this.state
 
         const y = yScale(sliceMolWeight)
@@ -78,9 +77,9 @@ class Peptide extends Component {
         const height = ((mouseIsOver) ? this.selRectHeight : this.defaultRectHeight)
         const height_2 = (highlightRepl) ? height * 2 : height
 
-        var stroke = mouseIsOver ? sampleColor(sampleIdx) : "None"
+        var stroke = mouseIsOver ? color : "None"
 
-        var fill = sampleColor(sampleIdx)
+        var fill = color
 
         var fillOpacity = highlightRepl ? 0.7 : 0.5
         fillOpacity = this.state.mouseIsOver ? 1 : fillOpacity
@@ -106,7 +105,6 @@ class Peptide extends Component {
 Peptide.propTypes = {
     xScale: PropTypes.func.isRequired,
     yScale: PropTypes.func.isRequired,
-    sampleIdx: PropTypes.number.isRequired,
     sampleName: PropTypes.string.isRequired,
     replName: PropTypes.string.isRequired,
     actions: PropTypes.object,
@@ -117,6 +115,7 @@ Peptide.propTypes = {
     sliceIsClicked: PropTypes.bool.isRequired,
     showPopupCB: PropTypes.func.isRequired,
     removePopupCB: PropTypes.func.isRequired,
+    color: PropTypes.string.isRequired
 };
 
 

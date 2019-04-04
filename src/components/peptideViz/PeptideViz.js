@@ -12,6 +12,7 @@ import Peptide from './Peptide'
 import ProteinVizLegends from '../proteinViz/ProteinVizLegends'
 import PopOverSkeleton from "../common/popOverSkeleton"
 import ProteinTitle from "../common/ProteinTitle"
+import { sampleColor } from '../common/colorSettings'
 
 class PeptideViz extends PureComponent {
 
@@ -140,7 +141,7 @@ class PeptideViz extends PureComponent {
 
     plotPeptides = () => {
         const {proteinData, clickedRepl, clickedSlices, mouseOverSampleId, mouseOverReplId,
-            showPopupCB, removePopupCB} = this.props
+            showPopupCB, removePopupCB, datasets} = this.props
 
         const {zoomLeft, zoomRight} = this.state
 
@@ -181,9 +182,9 @@ class PeptideViz extends PureComponent {
                     return <Peptide
                         xScale={this.state.xScale}
                         yScale={this.state.yScale}
-                        sampleIdx={i}
                         replIdx={replIdx-1}
                         sampleName={sample.sample}
+                        color={sampleColor(datasets[sample.sample].idx)}
                         replName={protein.dataSet.name}
                         svgParent={this.svg}
                         sliceMolWeight={massFits[peptide.sliceNr-1]}
@@ -229,7 +230,7 @@ class PeptideViz extends PureComponent {
     render(){
         const {viewWidth, viewHeight, samples, clickedRepl, mouseOverSampleCB, mouseOverReplId,
             mouseOverReplCB, mouseLeaveReplCB, mouseLeaveSampleCB, mouseClickReplCB, removeSelectedReplCB, mouseOverSampleId,
-            popup, proteinData} = this.props
+            popup, proteinData, datasets} = this.props
 
         return <div id={"peptide-plot"}>
             <svg className="peptide-svg"
@@ -260,6 +261,7 @@ class PeptideViz extends PureComponent {
                                    mouseOverReplId={mouseOverReplId} mouseOverReplCB={mouseOverReplCB}
                                    mouseLeaveReplCB={mouseLeaveReplCB} mouseLeaveSampleCB={mouseLeaveSampleCB}
                                    mouseClickReplCB={mouseClickReplCB} removeSelectedReplCB={removeSelectedReplCB}
+                                   datasets={datasets}
                 >
                 </ProteinVizLegends>
                 {popup && this.plotPopup()}
@@ -290,6 +292,7 @@ PeptideViz.propTypes = {
     showPopupCB: PropTypes.func.isRequired,
     removePopupCB: PropTypes.func.isRequired,
     popup: PropTypes.object,
+    datasets: PropTypes.object.isRequired
 };
 
 export default (PeptideViz)

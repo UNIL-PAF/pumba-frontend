@@ -16,7 +16,7 @@ class PeptideVizContainer extends Component {
     render(){
         const {proteinData, sequenceData, zoom, changeZoomRangeCB, clickedRepl, clickedSlices, mouseOverSampleId,
             mouseOverSampleCB, mouseOverReplId, mouseOverReplCB, mouseLeaveReplCB, mouseLeaveSampleCB,
-            mouseClickReplCB, removeSelectedReplCB, showPopupCB, removePopupCB, popup} = this.props
+            mouseClickReplCB, removeSelectedReplCB, showPopupCB, removePopupCB, popup, datasets} = this.props
 
         const samples = _.map(proteinData, (p, i) => {
             const replicates = _.map(p.proteins, (oneProt, i) => {
@@ -40,6 +40,7 @@ class PeptideVizContainer extends Component {
                                          mouseLeaveReplCB={mouseLeaveReplCB} mouseLeaveSampleCB={mouseLeaveSampleCB}
                                          mouseClickReplCB={mouseClickReplCB} removeSelectedReplCB={removeSelectedReplCB}
                                          showPopupCB={showPopupCB} removePopupCB={removePopupCB} popup={popup}
+                                         datasets={datasets}
                             /> }
         </div>
     }
@@ -63,6 +64,7 @@ PeptideVizContainer.propTypes = {
     showPopupCB: PropTypes.func.isRequired,
     removePopupCB: PropTypes.func.isRequired,
     popup: PropTypes.object,
+    datasets: PropTypes.object.isRequired
 };
 
 const mapStateToProps = (state) => {
@@ -75,6 +77,7 @@ const mapStateToProps = (state) => {
         mouseOverSampleId : state.sampleSelection.mouseOverSampleId,
         mouseOverReplId : state.sampleSelection.mouseOverReplId,
         popup: state.peptideViz.popup,
+        datasets: state.loadProtein.datasets
     }
     return props
 }
