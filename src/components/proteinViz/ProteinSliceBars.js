@@ -90,17 +90,16 @@ class SliceBars extends PureComponent {
         })
 
         return <SliceBar
-            key={keyName} mass={mass} int={int} color={color} xScale={xScale} yScale={yScale} margin={margin}
+            key={keyName} mass={mass} int={int} color={color} xScale={xScale} yScale={yScale} margin={margin} color={color}
             highlight={highlight} svgParent={svgParent} popOverCB={showSlicePopOverCB} removePopOverCB={this.removePopOverCB}
             sliceIdx={sliceIdx} clickCB={clickSliceCB} isHighlighted={isHighlighted} mouseIsOver={mouseOverTag === sliceTag}/>
     }
 
     render() {
-        const {sampleIdx, replIdx, proteins} = this.props
-        const col = sampleColor(sampleIdx)
+        const {sampleIdx, replIdx, proteins, color} = this.props
 
         return  <g>
-            { this.plotOneProtein(proteins.proteins[replIdx], col, "slice-bar-"+sampleIdx+"-", true) }
+            { this.plotOneProtein(proteins.proteins[replIdx], color, "slice-bar-"+sampleIdx+"-", true) }
         </g>
     }
 
@@ -109,6 +108,7 @@ class SliceBars extends PureComponent {
 SliceBars.propTypes = {
     proteins: PropTypes.object.isRequired,
     sampleIdx: PropTypes.number.isRequired,
+    color: PropTypes.string.isRequired,
     replIdx: PropTypes.number.isRequired,
     margin: PropTypes.object.isRequired,
     xScale: PropTypes.func.isRequired,

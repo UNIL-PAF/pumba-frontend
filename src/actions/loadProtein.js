@@ -91,15 +91,19 @@ export function fetchDatasets(){
             })
             .then(json => {
                 // parse a list of datasets and add them
+                var idx = 0;
+
                 const samples = _.reduce(json, (res, val) => {
                     if(! res[val.sample]){
                         res[val.sample] = {}
                         res[val.sample].isActive = true
                         res[val.sample].datasets = []
+                        res[val.sample].idx = idx ++;
                     }
                     res[val.sample].datasets.push({id: val.id, name: val.name, isActive: true})
                     return res
                 }, {})
+
                 dispatch(setDatasets(samples))
             })
             .catch(err => {

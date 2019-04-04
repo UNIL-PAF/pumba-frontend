@@ -23,7 +23,7 @@ class LegendField extends Component {
 
 
     render() {
-        const { x, y, width, text, height, legend, idx, onMouseOver, mouseOverId, sampleIdx, clickeablePointer, isSelected} = this.props;
+        const { x, y, width, text, height, legend, idx, onMouseOver, mouseOverId, sampleIdx, clickeablePointer, isSelected, colorIdx} = this.props;
         const yMiddle = y+13
 
 
@@ -41,7 +41,7 @@ class LegendField extends Component {
             />
             <SvgCheckbox x={x + 6} y={y + 2}></SvgCheckbox>
             <text x={x+width*0.25} y={yMiddle} fontFamily="sans-serif" fontSize={defaultFontSize}>{text}</text>
-            { legend(x+10, y+height-2, height+4, idx, mouseOverId, sampleIdx, isSelected) }
+            { legend(x+10, y+height-2, height+4, idx, mouseOverId, sampleIdx, colorIdx, isSelected) }
             { (isSelected) && <CloseButton x={x + width} y={y + 2} onCloseCB={() => this.closeLegend(parseInt(sampleIdx, 10), idx)}></CloseButton> }
         </g>
 
@@ -61,6 +61,7 @@ LegendField.propTypes = {
     removeSelectedReplCB: PropTypes.func,
     mouseOverId: PropTypes.number,
     sampleIdx: PropTypes.number,
+    colorIdx: PropTypes.number,
     clickeablePointer: PropTypes.bool,
     isSelected: PropTypes.bool
 };

@@ -134,7 +134,7 @@ class ProteinVizPlot extends Component {
     }
 
     plotMousePositionCircles = (mouseWeightPos) => {
-        const {proteinData, theoMergedProteins} = this.props
+        const {proteinData, theoMergedProteins, datasets} = this.props
         const mergedData = (theoMergedProteins) ? theoMergedProteins : proteinData
         const {mouseX, yScale} = this.state
 
@@ -147,11 +147,13 @@ class ProteinVizPlot extends Component {
                     const int = md.theoMergedProtein.intensities[curveIdx]
 
                     if(typeof int !== 'undefined'){
-                        return <circle key={idx} className={"merged-position-circle"} cx={mouseX} cy={yScale(int) + this.margin.top} r={3} fill={sampleColor(idx)}></circle>
+                        return <circle key={idx} className={"merged-position-circle"}
+                                       cx={mouseX} cy={yScale(int) + this.margin.top}
+                                       r={3} fill={sampleColor(datasets[proteinData[idx].sample].idx)}>
+                        </circle>
                     }
                 })}
             </g>
-
     }
 
     plotMousePositionLine = (mouseWeightPos) => {
@@ -206,7 +208,7 @@ class ProteinVizPlot extends Component {
         const {viewWidth, viewHeight, samples, mouseOverSampleId, mouseOverSampleCB, mouseOverReplId,
             mouseOverReplCB, mouseLeaveSampleCB, mouseLeaveReplCB, mouseClickReplCB, clickedRepl,
             removeSelectedReplCB, popup, proteinData, theoMergedProteins, unclickSliceCB, clickSliceCB,
-            zoomRight, zoomLeft, showPopupCB, removePopupCB, clickedSlices, history} = this.props
+            zoomRight, zoomLeft, showPopupCB, removePopupCB, clickedSlices, history, datasets} = this.props
 
         // the mol weight at the mouse position
         const mouseWeightPos = this.state.xScale.invert(this.state.mouseX)
@@ -247,7 +249,8 @@ class ProteinVizPlot extends Component {
                                                  zoomLeft={zoomLeft} zoomRight={zoomRight} clickedRepl={clickedRepl}
                                                  showPopupCB={showPopupCB} removePopupCB={removePopupCB} popup={popup}
                                                  clickedSlices={clickedSlices} history={history} xScale={this.state.xScale}
-                                                 yScale={this.state.yScale} margin={this.margin} svgParent={this.svg} scaleChanged={this.state.scaleChanged}>
+                                                 yScale={this.state.yScale} margin={this.margin} svgParent={this.svg}
+                                                 scaleChanged={this.state.scaleChanged} datasets={datasets}>
                                 </ProteinMerges>}
 
                     <ProteinVizLegends x={viewWidth-200} y={20} width={150} samples={samples}
@@ -256,6 +259,7 @@ class ProteinVizPlot extends Component {
                                      mouseLeaveReplCB={mouseLeaveReplCB} mouseLeaveSampleCB={mouseLeaveSampleCB}
                                      theoMolWeight={this.state.theoMolWeight} mouseClickReplCB={mouseClickReplCB}
                                      clickedRepl={clickedRepl} removeSelectedReplCB={removeSelectedReplCB}
+                                     datasets={datasets}
                     >
                     </ProteinVizLegends>
 
@@ -292,6 +296,7 @@ ProteinVizPlot.propTypes = {
     popup: PropTypes.object,
     clickedSlices: PropTypes.array.isRequired,
     history: PropTypes.object.isRequired,
+    datasets: PropTypes.object.isRequired
 };
 
 export default ProteinVizPlot

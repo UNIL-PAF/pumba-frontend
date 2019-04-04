@@ -31,16 +31,16 @@ class ProteinVizLegends extends PureComponent {
     /**
      * plot the sample dots
      */
-    sampleSymbol = (x, y, height, idx, mouseOverSampleIdx, sampleIdx) => {
+    sampleSymbol = (x, y, height, idx, mouseOverSampleIdx, sampleIdx, colorIdx) => {
         const highlight = (sampleIdx === mouseOverSampleIdx)
-        return <circle cx={x} cy={y-height/3} r={(highlight) ? height/4 : height/6} fill={sampleColor(sampleIdx)} >
+        return <circle cx={x} cy={y-height/3} r={(highlight) ? height/4 : height/6} fill={sampleColor(colorIdx)} >
         </circle>
     }
 
     /**
      *
      */
-    replSymbol = (x, y, height, idx, mouseOverReplIdx, sampleIdx, isSelected) => {
+    replSymbol = (x, y, height, idx, mouseOverReplIdx, sampleIdx, colorIdx, isSelected) => {
         const highlight = (idx === mouseOverReplIdx)
 
         return <line
@@ -48,7 +48,7 @@ class ProteinVizLegends extends PureComponent {
         y1={y-2}
         x2={x}
         y2={y-height+10}
-        stroke={sampleColor(sampleIdx)}
+        stroke={sampleColor(colorIdx)}
         strokeWidth={ (highlight || isSelected) ? 2 : 0.5 }
         />
     }
@@ -60,7 +60,7 @@ class ProteinVizLegends extends PureComponent {
         mouseOverReplCB(replIdx)
     }
 
-    plotReplicate = (repl, x, y, height, sampleIdx) => {
+    plotReplicate = (repl, x, y, height, sampleIdx, colorIdx) => {
         const {idx, name } = repl
         this.legendIdx = this.legendIdx + 1
         const {mouseOverReplId, mouseOverSampleId, width, mouseClickReplCB, clickedRepl, removeSelectedReplCB} = this.props
@@ -77,6 +77,7 @@ class ProteinVizLegends extends PureComponent {
             mouseOverId={(sampleIdx === mouseOverSampleId) ? mouseOverReplId : undefined}
             idx={idx}
             sampleIdx={sampleIdx}
+            colorIdx={colorIdx}
             isSelected={isSelected}
             x={x+5} y={y+(this.legendIdx)*height} width={width} height={height}
             text={name} legend={this.replSymbol}>
@@ -91,20 +92,22 @@ class ProteinVizLegends extends PureComponent {
     }
 
     plotSample = (sample, x, y, height) => {
-        const {width, mouseOverSampleId, clickedRepl} = this.props
+        const {width, mouseOverSampleId, clickedRepl, datasets} = this.props
+        const sampleIdx = sample.idx
+        const sampleName = sample.name
+        const isSampleSelected = _.some(clickedRepl, (x) => {return x.sampleIdx === sampleIdx})
+        const colorIdx = datasets[sampleName].idx
 
-        const {idx, name } = sample
-        const isSampleSelected = _.some(clickedRepl, (x) => {return x.sampleIdx === idx})
-
-        const res =  <g key={idx}>
+        const res =  <g key={sampleIdx}>
                 <LegendField
                     onMouseOver={this.mouseOverSample}
                     mouseOverId={mouseOverSampleId}
-                    sampleIdx={idx}
+                    sampleIdx={sampleIdx}
+                    colorIdx={colorIdx}
                     x={x} y={y+(this.legendIdx)*height} width={width} height={height}
-                    text={name} legend={this.sampleSymbol}>
+                    text={sampleName} legend={this.sampleSymbol}>
                 </LegendField>
-                { (idx === mouseOverSampleId || isSampleSelected) && _.map(sample.replicates, (repl) => this.plotReplicate(repl, x, y, height, idx)) }
+                { (sampleIdx === mouseOverSampleId || isSampleSelected) && _.map(sample.replicates, (repl) => this.plotReplicate(repl, x, y, height, sampleIdx, colorIdx)) }
         </g>
 
         this.legendIdx = this.legendIdx + 1
@@ -169,7 +172,8 @@ ProteinVizLegends.propTypes = {
     mouseClickReplCB: PropTypes.func.isRequired,
     removeSelectedReplCB: PropTypes.func.isRequired,
     theoMolWeight: PropTypes.number.isRequired,
-    clickedRepl: PropTypes.array.isRequired
+    clickedRepl: PropTypes.array.isRequired,
+    datasets: PropTypes.object.isRequired
 };
 
 export default (ProteinVizLegends);
