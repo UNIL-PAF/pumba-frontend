@@ -6,6 +6,7 @@ import LegendField from './LegendField'
 import TheoWeightLine from './TheoWeightLine'
 import * as _ from 'lodash';
 import { sampleColor } from '../common/colorSettings'
+import {reloadProtein} from "../../actions/loadProtein";
 
 class ProteinVizLegends extends PureComponent {
 
@@ -18,6 +19,60 @@ class ProteinVizLegends extends PureComponent {
 
     componentDidUpdate(){
         this.legendIdx = 1
+    }
+
+    changeSelection(target, sampleName, replIdx){
+        const {reloadProtein, setDatasets, datasets} = this.props
+
+        var newDatasets = null
+
+        // set the new dataset
+        if(target === "sample"){
+            newDatasets = {...datasets, [sampleName]: {
+                    isAvailable: datasets[sampleName].isAvailable,
+                    datasets: datasets[sampleName].datasets,
+                    idx: datasets[sampleName].idx,
+                    isActive: ! datasets[sampleName].isActive
+                }
+            }
+        }else{
+            console.log(replIdx)
+
+            // console.log("0", datasets[sampleName].datasets)
+            // const datasetsArray = datasets[sampleName].datasets
+            // console.log("1", datasetsArray)
+            // const newDatasetsArray = [...datasetsArray]
+            // console.log("2", newDatasetsArray)
+            // newDatasetsArray[replIdx].isActive = ! newDatasetsArray[replIdx].isActive
+            // console.log("3", newDatasetsArray)
+            // console.log("4", datasets[sampleName].datasets)
+
+            // newDataset = {...datasets, [sampleName]: {
+            //         isAvailable: datasets[sampleName].isAvailable,
+            //         datasets: newSubDatasets,
+            //         idx: datasets[sampleName].idx,
+            //         isActive: datasets[sampleName].isActive
+            //     }
+            // }
+
+            newDatasets = datasets
+        }
+
+        console.log("after", newDatasets['U2OS'].datasets)
+
+        setDatasets(newDatasets)
+
+        // reload protein with active datasets
+        const activeDatasets = _.reduce(newDatasets, (res, val) => {
+            if(val.isActive){
+                const active = _.filter(val.datasets, (d) => { return d.isActive })
+                res = res.concat(_.map(active, 'id'))
+            }
+            return res
+        }, [])
+
+        reloadProtein(activeDatasets)
+
     }
 
     /**
@@ -60,10 +115,10 @@ class ProteinVizLegends extends PureComponent {
         mouseOverReplCB(replIdx)
     }
 
-    plotReplicate = (repl, x, y, height, sampleIdx, colorIdx) => {
+    plotReplicate = (repl, x, y, height, sampleIdx, colorIdx, isSampleSelected, sampleName) => {
         const {idx, name } = repl
         this.legendIdx = this.legendIdx + 1
-        const {mouseOverReplId, mouseOverSampleId, width, mouseClickReplCB, clickedRepl, removeSelectedReplCB} = this.props
+        const {mouseOverReplId, mouseOverSampleId, width, mouseClickReplCB, clickedRepl, removeSelectedReplCB, datasets} = this.props
 
         // check if it is selected
         const isSelected = _.some(clickedRepl, (x) => {return x.sampleIdx === sampleIdx && x.replIdx === idx})
@@ -82,6 +137,8 @@ class ProteinVizLegends extends PureComponent {
             x={x+5} y={y+(this.legendIdx)*height} width={width} height={height}
             text={name} legend={this.replSymbol}
             isUnactiveable={true}
+            changeSelection={() => this.changeSelection("replicate", sampleName, idx)}
+            showCheckbox={isSampleSelected}
        >
         </LegendField>
 
@@ -99,6 +156,7 @@ class ProteinVizLegends extends PureComponent {
         const sampleName = sample.name
         const isSampleSelected = _.some(clickedRepl, (x) => {return x.sampleIdx === sampleIdx})
         const colorIdx = datasets[sampleName].idx
+        const showCheckbox = mouseOverSampleId === sampleIdx
 
         const res =  <g key={sampleIdx}>
                 <LegendField
@@ -109,9 +167,11 @@ class ProteinVizLegends extends PureComponent {
                     x={x} y={y+(this.legendIdx)*height} width={width} height={height}
                     text={sampleName} legend={this.sampleSymbol}
                     isUnactiveable={true}
+                    changeSelection={() => this.changeSelection("sample", sampleName)}
+                    showCheckbox={showCheckbox}
                 >
                 </LegendField>
-                { (sampleIdx === mouseOverSampleId || isSampleSelected) && _.map(sample.replicates, (repl) => this.plotReplicate(repl, x, y, height, sampleIdx, colorIdx)) }
+                { (sampleIdx === mouseOverSampleId || isSampleSelected) && _.map(sample.replicates, (repl) => this.plotReplicate(repl, x, y, height, sampleIdx, colorIdx, showCheckbox, sampleName)) }
         </g>
 
         this.legendIdx = this.legendIdx + 1
@@ -120,7 +180,7 @@ class ProteinVizLegends extends PureComponent {
     }
 
     plotTheoMolWeight = (x, y, legendHeight) => {
-        const {width, mouseLeaveSampleCB, theoMolWeight} = this.props
+        const {width, mouseLeaveSampleCB, theoMolWeight, datasets} = this.props
 
         return  <LegendField
             x={x} y={y} width={width} height={legendHeight}
@@ -159,7 +219,6 @@ class ProteinVizLegends extends PureComponent {
             { this.plotTheoMolWeight(x + xShift, y+yShift, legendHeight) }
 
             <g>{_.map(samples, (s) => this.plotSample(s, x+xShift, y+yShift, legendHeight))}</g>
-
         </g>
 
     }
@@ -181,6 +240,10 @@ ProteinVizLegends.propTypes = {
     theoMolWeight: PropTypes.number.isRequired,
     clickedRepl: PropTypes.array.isRequired,
     datasets: PropTypes.object.isRequired,
+    reloadProtein: PropTypes.func.isRequired,
+    setDatasets: PropTypes.func.isRequired,
+    datasets: PropTypes.object.isRequired,
+    reloadProtein: PropTypes.func.isRequired,
 };
 
 export default (ProteinVizLegends);

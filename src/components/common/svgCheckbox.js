@@ -17,7 +17,6 @@ class SvgCheckbox extends Component {
     }
 
     onEnter = () => {
-        console.log("enter")
         this.setState({
             color: mouseOverColor
         })
@@ -54,8 +53,8 @@ class SvgCheckbox extends Component {
             <rect
                 x={thisX}
                 y={thisY}
-                cx={2}
-                cy={2}
+                rx={1}
+                ry={1}
                 width={thisWidth}
                 height={thisHeight}
                 stroke={this.state.color}

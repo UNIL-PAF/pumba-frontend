@@ -43,13 +43,13 @@ class ProteinSearchContainer extends React.Component{
         }
     }
 
-    oneSample(sample, isActive) {
+    oneSample(sample, isAvailable) {
         return <FormGroup check inline key={sample}>
                 <Label check>
                     <Input
                         id={sample}
                         type="checkbox"
-                        checked={isActive}
+                        checked={isAvailable}
                         onChange={this.changeSampleActive}
                         onKeyPress={this.keyClicked}
                     />{sample}
@@ -60,9 +60,10 @@ class ProteinSearchContainer extends React.Component{
     changeSampleActive(event) {
         const {datasets, setDatasets} = this.props
         const newDataset = {...datasets, [event.target.id]: {
-                isActive: !datasets[event.target.id].isActive,
+                isAvailable: !datasets[event.target.id].isAvailable,
                 datasets: datasets[event.target.id].datasets,
-                idx: datasets[event.target.id].idx
+                idx: datasets[event.target.id].idx,
+                isActive: !datasets[event.target.id].isAvailable
             }
         }
         setDatasets(newDataset)
@@ -71,12 +72,12 @@ class ProteinSearchContainer extends React.Component{
     loadProtein() {
         const {onLoadProtein, datasets} = this.props
 
-        const activeDatasets = _.reduce(datasets, (res, val) => {
-            if(val.isActive) res = res.concat(_.map(val.datasets, 'id'))
+        const availableDatasets = _.reduce(datasets, (res, val) => {
+            if(val.isAvailable) res = res.concat(_.map(val.datasets, 'id'))
             return res
         }, [])
 
-        onLoadProtein(this.state.searchString, activeDatasets)
+        onLoadProtein(this.state.searchString, availableDatasets)
     }
 
     render(){
@@ -103,7 +104,7 @@ class ProteinSearchContainer extends React.Component{
                 <Row>
                     <Col className="text-center" md={{ size: 4, offset: 4 }}>
                         {datasets && _.map(datasets, (val, key) => {
-                            return this.oneSample(key, val.isActive)
+                            return this.oneSample(key, val.isAvailable)
                         })}
                     </Col>
                 </Row>
@@ -151,19 +152,10 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onLoadProtein: (proteinId, activeDatasets) => {
-            dispatch(fetchProtein(proteinId, activeDatasets))
-        },
-        gotoProteinViz: (letsGo) => {
-            dispatch(gotoViz(letsGo))
-        },
-        loadDatasets: () => {
-            dispatch(fetchDatasets())
-        },
-        setDatasets: (datasets) => {
-            dispatch(setDatasets(datasets))
-        }
-
+        onLoadProtein: (proteinId, availableDatasets) => { dispatch(fetchProtein(proteinId, availableDatasets)) },
+        gotoProteinViz: (letsGo) => { dispatch(gotoViz(letsGo)) },
+        loadDatasets: () => { dispatch(fetchDatasets()) },
+        setDatasets: (datasets) => { dispatch(setDatasets(datasets)) }
     }
 }
 

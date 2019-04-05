@@ -13,8 +13,19 @@ export const GOTO_VIZ = 'GOTO_VIZ'
 export const ADD_SEQUENCE_DATA = 'ADD_SEQUENCE_DATA'
 export const SET_DATASETS = 'SET_DATASETS'
 
-export function fetchProtein(proteinId, activeDatasets){
+
+export function reloadProtein(activeDatasets){
     const datasetIds = activeDatasets.join(',')
+
+    return function (dispatch, getState) {
+        const proteinId = getState().loadProtein.proteinData[0].mainProteinId
+        dispatch(fetchProtein(proteinId, activeDatasets, true))
+    }
+}
+
+
+export function fetchProtein(proteinId, availableDatasets, noReset){
+    const datasetIds = availableDatasets.join(',')
 
     return function (dispatch) {
         dispatch(requestProtein(proteinId))
@@ -22,10 +33,12 @@ export function fetchProtein(proteinId, activeDatasets){
         // we reset the error message to undefined
         dispatch(proteinLoadError(undefined))
 
-        // and reset settings from the views
-        dispatch(resetProteinView())
-        dispatch(resetPeptideView())
-        dispatch(resetSampleSelection())
+        if(! noReset){
+            // and reset settings from the views
+            dispatch(resetProteinView())
+            dispatch(resetPeptideView())
+            dispatch(resetSampleSelection())
+        }
 
         return fetch(pumbaConfig.urlBackend + "/merge-protein/" + proteinId + '?dataSetsString=' + datasetIds)
             .then( response => {
@@ -35,13 +48,15 @@ export function fetchProtein(proteinId, activeDatasets){
             .then(json => {
                     // add timestamp
                     json.timestamp = Date.now()
+
+                if(! noReset){
                     // let's take the FASTA data from the first entry (should always be OK)
                     const dataBaseName = json[0].proteins[0].dataSet.dataBaseName
                     dispatch(fetchSequence(proteinId, dataBaseName))
-
+                    dispatch(gotoViz(true))
+                }
                     dispatch(addProteinData(json))
                     dispatch(proteinIsLoaded())
-                    dispatch(gotoViz(true))
                 }
             )
             .catch(err => {
@@ -97,6 +112,7 @@ export function fetchDatasets(){
                     if(! res[val.sample]){
                         res[val.sample] = {}
                         res[val.sample].isActive = true
+                        res[val.sample].isAvailable = true
                         res[val.sample].datasets = []
                         res[val.sample].idx = idx ++;
                     }
