@@ -71,7 +71,7 @@ class ProteinVizLegends extends PureComponent {
             return res
         }, [])
 
-        reloadProtein(activeDatasets)
+        reloadProtein(activeDatasets.join(','))
 
     }
 

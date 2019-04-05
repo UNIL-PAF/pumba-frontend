@@ -14,19 +14,14 @@ export const ADD_SEQUENCE_DATA = 'ADD_SEQUENCE_DATA'
 export const SET_DATASETS = 'SET_DATASETS'
 
 
-export function reloadProtein(activeDatasets){
-    const datasetIds = activeDatasets.join(',')
-
+export function reloadProtein(activeDatasetIds){
     return function (dispatch, getState) {
         const proteinId = getState().loadProtein.proteinData[0].mainProteinId
-        dispatch(fetchProtein(proteinId, activeDatasets, true))
+        dispatch(fetchProtein(proteinId, activeDatasetIds, true))
     }
 }
 
-
-export function fetchProtein(proteinId, availableDatasets, noReset){
-    const datasetIds = availableDatasets.join(',')
-
+export function fetchProtein(proteinId, datasetIds, noReset){
     return function (dispatch) {
         dispatch(requestProtein(proteinId))
 

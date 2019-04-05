@@ -77,7 +77,7 @@ class ProteinSearchContainer extends React.Component{
             return res
         }, [])
 
-        onLoadProtein(this.state.searchString, availableDatasets)
+        onLoadProtein(this.state.searchString, availableDatasets.join(','))
     }
 
     render(){
