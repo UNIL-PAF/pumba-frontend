@@ -36,29 +36,17 @@ class ProteinVizLegends extends PureComponent {
                 }
             }
         }else{
-            console.log(replIdx)
+            let newDatasetsArray = [...(datasets[sampleName].datasets)]
+            newDatasetsArray[replIdx].isActive = ! newDatasetsArray[replIdx].isActive
 
-            // console.log("0", datasets[sampleName].datasets)
-            // const datasetsArray = datasets[sampleName].datasets
-            // console.log("1", datasetsArray)
-            // const newDatasetsArray = [...datasetsArray]
-            // console.log("2", newDatasetsArray)
-            // newDatasetsArray[replIdx].isActive = ! newDatasetsArray[replIdx].isActive
-            // console.log("3", newDatasetsArray)
-            // console.log("4", datasets[sampleName].datasets)
-
-            // newDataset = {...datasets, [sampleName]: {
-            //         isAvailable: datasets[sampleName].isAvailable,
-            //         datasets: newSubDatasets,
-            //         idx: datasets[sampleName].idx,
-            //         isActive: datasets[sampleName].isActive
-            //     }
-            // }
-
-            newDatasets = datasets
+            newDatasets = {...datasets, [sampleName]: {
+                    isAvailable: datasets[sampleName].isAvailable,
+                    datasets: newDatasetsArray,
+                    idx: datasets[sampleName].idx,
+                    isActive: datasets[sampleName].isActive
+                }
+            }
         }
-
-        console.log("after", newDatasets['U2OS'].datasets)
 
         setDatasets(newDatasets)
 
