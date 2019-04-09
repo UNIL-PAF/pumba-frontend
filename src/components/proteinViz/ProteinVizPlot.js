@@ -132,12 +132,15 @@ class ProteinVizPlot extends Component {
     }
 
     plotMousePositionCircles = (mouseWeightPos) => {
-        const {proteinData, theoMergedProteins} = this.props
+        const {proteinData, theoMergedProteins, datasets} = this.props
         const mergedData = (theoMergedProteins) ? theoMergedProteins : proteinData
         const {mouseX, yScale} = this.state
 
         return <g>
-                {_.map(mergedData, (md, idx) => {
+                {_.map(mergedData, (md) => {
+
+                    const idx = datasets[md.sample].idx
+
                     // find the correct intensity
                     const curveIdx = _.findIndex(md.theoMergedProtein.theoMolWeights, (x) => {
                         return x > mouseWeightPos
