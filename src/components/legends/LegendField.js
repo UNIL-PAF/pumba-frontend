@@ -10,10 +10,10 @@ const defaultFontSize = "8px"
 class LegendField extends Component {
 
     clickOnLegend = () => {
-        const {clickeablePointer, idx, sampleIdx, mouseClickReplCB} = this.props
+        const {clickeablePointer, sampleName, mouseClickReplCB, replId} = this.props
 
         if(clickeablePointer){
-            mouseClickReplCB(sampleIdx, idx)
+            mouseClickReplCB(sampleName, replId)
         }
     }
 
@@ -25,12 +25,12 @@ class LegendField extends Component {
     render() {
         const { x, y, width, text, height, legend, idx, onMouseOver, mouseOverId,
             sampleIdx, clickeablePointer, isSelected, colorIdx, isUnactiveable, changeSelection,
-            showCheckbox, sampleName, mouseOverReplId} = this.props;
+            showCheckbox, sampleName, replId} = this.props;
 
         const yMiddle = y+13
 
         return <g style={ (clickeablePointer) ? {cursor: 'pointer'} : {} }
-                  onMouseOver={() => { if(onMouseOver) onMouseOver(sampleName, mouseOverReplId) } }
+                  onMouseOver={() => { if(onMouseOver) onMouseOver(sampleName, replId) } }
                   onClick={() => this.clickOnLegend()}>
             <rect
                 className="merged-legend-field"
@@ -45,7 +45,7 @@ class LegendField extends Component {
             />
             {isUnactiveable && showCheckbox && <SvgCheckbox x={x + 6} y={y + 2} changeSelection={changeSelection}></SvgCheckbox>}
             <text x={x+width*0.25} y={yMiddle} fontFamily="sans-serif" fontSize={defaultFontSize}>{text}</text>
-            { legend(x+10, y+height-2, height+4, idx, mouseOverId, sampleIdx, colorIdx, isSelected) }
+            { legend(x+10, y+height-2, height+4, replId, mouseOverId, sampleName, colorIdx, isSelected) }
             { (isSelected) && <CloseButton x={x + width} y={y + 2} onCloseCB={() => this.closeLegend(parseInt(sampleIdx, 10), idx)}></CloseButton> }
         </g>
 
@@ -63,7 +63,7 @@ LegendField.propTypes = {
     onMouseOver: PropTypes.func,
     mouseClickReplCB: PropTypes.func,
     removeSelectedReplCB: PropTypes.func,
-    mouseOverReplId: PropTypes.string,
+    replId: PropTypes.string,
     sampleIdx: PropTypes.number,
     sampleName: PropTypes.string,
     clickeablePointer: PropTypes.bool,

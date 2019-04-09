@@ -73,8 +73,8 @@ class ProteinVizLegends extends PureComponent {
     /**
      * plot the sample dots
      */
-    sampleSymbol = (x, y, height, idx, mouseOverSampleIdx, sampleIdx, colorIdx) => {
-        const highlight = (sampleIdx === mouseOverSampleIdx)
+    sampleSymbol = (x, y, height, replId, mouseOverSampleIdx, sampleName, colorIdx) => {
+        const highlight = (sampleName === mouseOverSampleIdx)
         return <circle cx={x} cy={y-height/3} r={(highlight) ? height/4 : height/6} fill={sampleColor(colorIdx)} >
         </circle>
     }
@@ -82,8 +82,10 @@ class ProteinVizLegends extends PureComponent {
     /**
      *
      */
-    replSymbol = (x, y, height, idx, mouseOverReplIdx, sampleIdx, colorIdx, isSelected) => {
-        const highlight = (idx === mouseOverReplIdx)
+    replSymbol = (x, y, height, replId, mouseOverReplIdx, sampleName, colorIdx, isSelected) => {
+        console.log(replId, mouseOverReplIdx)
+
+        const highlight = (replId === mouseOverReplIdx)
 
         return <line
         x1={x}
@@ -106,7 +108,7 @@ class ProteinVizLegends extends PureComponent {
         const {idx, name} = repl
 
         this.legendIdx = this.legendIdx + 1
-        const {mouseOverReplId, mouseOverSampleId, width, mouseClickReplCB, clickedRepl, removeSelectedReplCB, datasets} = this.props
+        const {mouseOverReplId, mouseOverSampleId, width, mouseClickReplCB, clickedRepl, removeSelectedReplCB} = this.props
 
         // check if it is selected
         const isSelected = _.some(clickedRepl, (x) => {return x.sampleIdx === sampleIdx && x.replIdx === idx})
@@ -117,10 +119,10 @@ class ProteinVizLegends extends PureComponent {
             mouseClickReplCB={mouseClickReplCB}
             removeSelectedReplCB={removeSelectedReplCB}
             onMouseOver={this.mouseOverReplicate}
-            mouseOverId={(sampleIdx === mouseOverSampleId) ? mouseOverReplId : undefined}
+            mouseOverId={mouseOverReplId}
             idx={idx}
             sampleName={sampleName}
-            mouseOverReplId={repl.id}
+            replId={repl.id}
             colorIdx={colorIdx}
             isSelected={isSelected}
             x={x+5} y={y+(this.legendIdx)*height} width={width} height={height}
