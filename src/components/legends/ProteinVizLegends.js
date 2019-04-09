@@ -118,7 +118,6 @@ class ProteinVizLegends extends PureComponent {
             removeSelectedReplCB={removeSelectedReplCB}
             onMouseOver={this.mouseOverReplicate}
             mouseOverId={mouseOverReplId}
-            idx={idx}
             sampleName={sampleName}
             replId={repl.id}
             colorIdx={colorIdx}
@@ -151,7 +150,6 @@ class ProteinVizLegends extends PureComponent {
                 <LegendField
                     onMouseOver={this.mouseOverSample}
                     mouseOverId={mouseOverSampleId}
-                    sampleIdx={sampleIdx}
                     sampleName={sampleName}
                     colorIdx={colorIdx}
                     x={x} y={y+(this.legendIdx)*height} width={width} height={height}

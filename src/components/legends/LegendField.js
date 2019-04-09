@@ -23,8 +23,8 @@ class LegendField extends Component {
 
 
     render() {
-        const { x, y, width, text, height, legend, idx, onMouseOver, mouseOverId,
-            sampleIdx, clickeablePointer, isSelected, colorIdx, isUnactiveable, changeSelection,
+        const { x, y, width, text, height, legend, onMouseOver, mouseOverId,
+            clickeablePointer, isSelected, colorIdx, isUnactiveable, changeSelection,
             showCheckbox, sampleName, replId} = this.props;
 
         const yMiddle = y+13
@@ -46,7 +46,7 @@ class LegendField extends Component {
             {isUnactiveable && showCheckbox && <SvgCheckbox x={x + 6} y={y + 2} changeSelection={changeSelection}></SvgCheckbox>}
             <text x={x+width*0.25} y={yMiddle} fontFamily="sans-serif" fontSize={defaultFontSize}>{text}</text>
             { legend(x+10, y+height-2, height+4, replId, mouseOverId, sampleName, colorIdx, isSelected) }
-            { (isSelected) && <CloseButton x={x + width} y={y + 2} onCloseCB={() => this.closeLegend(parseInt(sampleIdx, 10), idx)}></CloseButton> }
+            { (isSelected) && <CloseButton x={x + width} y={y + 2} onCloseCB={() => this.closeLegend(sampleName, replId)}></CloseButton> }
         </g>
 
     }
@@ -59,12 +59,10 @@ LegendField.propTypes = {
     height: PropTypes.number.isRequired,
     text: PropTypes.string.isRequired,
     legend: PropTypes.func.isRequired,
-    idx: PropTypes.number,
     onMouseOver: PropTypes.func,
     mouseClickReplCB: PropTypes.func,
     removeSelectedReplCB: PropTypes.func,
     replId: PropTypes.string,
-    sampleIdx: PropTypes.number,
     sampleName: PropTypes.string,
     clickeablePointer: PropTypes.bool,
     isSelected: PropTypes.bool,
