@@ -137,9 +137,9 @@ class ProteinVizPlot extends Component {
         const {mouseX, yScale} = this.state
 
         return <g>
-                {_.map(mergedData, (md) => {
+                {_.map(mergedData, (md, i) => {
 
-                    const idx = datasets[md.sample].idx
+                    const idx = datasets[proteinData[i].sample].idx
 
                     // find the correct intensity
                     const curveIdx = _.findIndex(md.theoMergedProtein.theoMolWeights, (x) => {
