@@ -119,7 +119,7 @@ class ProteinVizLegends extends PureComponent {
             onMouseOver={this.mouseOverReplicate}
             mouseOverId={(sampleIdx === mouseOverSampleId) ? mouseOverReplId : undefined}
             idx={idx}
-            sampleIdx={sampleIdx}
+            sampleName={sampleName}
             mouseOverReplId={repl.id}
             colorIdx={colorIdx}
             isSelected={isSelected}
@@ -222,7 +222,7 @@ ProteinVizLegends.propTypes = {
     y: PropTypes.number.isRequired,
     width: PropTypes.number.isRequired,
     mouseOverSampleId: PropTypes.string,
-    mouseOverReplId: PropTypes.number,
+    mouseOverReplId: PropTypes.string,
     mouseOverSampleCB: PropTypes.func.isRequired,
     mouseOverReplCB: PropTypes.func.isRequired,
     mouseLeaveReplCB: PropTypes.func.isRequired,

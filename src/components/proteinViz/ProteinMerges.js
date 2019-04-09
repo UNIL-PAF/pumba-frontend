@@ -39,14 +39,14 @@ class ProteinMerges extends PureComponent {
         return res
     }
 
-    plotSliceBars = (sampleIdx, replIdx) => {
+    plotSliceBars = (sampleName, replId) => {
         const {zoomLeft, zoomRight, showPopupCB, removePopupCB, clickSliceCB, unclickSliceCB, clickedSlices, popup,
             history, margin, xScale, yScale, svgParent, scaleChanged, datasets, proteinData} = this.props
 
-        const proteins = proteinData[sampleIdx]
+        const proteins = _.find(proteinData, (p) => { return p.sample === sampleName})
         const color = sampleColor(datasets[proteins.sample].idx)
 
-        return <ProteinSliceBars key={sampleIdx + ':' + replIdx} sampleIdx={sampleIdx} replIdx={replIdx} margin={margin} xScale={xScale}
+        return <ProteinSliceBars key={sampleName + ':' + replId} sampleName={sampleName} replId={replId} margin={margin} xScale={xScale}
                                  yScale={yScale} zoomLeft={zoomLeft} zoomRight={zoomRight} proteins={proteins}
                                  svgParent={svgParent} showPopupCB={showPopupCB} removePopupCB={removePopupCB}
                                  clickSliceCB={clickSliceCB} unclickSliceCB={unclickSliceCB} clickedSlices={clickedSlices} mouseOverTag={popup ? popup.tag : undefined}
@@ -76,7 +76,7 @@ ProteinMerges.propTypes = {
     unclickSliceCB: PropTypes.func.isRequired,
     clickSliceCB: PropTypes.func.isRequired,
     mouseOverSampleId: PropTypes.string,
-    mouseOverReplId: PropTypes.number,
+    mouseOverReplId: PropTypes.string,
     zoomLeft: PropTypes.number,
     zoomRight: PropTypes.number,
     clickedRepl: PropTypes.array.isRequired,

@@ -281,7 +281,7 @@ ProteinVizPlot.propTypes = {
     unclickSliceCB: PropTypes.func.isRequired,
     clickSliceCB: PropTypes.func.isRequired,
     mouseOverSampleId: PropTypes.string,
-    mouseOverReplId: PropTypes.number,
+    mouseOverReplId: PropTypes.string,
     changeZoomRangeCB: PropTypes.func.isRequired,
     zoomLeft: PropTypes.number,
     zoomRight: PropTypes.number,

@@ -42,7 +42,7 @@ ProteinVizContainer.propTypes = {
     proteinData: PropTypes.array,
     theoMergedProteins: PropTypes.array,
     mouseOverSampleId: PropTypes.string,
-    mouseOverReplId: PropTypes.number,
+    mouseOverReplId: PropTypes.string,
     mouseOverSampleCB: PropTypes.func.isRequired,
     mouseOverReplCB: PropTypes.func.isRequired,
     mouseLeaveSampleCB: PropTypes.func.isRequired,

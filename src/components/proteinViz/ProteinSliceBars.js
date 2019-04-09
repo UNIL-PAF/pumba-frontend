@@ -95,10 +95,11 @@ class SliceBars extends PureComponent {
     }
 
     render() {
-        const {sampleIdx, replIdx, proteins, color} = this.props
+        const {sampleName, replId, proteins, color} = this.props
+        const currentProtein = _.find(proteins.proteins, (p) => {return p.dataSet.id === replId})
 
         return  <g>
-            { this.plotOneProtein(proteins.proteins[replIdx], color, "slice-bar-"+sampleIdx+"-", true) }
+            { this.plotOneProtein(currentProtein, color, "slice-bar-"+sampleName+"-", true) }
         </g>
     }
 
@@ -106,9 +107,9 @@ class SliceBars extends PureComponent {
 
 SliceBars.propTypes = {
     proteins: PropTypes.object.isRequired,
-    sampleIdx: PropTypes.number.isRequired,
+    sampleName: PropTypes.string.isRequired,
     color: PropTypes.string.isRequired,
-    replIdx: PropTypes.number.isRequired,
+    replId: PropTypes.string.isRequired,
     margin: PropTypes.object.isRequired,
     xScale: PropTypes.func.isRequired,
     yScale: PropTypes.func.isRequired,
