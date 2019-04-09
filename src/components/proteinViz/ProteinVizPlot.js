@@ -201,7 +201,7 @@ class ProteinVizPlot extends Component {
     }
 
     render() {
-        const {viewWidth, viewHeight, samples, mouseOverSampleId, mouseOverSampleCB, mouseOverReplId,
+        const {viewWidth, viewHeight, mouseOverSampleId, mouseOverSampleCB, mouseOverReplId,
             mouseOverReplCB, mouseLeaveSampleCB, mouseLeaveReplCB, mouseClickReplCB, clickedRepl,
             removeSelectedReplCB, popup, proteinData, theoMergedProteins, unclickSliceCB, clickSliceCB,
             zoomRight, zoomLeft, showPopupCB, removePopupCB, clickedSlices, history, datasets, setDatasets, reloadProtein} = this.props
@@ -249,7 +249,7 @@ class ProteinVizPlot extends Component {
                                                  scaleChanged={this.state.scaleChanged} datasets={datasets}>
                                 </ProteinMerges>}
 
-                    <ProteinVizLegends x={viewWidth-200} y={20} width={150} samples={samples}
+                    <ProteinVizLegends x={viewWidth-200} y={20} width={150}
                                      mouseOverSampleId={mouseOverSampleId} mouseOverSampleCB={mouseOverSampleCB}
                                      mouseOverReplId={mouseOverReplId} mouseOverReplCB={mouseOverReplCB}
                                      mouseLeaveReplCB={mouseLeaveReplCB} mouseLeaveSampleCB={mouseLeaveSampleCB}
@@ -272,7 +272,6 @@ ProteinVizPlot.propTypes = {
     theoMergedProteins: PropTypes.array,
     viewWidth: PropTypes.number.isRequired,
     viewHeight: PropTypes.number.isRequired,
-    samples: PropTypes.array.isRequired,
     mouseOverSampleCB: PropTypes.func.isRequired,
     mouseOverReplCB: PropTypes.func.isRequired,
     mouseLeaveSampleCB: PropTypes.func.isRequired,

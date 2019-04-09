@@ -5,8 +5,7 @@ import {
 
 const initialState = {
     proteinIsLoading: false,
-    proteinData: null,
-    timestamp: undefined
+    proteinData: null
 }
 
 const loadProteinReducer = (state = initialState, action) => {

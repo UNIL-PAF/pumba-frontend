@@ -60,7 +60,6 @@ class ProteinVizLegends extends PureComponent {
         }, [])
 
         reloadProtein(activeDatasets.join(','))
-
     }
 
     /**
@@ -159,7 +158,7 @@ class ProteinVizLegends extends PureComponent {
                     showCheckbox={showCheckbox}
                 >
                 </LegendField>
-                { (sampleIdx === mouseOverSampleId || isSampleSelected) && _.map(sample.replicates, (repl) => this.plotReplicate(repl, x, y, height, sampleIdx, colorIdx, showCheckbox, sampleName)) }
+                { (sampleIdx === mouseOverSampleId || isSampleSelected) && _.map(sample.datasets, (repl) => this.plotReplicate(repl, x, y, height, sampleIdx, colorIdx, showCheckbox, sampleName)) }
         </g>
 
         this.legendIdx = this.legendIdx + 1
@@ -181,12 +180,15 @@ class ProteinVizLegends extends PureComponent {
     }
 
     render() {
-        const { x, y, width, samples, mouseOverSampleId, clickedRepl} = this.props;
+        const { x, y, width, mouseOverSampleId, clickedRepl, datasets} = this.props;
+
+        // transform the sample into a sorted array
+        const samples = _.sortBy(_.values(_.mapValues(datasets, (value, key) => { value.name = key; return value; })), ['idx'])
 
         const legendHeight = 20
         const selectedSampleIdx = _.countBy(clickedRepl, "sampleIdx")
-        const mouseOverReplNr = (mouseOverSampleId !== undefined && (! selectedSampleIdx[mouseOverSampleId])) ? samples[mouseOverSampleId].replicates.length : 0
-        const nrLegends = samples.length + mouseOverReplNr + _.reduce(selectedSampleIdx, (res, v, k) => {return res + samples[k].replicates.length}, 0)
+        const mouseOverReplNr = (mouseOverSampleId !== undefined && (! selectedSampleIdx[mouseOverSampleId])) ? samples[mouseOverSampleId].datasets.length : 0
+        const nrLegends = samples.length + mouseOverReplNr + _.reduce(selectedSampleIdx, (res, v, k) => {return res + samples[k].datasets.length}, 0)
         const xShift = 12
         const yShift = 10
 
@@ -216,7 +218,6 @@ ProteinVizLegends.propTypes = {
     x: PropTypes.number.isRequired,
     y: PropTypes.number.isRequired,
     width: PropTypes.number.isRequired,
-    samples: PropTypes.array.isRequired,
     mouseOverSampleId: PropTypes.number,
     mouseOverReplId: PropTypes.number,
     mouseOverSampleCB: PropTypes.func.isRequired,

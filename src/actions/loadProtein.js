@@ -41,9 +41,6 @@ export function fetchProtein(proteinId, datasetIds, noReset){
                 return response.json()
             })
             .then(json => {
-                    // add timestamp
-                    json.timestamp = Date.now()
-
                 if(! noReset){
                     // let's take the FASTA data from the first entry (should always be OK)
                     const dataBaseName = json[0].proteins[0].dataSet.dataBaseName
@@ -115,7 +112,15 @@ export function fetchDatasets(){
                     return res
                 }, {})
 
-                dispatch(setDatasets(samples))
+                const samplesWithIdx = _.mapValues(samples, (s) => {
+                    s.datasets =  _.map(s.datasets, (d, idx) => {
+                        d.idx = idx
+                        return d
+                    })
+                    return s
+                })
+
+                dispatch(setDatasets(samplesWithIdx))
             })
             .catch(err => {
                 // we have to catch error messages differently for if backend is on or off.

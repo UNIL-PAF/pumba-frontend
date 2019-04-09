@@ -21,15 +21,10 @@ class ProteinVizContainer extends Component {
             clickedRepl, removeSelectedReplCB, showPopupCB, removePopupCB, popup, clickedSlices,
             clickSliceCB, unclickSliceCB, history, datasets, reloadProtein, setDatasets} = this.props
 
-        const samples = _.map(proteinData, (p, i) => {
-            const replicates = _.map(p.proteins, (oneProt, i) => {
-                return { idx: i, name: oneProt.dataSet.name }
-            })
-            return { idx: i, name: p.sample, replicates: replicates }
-        })
+        console.log(proteinData)
 
         return <div id={"protein-viz"}>
-        { proteinData && <ProteinVizPlot proteinData={proteinData} samples={samples} viewWidth={800} viewHeight={400}
+        { proteinData && <ProteinVizPlot proteinData={proteinData} viewWidth={800} viewHeight={400}
                              mouseOverSampleId={mouseOverSampleId} mouseOverSampleCB={mouseOverSampleCB}
                              mouseOverReplId={mouseOverReplId} mouseOverReplCB={mouseOverReplCB}
                              mouseLeaveSampleCB={mouseLeaveSampleCB} mouseLeaveReplCB={mouseLeaveReplCB}
