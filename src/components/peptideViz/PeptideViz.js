@@ -151,7 +151,7 @@ class PeptideViz extends PureComponent {
         // we need this variable to get the correct replIdx
         var replIdx = 0;
 
-        return proteinData.map((sample, i) => {h
+        return proteinData.map((sample, i) => {
             return sample.proteins.map((protein, j) => {
                 replIdx = replIdx + 1
 
@@ -180,7 +180,7 @@ class PeptideViz extends PureComponent {
                         return sliceFromReplIsClicked & (slice.idx+1) === peptide.sliceNr
                     })
 
-                    const highlightRepl = (i === mouseOverSampleId && j === mouseOverReplId)
+                    const highlightRepl = (sample.sample === mouseOverSampleId && protein.dataSet.id === mouseOverReplId)
 
                     return <Peptide
                         xScale={this.state.xScale}
