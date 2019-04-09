@@ -83,8 +83,6 @@ class ProteinVizLegends extends PureComponent {
      *
      */
     replSymbol = (x, y, height, replId, mouseOverReplIdx, sampleName, colorIdx, isSelected) => {
-        console.log(replId, mouseOverReplIdx)
-
         const highlight = (replId === mouseOverReplIdx)
 
         return <line
@@ -105,13 +103,13 @@ class ProteinVizLegends extends PureComponent {
     }
 
     plotReplicate = (repl, x, y, height, sampleIdx, colorIdx, isSampleSelected, sampleName) => {
-        const {idx, name} = repl
+        const {idx, name, id} = repl
 
         this.legendIdx = this.legendIdx + 1
-        const {mouseOverReplId, mouseOverSampleId, width, mouseClickReplCB, clickedRepl, removeSelectedReplCB} = this.props
+        const {mouseOverReplId, width, mouseClickReplCB, clickedRepl, removeSelectedReplCB} = this.props
 
         // check if it is selected
-        const isSelected = _.some(clickedRepl, (x) => {return x.sampleIdx === sampleIdx && x.replIdx === idx})
+        const isSelected = _.some(clickedRepl, (x) => {return x.sampleIdx === sampleName && x.replIdx === repl.id})
 
        const res = <LegendField
             key={idx}
@@ -145,7 +143,7 @@ class ProteinVizLegends extends PureComponent {
         const {width, mouseOverSampleId, clickedRepl, datasets} = this.props
         const sampleIdx = sample.idx
         const sampleName = sample.name
-        const isSampleSelected = _.some(clickedRepl, (x) => {return x.sampleIdx === sampleIdx})
+        const isSampleSelected = _.some(clickedRepl, (x) => {return x.sampleIdx === sampleName})
         const colorIdx = datasets[sampleName].idx
         const showCheckbox = mouseOverSampleId === sampleName
 
@@ -193,7 +191,7 @@ class ProteinVizLegends extends PureComponent {
         const legendHeight = 20
         const selectedSampleIdx = _.countBy(clickedRepl, "sampleIdx")
         const mouseOverReplNr = (mouseOverSampleId !== undefined && (! selectedSampleIdx[mouseOverSampleId])) ? datasets[mouseOverSampleId].datasets.length : 0
-        const nrLegends = samples.length + mouseOverReplNr + _.reduce(selectedSampleIdx, (res, v, k) => {return res + samples[k].datasets.length}, 0)
+        const nrLegends = samples.length + mouseOverReplNr + _.reduce(selectedSampleIdx, (res, v, k) => {return res + datasets[k].datasets.length}, 0)
         const xShift = 12
         const yShift = 10
 
