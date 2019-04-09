@@ -2,7 +2,6 @@ import React, {
     Component
 } from 'react'
 import PropTypes from 'prop-types'
-import * as _ from 'lodash';
 import { connect } from 'react-redux'
 import ProteinVizPlot from "./ProteinVizPlot";
 import {

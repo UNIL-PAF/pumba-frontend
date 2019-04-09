@@ -145,10 +145,13 @@ class PeptideViz extends PureComponent {
 
         const {zoomLeft, zoomRight} = this.state
 
+
+        console.log(clickedRepl)
+
         // we need this variable to get the correct replIdx
         var replIdx = 0;
 
-        return proteinData.map((sample, i) => {
+        return proteinData.map((sample, i) => {h
             return sample.proteins.map((protein, j) => {
                 replIdx = replIdx + 1
 
@@ -170,7 +173,7 @@ class PeptideViz extends PureComponent {
                 return fltProt.map((peptide, k) => {
                     // check if given replicate is activated on proteinViz
                     const replIsClicked = _.some(clickedRepl, (x) => {
-                        return x.sampleIdx === i && x.replIdx === j
+                        return x.sampleIdx === sample.sample && x.replIdx === protein.dataSet.id
                     })
 
                     const sliceIsClicked = _.some(clickedSlices, (slice) => {
@@ -281,8 +284,8 @@ PeptideViz.propTypes = {
     clickedSlices: PropTypes.array.isRequired,
     samples: PropTypes.array.isRequired,
     sequenceData: PropTypes.object,
-    mouseOverSampleId: PropTypes.number,
-    mouseOverReplId: PropTypes.number,
+    mouseOverSampleId: PropTypes.string,
+    mouseOverReplId: PropTypes.string,
     mouseOverSampleCB: PropTypes.func.isRequired,
     mouseOverReplCB: PropTypes.func.isRequired,
     mouseLeaveSampleCB: PropTypes.func.isRequired,

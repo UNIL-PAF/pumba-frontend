@@ -6,7 +6,6 @@ import LegendField from './LegendField'
 import TheoWeightLine from '../proteinViz/TheoWeightLine'
 import * as _ from 'lodash';
 import { sampleColor } from '../common/colorSettings'
-import {reloadProtein} from "../../actions/loadProtein";
 
 class ProteinVizLegends extends PureComponent {
 
@@ -103,8 +102,6 @@ class ProteinVizLegends extends PureComponent {
     }
 
     plotReplicate = (repl, x, y, height, sampleIdx, colorIdx, isSampleSelected, sampleName) => {
-        const {idx, name, id} = repl
-
         this.legendIdx = this.legendIdx + 1
         const {mouseOverReplId, width, mouseClickReplCB, clickedRepl, removeSelectedReplCB} = this.props
 
@@ -112,7 +109,7 @@ class ProteinVizLegends extends PureComponent {
         const isSelected = _.some(clickedRepl, (x) => {return x.sampleIdx === sampleName && x.replIdx === repl.id})
 
        const res = <LegendField
-            key={idx}
+            key={repl.idx}
             clickeablePointer={true}
             mouseClickReplCB={mouseClickReplCB}
             removeSelectedReplCB={removeSelectedReplCB}
@@ -123,9 +120,9 @@ class ProteinVizLegends extends PureComponent {
             colorIdx={colorIdx}
             isSelected={isSelected}
             x={x+5} y={y+(this.legendIdx)*height} width={width} height={height}
-            text={name} legend={this.replSymbol}
+            text={repl.name} legend={this.replSymbol}
             isUnactiveable={true}
-            changeSelection={() => this.changeSelection("replicate", sampleName, idx)}
+            changeSelection={() => this.changeSelection("replicate", sampleName, repl.idx)}
             showCheckbox={isSampleSelected}
        >
         </LegendField>
