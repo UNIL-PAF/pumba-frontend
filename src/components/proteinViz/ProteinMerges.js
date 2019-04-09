@@ -10,13 +10,15 @@ import ProteinSliceBars from "./ProteinSliceBars";
 
 class ProteinMerges extends PureComponent {
 
-    plotOneProteinMerge = (proteinMerge, idx, sample) => {
+    plotOneProteinMerge = (proteinMerge, proteinInfo) => {
         const {datasets, mouseOverSampleId} = this.props
 
-        const sampleCol = sampleColor(datasets[sample].idx)
-        const highlight = (mouseOverSampleId === idx)
+        const sampleIdx = datasets[proteinInfo.sample].idx
+        const sampleName = datasets[proteinInfo.sample].name
+        const sampleCol = sampleColor(sampleIdx)
+        const highlight = (mouseOverSampleId === sampleName)
 
-        return <polyline className="merged-plot-line" key={idx} points={this.theoPosString(proteinMerge)}
+        return <polyline className="merged-plot-line" key={sampleIdx} points={this.theoPosString(proteinMerge.theoMergedProtein)}
                          stroke={sampleCol} fill="transparent" strokeWidth={ highlight ? "2" : "1" }/>
     }
 
@@ -37,9 +39,11 @@ class ProteinMerges extends PureComponent {
         return res
     }
 
-    plotSliceBars = (proteins, sampleIdx, replIdx) => {
+    plotSliceBars = (sampleIdx, replIdx) => {
         const {zoomLeft, zoomRight, showPopupCB, removePopupCB, clickSliceCB, unclickSliceCB, clickedSlices, popup,
-            history, margin, xScale, yScale, svgParent, scaleChanged, datasets} = this.props
+            history, margin, xScale, yScale, svgParent, scaleChanged, datasets, proteinData} = this.props
+
+        const proteins = proteinData[sampleIdx]
         const color = sampleColor(datasets[proteins.sample].idx)
 
         return <ProteinSliceBars key={sampleIdx + ':' + replIdx} sampleIdx={sampleIdx} replIdx={replIdx} margin={margin} xScale={xScale}
@@ -58,9 +62,9 @@ class ProteinMerges extends PureComponent {
         const mergedData = (theoMergedProteins) ? theoMergedProteins : proteinData
 
         return <g>
-            { _.map(mergedData, (p, i) => this.plotOneProteinMerge(p.theoMergedProtein, i, proteinData[i].sample)) }
-            { typeof mouseOverReplId !== "undefined" && this.plotSliceBars(proteinData[mouseOverSampleId], mouseOverSampleId, mouseOverReplId)}
-            { (clickedRepl.length === 0) || _.map(clickedRepl, (v) => {return this.plotSliceBars(proteinData[v.sampleIdx], v.sampleIdx, v.replIdx)}) }
+            { _.map(mergedData, (p, i) => this.plotOneProteinMerge(p, proteinData[i])) }
+            { typeof mouseOverReplId !== "undefined" && this.plotSliceBars(mouseOverSampleId, mouseOverReplId)}
+            { (clickedRepl.length === 0) || _.map(clickedRepl, (v) => {return this.plotSliceBars(v.sampleIdx, v.replIdx)}) }
         </g>
     }
 
@@ -71,7 +75,7 @@ ProteinMerges.propTypes = {
     theoMergedProteins: PropTypes.array,
     unclickSliceCB: PropTypes.func.isRequired,
     clickSliceCB: PropTypes.func.isRequired,
-    mouseOverSampleId: PropTypes.number,
+    mouseOverSampleId: PropTypes.string,
     mouseOverReplId: PropTypes.number,
     zoomLeft: PropTypes.number,
     zoomRight: PropTypes.number,

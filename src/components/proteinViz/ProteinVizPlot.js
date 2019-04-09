@@ -9,7 +9,7 @@ import {brushX} from 'd3-brush'
 import { select, event, mouse } from 'd3-selection'
 import { sampleColor } from '../common/colorSettings'
 import TheoWeightLine from './TheoWeightLine'
-import ProteinVizLegends from './ProteinVizLegends'
+import ProteinVizLegends from '../legends/ProteinVizLegends'
 import ProteinMerges from "./ProteinMerges"
 import PopOverSkeleton from "../common/popOverSkeleton"
 import ProteinTitle from "../common/ProteinTitle"
@@ -280,7 +280,7 @@ ProteinVizPlot.propTypes = {
     removeSelectedReplCB: PropTypes.func.isRequired,
     unclickSliceCB: PropTypes.func.isRequired,
     clickSliceCB: PropTypes.func.isRequired,
-    mouseOverSampleId: PropTypes.number,
+    mouseOverSampleId: PropTypes.string,
     mouseOverReplId: PropTypes.number,
     changeZoomRangeCB: PropTypes.func.isRequired,
     zoomLeft: PropTypes.number,

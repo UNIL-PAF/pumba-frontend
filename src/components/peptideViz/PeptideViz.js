@@ -9,7 +9,7 @@ import {brush} from "d3-brush";
 import * as _ from 'lodash'
 import AminoAcidBar from './AminoAcidBar'
 import Peptide from './Peptide'
-import ProteinVizLegends from '../proteinViz/ProteinVizLegends'
+import ProteinVizLegends from '../legends/ProteinVizLegends'
 import PopOverSkeleton from "../common/popOverSkeleton"
 import ProteinTitle from "../common/ProteinTitle"
 import { sampleColor } from '../common/colorSettings'

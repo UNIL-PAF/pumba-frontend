@@ -3,7 +3,7 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import LegendField from './LegendField'
-import TheoWeightLine from './TheoWeightLine'
+import TheoWeightLine from '../proteinViz/TheoWeightLine'
 import * as _ from 'lodash';
 import { sampleColor } from '../common/colorSettings'
 import {reloadProtein} from "../../actions/loadProtein";
@@ -103,7 +103,8 @@ class ProteinVizLegends extends PureComponent {
     }
 
     plotReplicate = (repl, x, y, height, sampleIdx, colorIdx, isSampleSelected, sampleName) => {
-        const {idx, name } = repl
+        const {idx, name} = repl
+
         this.legendIdx = this.legendIdx + 1
         const {mouseOverReplId, mouseOverSampleId, width, mouseClickReplCB, clickedRepl, removeSelectedReplCB, datasets} = this.props
 
@@ -119,6 +120,7 @@ class ProteinVizLegends extends PureComponent {
             mouseOverId={(sampleIdx === mouseOverSampleId) ? mouseOverReplId : undefined}
             idx={idx}
             sampleIdx={sampleIdx}
+            mouseOverReplId={repl.id}
             colorIdx={colorIdx}
             isSelected={isSelected}
             x={x+5} y={y+(this.legendIdx)*height} width={width} height={height}
@@ -143,13 +145,14 @@ class ProteinVizLegends extends PureComponent {
         const sampleName = sample.name
         const isSampleSelected = _.some(clickedRepl, (x) => {return x.sampleIdx === sampleIdx})
         const colorIdx = datasets[sampleName].idx
-        const showCheckbox = mouseOverSampleId === sampleIdx
+        const showCheckbox = mouseOverSampleId === sampleName
 
         const res =  <g key={sampleIdx}>
                 <LegendField
                     onMouseOver={this.mouseOverSample}
                     mouseOverId={mouseOverSampleId}
                     sampleIdx={sampleIdx}
+                    sampleName={sampleName}
                     colorIdx={colorIdx}
                     x={x} y={y+(this.legendIdx)*height} width={width} height={height}
                     text={sampleName} legend={this.sampleSymbol}
@@ -158,7 +161,7 @@ class ProteinVizLegends extends PureComponent {
                     showCheckbox={showCheckbox}
                 >
                 </LegendField>
-                { (sampleIdx === mouseOverSampleId || isSampleSelected) && _.map(sample.datasets, (repl) => this.plotReplicate(repl, x, y, height, sampleIdx, colorIdx, showCheckbox, sampleName)) }
+                { (sampleName === mouseOverSampleId || isSampleSelected) && _.map(sample.datasets, (repl) => this.plotReplicate(repl, x, y, height, sampleIdx, colorIdx, showCheckbox, sampleName)) }
         </g>
 
         this.legendIdx = this.legendIdx + 1
@@ -167,7 +170,7 @@ class ProteinVizLegends extends PureComponent {
     }
 
     plotTheoMolWeight = (x, y, legendHeight) => {
-        const {width, mouseLeaveSampleCB, theoMolWeight, datasets} = this.props
+        const {width, mouseLeaveSampleCB, theoMolWeight} = this.props
 
         return  <LegendField
             x={x} y={y} width={width} height={legendHeight}
@@ -187,7 +190,7 @@ class ProteinVizLegends extends PureComponent {
 
         const legendHeight = 20
         const selectedSampleIdx = _.countBy(clickedRepl, "sampleIdx")
-        const mouseOverReplNr = (mouseOverSampleId !== undefined && (! selectedSampleIdx[mouseOverSampleId])) ? samples[mouseOverSampleId].datasets.length : 0
+        const mouseOverReplNr = (mouseOverSampleId !== undefined && (! selectedSampleIdx[mouseOverSampleId])) ? datasets[mouseOverSampleId].datasets.length : 0
         const nrLegends = samples.length + mouseOverReplNr + _.reduce(selectedSampleIdx, (res, v, k) => {return res + samples[k].datasets.length}, 0)
         const xShift = 12
         const yShift = 10
@@ -218,7 +221,7 @@ ProteinVizLegends.propTypes = {
     x: PropTypes.number.isRequired,
     y: PropTypes.number.isRequired,
     width: PropTypes.number.isRequired,
-    mouseOverSampleId: PropTypes.number,
+    mouseOverSampleId: PropTypes.string,
     mouseOverReplId: PropTypes.number,
     mouseOverSampleCB: PropTypes.func.isRequired,
     mouseOverReplCB: PropTypes.func.isRequired,
@@ -231,8 +234,6 @@ ProteinVizLegends.propTypes = {
     datasets: PropTypes.object.isRequired,
     reloadProtein: PropTypes.func.isRequired,
     setDatasets: PropTypes.func.isRequired,
-    datasets: PropTypes.object.isRequired,
-    reloadProtein: PropTypes.func.isRequired,
 };
 
 export default (ProteinVizLegends);

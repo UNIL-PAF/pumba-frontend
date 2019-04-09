@@ -21,8 +21,6 @@ class ProteinVizContainer extends Component {
             clickedRepl, removeSelectedReplCB, showPopupCB, removePopupCB, popup, clickedSlices,
             clickSliceCB, unclickSliceCB, history, datasets, reloadProtein, setDatasets} = this.props
 
-        console.log(proteinData)
-
         return <div id={"protein-viz"}>
         { proteinData && <ProteinVizPlot proteinData={proteinData} viewWidth={800} viewHeight={400}
                              mouseOverSampleId={mouseOverSampleId} mouseOverSampleCB={mouseOverSampleCB}
@@ -43,7 +41,7 @@ class ProteinVizContainer extends Component {
 ProteinVizContainer.propTypes = {
     proteinData: PropTypes.array,
     theoMergedProteins: PropTypes.array,
-    mouseOverSampleId: PropTypes.number,
+    mouseOverSampleId: PropTypes.string,
     mouseOverReplId: PropTypes.number,
     mouseOverSampleCB: PropTypes.func.isRequired,
     mouseOverReplCB: PropTypes.func.isRequired,

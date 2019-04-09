@@ -24,12 +24,13 @@ class LegendField extends Component {
 
     render() {
         const { x, y, width, text, height, legend, idx, onMouseOver, mouseOverId,
-            sampleIdx, clickeablePointer, isSelected, colorIdx, isUnactiveable, changeSelection, showCheckbox} = this.props;
+            sampleIdx, clickeablePointer, isSelected, colorIdx, isUnactiveable, changeSelection,
+            showCheckbox, sampleName, mouseOverReplId} = this.props;
 
         const yMiddle = y+13
 
         return <g style={ (clickeablePointer) ? {cursor: 'pointer'} : {} }
-                  onMouseOver={() => { if(onMouseOver) onMouseOver(sampleIdx, idx) } }
+                  onMouseOver={() => { if(onMouseOver) onMouseOver(sampleName, mouseOverReplId) } }
                   onClick={() => this.clickOnLegend()}>
             <rect
                 className="merged-legend-field"
@@ -62,9 +63,9 @@ LegendField.propTypes = {
     onMouseOver: PropTypes.func,
     mouseClickReplCB: PropTypes.func,
     removeSelectedReplCB: PropTypes.func,
-    mouseOverId: PropTypes.number,
+    mouseOverReplId: PropTypes.string,
     sampleIdx: PropTypes.number,
-    colorIdx: PropTypes.number,
+    sampleName: PropTypes.string,
     clickeablePointer: PropTypes.bool,
     isSelected: PropTypes.bool,
     isUnactiveable: PropTypes.bool.isRequired,
