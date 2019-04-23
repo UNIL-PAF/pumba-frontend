@@ -9,7 +9,7 @@ import {brushX} from 'd3-brush'
 import { select, event, mouse } from 'd3-selection'
 import { sampleColor } from '../common/colorSettings'
 import TheoWeightLine from './TheoWeightLine'
-import ProteinVizLegends from '../legends/ProteinVizLegends'
+import ProteinVizLegendsContainer from '../legends/ProteinVizLegendsContainer'
 import ProteinMerges from "./ProteinMerges"
 import PopOverSkeleton from "../common/popOverSkeleton"
 import ProteinTitle from "../common/ProteinTitle"
@@ -204,10 +204,9 @@ class ProteinVizPlot extends Component {
     }
 
     render() {
-        const {viewWidth, viewHeight, mouseOverSampleId, mouseOverSampleCB, mouseOverReplId,
-            mouseOverReplCB, mouseLeaveSampleCB, mouseLeaveReplCB, mouseClickReplCB, clickedRepl,
-            removeSelectedReplCB, popup, proteinData, theoMergedProteins, unclickSliceCB, clickSliceCB,
-            zoomRight, zoomLeft, showPopupCB, removePopupCB, clickedSlices, history, datasets, setDatasets, reloadProtein} = this.props
+        const {viewWidth, viewHeight, mouseOverSampleId, mouseOverReplId,
+            mouseLeaveSampleCB, clickedRepl, popup, proteinData, theoMergedProteins, unclickSliceCB, clickSliceCB,
+            zoomRight, zoomLeft, showPopupCB, removePopupCB, clickedSlices, history, datasets} = this.props
 
         // the mol weight at the mouse position
         const mouseWeightPos = this.state.xScale.invert(this.state.mouseX)
@@ -252,15 +251,10 @@ class ProteinVizPlot extends Component {
                                                  scaleChanged={this.state.scaleChanged} datasets={datasets}>
                                 </ProteinMerges>}
 
-                    <ProteinVizLegends x={viewWidth-200} y={20} width={150}
-                                     mouseOverSampleId={mouseOverSampleId} mouseOverSampleCB={mouseOverSampleCB}
-                                     mouseOverReplId={mouseOverReplId} mouseOverReplCB={mouseOverReplCB}
-                                     mouseLeaveReplCB={mouseLeaveReplCB} mouseLeaveSampleCB={mouseLeaveSampleCB}
-                                     theoMolWeight={this.state.theoMolWeight} mouseClickReplCB={mouseClickReplCB}
-                                     clickedRepl={clickedRepl} removeSelectedReplCB={removeSelectedReplCB}
-                                     datasets={datasets} setDatasets={setDatasets} reloadProtein={reloadProtein}
+                    <ProteinVizLegendsContainer x={viewWidth-200} y={20} width={150}
+                                     theoMolWeight={this.state.theoMolWeight}
                     >
-                    </ProteinVizLegends>
+                    </ProteinVizLegendsContainer>
 
                     {popup && this.plotPopup()}
                 </g>
@@ -275,12 +269,7 @@ ProteinVizPlot.propTypes = {
     theoMergedProteins: PropTypes.array,
     viewWidth: PropTypes.number.isRequired,
     viewHeight: PropTypes.number.isRequired,
-    mouseOverSampleCB: PropTypes.func.isRequired,
-    mouseOverReplCB: PropTypes.func.isRequired,
     mouseLeaveSampleCB: PropTypes.func.isRequired,
-    mouseLeaveReplCB: PropTypes.func.isRequired,
-    mouseClickReplCB: PropTypes.func.isRequired,
-    removeSelectedReplCB: PropTypes.func.isRequired,
     unclickSliceCB: PropTypes.func.isRequired,
     clickSliceCB: PropTypes.func.isRequired,
     mouseOverSampleId: PropTypes.string,
@@ -294,9 +283,7 @@ ProteinVizPlot.propTypes = {
     popup: PropTypes.object,
     clickedSlices: PropTypes.array.isRequired,
     history: PropTypes.object.isRequired,
-    datasets: PropTypes.object.isRequired,
-    setDatasets: PropTypes.func.isRequired,
-    reloadProtein: PropTypes.func.isRequired,
+    datasets: PropTypes.object.isRequired
 };
 
 export default ProteinVizPlot

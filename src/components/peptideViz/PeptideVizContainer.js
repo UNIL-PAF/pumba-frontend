@@ -10,13 +10,14 @@ import {
     mouseClickRepl, mouseLeaveRepl, mouseLeaveSample, mouseOverRepl,
     mouseOverSample, removeRepl
 } from "../../actions/sampleSelection";
+import {reloadProtein} from "../../actions/loadProtein"
 
 class PeptideVizContainer extends Component {
 
     render(){
         const {proteinData, sequenceData, zoom, changeZoomRangeCB, clickedRepl, clickedSlices, mouseOverSampleId,
             mouseOverSampleCB, mouseOverReplId, mouseOverReplCB, mouseLeaveReplCB, mouseLeaveSampleCB,
-            mouseClickReplCB, removeSelectedReplCB, showPopupCB, removePopupCB, popup, datasets} = this.props
+            mouseClickReplCB, removeSelectedReplCB, showPopupCB, removePopupCB, popup, datasets, reloadProteinCB} = this.props
 
         const samples = _.map(proteinData, (p, i) => {
             const replicates = _.map(p.proteins, (oneProt, i) => {
@@ -40,7 +41,7 @@ class PeptideVizContainer extends Component {
                                          mouseLeaveReplCB={mouseLeaveReplCB} mouseLeaveSampleCB={mouseLeaveSampleCB}
                                          mouseClickReplCB={mouseClickReplCB} removeSelectedReplCB={removeSelectedReplCB}
                                          showPopupCB={showPopupCB} removePopupCB={removePopupCB} popup={popup}
-                                         datasets={datasets}
+                                         datasets={datasets} reloadProteinCB={reloadProteinCB}
                             /> }
         </div>
     }
@@ -64,7 +65,8 @@ PeptideVizContainer.propTypes = {
     showPopupCB: PropTypes.func.isRequired,
     removePopupCB: PropTypes.func.isRequired,
     popup: PropTypes.object,
-    datasets: PropTypes.object.isRequired
+    datasets: PropTypes.object.isRequired,
+    reloadProteinCB: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => {
@@ -93,6 +95,7 @@ const mapDispatchToProps = (dispatch) => {
         removeSelectedReplCB: (sampleIdx, replIdx) => { dispatch(removeRepl(sampleIdx, replIdx)) },
         showPopupCB: (popup) => { dispatch(showPepPopup(popup))},
         removePopupCB: () => { dispatch(removePepPopup())},
+        reloadProteinCB: (activeDatasetIds) => { dispatch(reloadProtein(activeDatasetIds))}
     }
 }
 

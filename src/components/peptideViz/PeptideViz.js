@@ -9,7 +9,7 @@ import {brush} from "d3-brush";
 import * as _ from 'lodash'
 import AminoAcidBar from './AminoAcidBar'
 import Peptide from './Peptide'
-import ProteinVizLegends from '../legends/ProteinVizLegends'
+import ProteinVizLegendsContainer from '../legends/ProteinVizLegendsContainer'
 import PopOverSkeleton from "../common/popOverSkeleton"
 import ProteinTitle from "../common/ProteinTitle"
 import { sampleColor } from '../common/colorSettings'
@@ -228,9 +228,7 @@ class PeptideViz extends PureComponent {
     }
 
     render(){
-        const {viewWidth, viewHeight, samples, clickedRepl, mouseOverSampleCB, mouseOverReplId,
-            mouseOverReplCB, mouseLeaveReplCB, mouseLeaveSampleCB, mouseClickReplCB, removeSelectedReplCB, mouseOverSampleId,
-            popup, proteinData, datasets} = this.props
+        const {viewWidth, viewHeight, mouseLeaveSampleCB, popup, proteinData} = this.props
 
         return <div id={"peptide-plot"}>
             <svg className="peptide-svg"
@@ -255,15 +253,8 @@ class PeptideViz extends PureComponent {
                     { this.plotAminoAcidBar() }
                     { this.svg && this.plotPeptides() }
                 </g>
-                <ProteinVizLegends x={viewWidth-200} y={20} width={150} samples={samples}
-                                   theoMolWeight={this.state.theoMolWeight} clickedRepl={clickedRepl}
-                                   mouseOverSampleId={mouseOverSampleId} mouseOverSampleCB={mouseOverSampleCB}
-                                   mouseOverReplId={mouseOverReplId} mouseOverReplCB={mouseOverReplCB}
-                                   mouseLeaveReplCB={mouseLeaveReplCB} mouseLeaveSampleCB={mouseLeaveSampleCB}
-                                   mouseClickReplCB={mouseClickReplCB} removeSelectedReplCB={removeSelectedReplCB}
-                                   datasets={datasets}
-                >
-                </ProteinVizLegends>
+                <ProteinVizLegendsContainer x={viewWidth-200} y={20} width={150} theoMolWeight={this.state.theoMolWeight}>
+                </ProteinVizLegendsContainer>
                 {popup && this.plotPopup()}
             </svg>
         </div>
@@ -279,20 +270,14 @@ PeptideViz.propTypes = {
     changeZoomRangeCB: PropTypes.func,
     clickedRepl: PropTypes.array.isRequired,
     clickedSlices: PropTypes.array.isRequired,
-    samples: PropTypes.array.isRequired,
     sequenceData: PropTypes.object,
     mouseOverSampleId: PropTypes.string,
     mouseOverReplId: PropTypes.string,
-    mouseOverSampleCB: PropTypes.func.isRequired,
-    mouseOverReplCB: PropTypes.func.isRequired,
     mouseLeaveSampleCB: PropTypes.func.isRequired,
-    mouseLeaveReplCB: PropTypes.func.isRequired,
-    mouseClickReplCB: PropTypes.func.isRequired,
-    removeSelectedReplCB: PropTypes.func.isRequired,
     showPopupCB: PropTypes.func.isRequired,
     removePopupCB: PropTypes.func.isRequired,
     popup: PropTypes.object,
-    datasets: PropTypes.object.isRequired
+    datasets: PropTypes.object.isRequired,
 };
 
 export default (PeptideViz)

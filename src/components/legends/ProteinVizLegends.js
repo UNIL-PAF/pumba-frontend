@@ -21,7 +21,7 @@ class ProteinVizLegends extends PureComponent {
     }
 
     changeSelection(target, sampleName, replIdx){
-        const {reloadProtein, setDatasets, datasets} = this.props
+        const {reloadProteinCB, setDatasets, datasets} = this.props
 
         var newDatasets = null
 
@@ -58,7 +58,9 @@ class ProteinVizLegends extends PureComponent {
             return res
         }, [])
 
-        reloadProtein(activeDatasets.join(','))
+        console.log(reloadProteinCB)
+
+        reloadProteinCB(activeDatasets.join(','))
     }
 
     /**
@@ -221,6 +223,7 @@ ProteinVizLegends.propTypes = {
     x: PropTypes.number.isRequired,
     y: PropTypes.number.isRequired,
     width: PropTypes.number.isRequired,
+    theoMolWeight: PropTypes.number.isRequired,
     mouseOverSampleId: PropTypes.string,
     mouseOverReplId: PropTypes.string,
     mouseOverSampleCB: PropTypes.func.isRequired,
@@ -229,10 +232,9 @@ ProteinVizLegends.propTypes = {
     mouseLeaveSampleCB: PropTypes.func.isRequired,
     mouseClickReplCB: PropTypes.func.isRequired,
     removeSelectedReplCB: PropTypes.func.isRequired,
-    theoMolWeight: PropTypes.number.isRequired,
     clickedRepl: PropTypes.array.isRequired,
     datasets: PropTypes.object.isRequired,
-    reloadProtein: PropTypes.func.isRequired,
+    reloadProteinCB: PropTypes.func.isRequired,
     setDatasets: PropTypes.func.isRequired,
 };
 

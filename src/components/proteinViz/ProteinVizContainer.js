@@ -4,33 +4,28 @@ import React, {
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import ProteinVizPlot from "./ProteinVizPlot";
-import {
-    mouseClickRepl, mouseLeaveRepl, mouseLeaveSample, mouseOverRepl, mouseOverSample,
-    removeRepl, clickSlice, unclickSlice
-} from "../../actions/sampleSelection";
+import { mouseLeaveSample, clickSlice, unclickSlice} from "../../actions/sampleSelection";
 import {changeZoomAndFilter, removeSlicePopup, showSlicePopup} from "../../actions/proteinVizActions";
-import {reloadProtein, setDatasets} from "../../actions/loadProtein";
 
 class ProteinVizContainer extends Component {
 
     render(){
-        const {proteinData, mouseOverSampleId, mouseOverSampleCB,
-            mouseOverReplId, mouseOverReplCB, mouseLeaveSampleCB, mouseLeaveReplCB,
-            zoomLeft, zoomRight, changeZoomRangeCB, theoMergedProteins, mouseClickReplCB,
-            clickedRepl, removeSelectedReplCB, showPopupCB, removePopupCB, popup, clickedSlices,
-            clickSliceCB, unclickSliceCB, history, datasets, reloadProtein, setDatasets} = this.props
+        const {proteinData, mouseOverSampleId, mouseOverReplId, mouseLeaveSampleCB, zoomLeft, zoomRight,
+            changeZoomRangeCB, theoMergedProteins,
+            clickedRepl, showPopupCB, removePopupCB, popup, clickedSlices,
+            clickSliceCB, unclickSliceCB, history, datasets} = this.props
 
         return <div id={"protein-viz"}>
         { proteinData && <ProteinVizPlot proteinData={proteinData} viewWidth={800} viewHeight={400}
-                             mouseOverSampleId={mouseOverSampleId} mouseOverSampleCB={mouseOverSampleCB}
-                             mouseOverReplId={mouseOverReplId} mouseOverReplCB={mouseOverReplCB}
-                             mouseLeaveSampleCB={mouseLeaveSampleCB} mouseLeaveReplCB={mouseLeaveReplCB}
+                             mouseOverSampleId={mouseOverSampleId}
+                             mouseOverReplId={mouseOverReplId}
+                             mouseLeaveSampleCB={mouseLeaveSampleCB}
                              changeZoomRangeCB={changeZoomRangeCB} zoomLeft={zoomLeft} zoomRight={zoomRight}
-                             theoMergedProteins={theoMergedProteins} mouseClickReplCB={mouseClickReplCB}
-                             clickedRepl={clickedRepl} removeSelectedReplCB={removeSelectedReplCB}
+                             theoMergedProteins={theoMergedProteins}
+                             clickedRepl={clickedRepl}
                              showPopupCB={showPopupCB} removePopupCB={removePopupCB} popup={popup}
                              clickedSlices={clickedSlices} clickSliceCB={clickSliceCB} unclickSliceCB={unclickSliceCB}
-                             history={history} datasets={datasets} reloadProtein={reloadProtein} setDatasets={setDatasets}
+                             history={history} datasets={datasets}
         /> }
         </div>
     }
@@ -42,13 +37,8 @@ ProteinVizContainer.propTypes = {
     theoMergedProteins: PropTypes.array,
     mouseOverSampleId: PropTypes.string,
     mouseOverReplId: PropTypes.string,
-    mouseOverSampleCB: PropTypes.func.isRequired,
-    mouseOverReplCB: PropTypes.func.isRequired,
     mouseLeaveSampleCB: PropTypes.func.isRequired,
-    mouseLeaveReplCB: PropTypes.func.isRequired,
     changeZoomRangeCB: PropTypes.func.isRequired,
-    mouseClickReplCB: PropTypes.func.isRequired,
-    removeSelectedReplCB: PropTypes.func.isRequired,
     showPopupCB: PropTypes.func.isRequired,
     removePopupCB: PropTypes.func.isRequired,
     clickSliceCB: PropTypes.func.isRequired,
@@ -60,8 +50,6 @@ ProteinVizContainer.propTypes = {
     clickedSlices: PropTypes.array.isRequired,
     history: PropTypes.object.isRequired,
     datasets: PropTypes.object.isRequired,
-    reloadProtein: PropTypes.func.isRequired,
-    setDatasets: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => {
@@ -82,19 +70,12 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        mouseOverSampleCB: sampleIdx => { dispatch(mouseOverSample(sampleIdx)) },
-        mouseOverReplCB: replIdx => { dispatch(mouseOverRepl(replIdx)) },
         mouseLeaveSampleCB: () => { dispatch(mouseLeaveSample()) },
-        mouseLeaveReplCB: () => { dispatch(mouseLeaveRepl()) },
-        mouseClickReplCB: (sampleIdx, replIdx) => { dispatch(mouseClickRepl(sampleIdx, replIdx)) },
         changeZoomRangeCB: (left, right) => { dispatch(changeZoomAndFilter(left, right)) },
-        removeSelectedReplCB: (sampleIdx, replIdx) => { dispatch(removeRepl(sampleIdx, replIdx)) },
         showPopupCB: (popup) => { dispatch(showSlicePopup(popup))},
         removePopupCB: () => { dispatch(removeSlicePopup())},
         clickSliceCB: (slice) => { dispatch(clickSlice(slice))},
-        unclickSliceCB: (slice) => { dispatch(unclickSlice(slice))},
-        reloadProtein: (activeDatasets) => { dispatch(reloadProtein(activeDatasets)) },
-        setDatasets: (datasets) => { dispatch(setDatasets(datasets)) }
+        unclickSliceCB: (slice) => { dispatch(unclickSlice(slice))}
     }
 }
 
