@@ -139,6 +139,10 @@ class ProteinVizLegends extends PureComponent {
         const {width, mouseOverSampleId, clickedRepl, datasets} = this.props
         const sampleIdx = sample.idx
         const sampleName = sample.name
+
+        // don't show anything in case this is an unavailable dataset
+        if(! datasets[sampleName].isAvailable) return null
+
         const isSampleSelected = _.some(clickedRepl, (x) => {return x.sampleIdx === sampleName})
         const colorIdx = datasets[sampleName].idx
         const showCheckbox = mouseOverSampleId === sampleName
@@ -186,7 +190,8 @@ class ProteinVizLegends extends PureComponent {
         const legendHeight = 20
         const selectedSampleIdx = _.countBy(clickedRepl, "sampleIdx")
         const mouseOverReplNr = (mouseOverSampleId !== undefined && (! selectedSampleIdx[mouseOverSampleId])) ? datasets[mouseOverSampleId].datasets.length : 0
-        const nrLegends = samples.length + mouseOverReplNr + _.reduce(selectedSampleIdx, (res, v, k) => {return res + datasets[k].datasets.length}, 0)
+        const nrActiveDatasets = _.filter(datasets, (d) => {return d.isAvailable}).length
+        const nrLegends = nrActiveDatasets + mouseOverReplNr + _.reduce(selectedSampleIdx, (res, v, k) => {return res + datasets[k].datasets.length}, 0)
         const xShift = 12
         const yShift = 10
 

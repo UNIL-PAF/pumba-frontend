@@ -145,9 +145,6 @@ class PeptideViz extends PureComponent {
 
         const {zoomLeft, zoomRight} = this.state
 
-
-        console.log(clickedRepl)
-
         // we need this variable to get the correct replIdx
         var replIdx = 0;
 
