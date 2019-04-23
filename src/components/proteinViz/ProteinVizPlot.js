@@ -204,9 +204,7 @@ class ProteinVizPlot extends Component {
     }
 
     render() {
-        const {viewWidth, viewHeight, mouseOverSampleId, mouseOverReplId,
-            mouseLeaveSampleCB, clickedRepl, popup, proteinData, theoMergedProteins, unclickSliceCB, clickSliceCB,
-            zoomRight, zoomLeft, showPopupCB, removePopupCB, clickedSlices, history, datasets} = this.props
+        const {viewWidth, viewHeight, mouseLeaveSampleCB, popup, proteinData, history} = this.props
 
         // the mol weight at the mouse position
         const mouseWeightPos = this.state.xScale.invert(this.state.mouseX)
@@ -241,7 +239,7 @@ class ProteinVizPlot extends Component {
 
                     {this.plotMousePositionLine(mouseWeightPos)}
 
-                    {this.svg &&  <ProteinMergesContainer xScale={this.state.xScale} yScale={this.state.yScale}
+                    {this.svg &&  <ProteinMergesContainer xScale={this.state.xScale} yScale={this.state.yScale} history={history}
                                                  margin={this.margin} svgParent={this.svg} scaleChanged={this.state.scaleChanged}>
                                 </ProteinMergesContainer>}
 

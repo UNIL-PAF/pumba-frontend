@@ -6,11 +6,7 @@ import * as _ from 'lodash';
 import { connect } from 'react-redux'
 import PeptideViz from './PeptideViz'
 import {changePepZoomRange, removePepPopup, showPepPopup} from "../../actions/peptideVizActions";
-import {
-    mouseClickRepl, mouseLeaveRepl, mouseLeaveSample, mouseOverRepl,
-    mouseOverSample, removeRepl
-} from "../../actions/sampleSelection";
-import {reloadProtein} from "../../actions/loadProtein"
+import {mouseLeaveSample} from "../../actions/sampleSelection";
 
 class PeptideVizContainer extends Component {
 
