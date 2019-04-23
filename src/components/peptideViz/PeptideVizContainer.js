@@ -16,8 +16,7 @@ class PeptideVizContainer extends Component {
 
     render(){
         const {proteinData, sequenceData, zoom, changeZoomRangeCB, clickedRepl, clickedSlices, mouseOverSampleId,
-            mouseOverSampleCB, mouseOverReplId, mouseOverReplCB, mouseLeaveReplCB, mouseLeaveSampleCB,
-            mouseClickReplCB, removeSelectedReplCB, showPopupCB, removePopupCB, popup, datasets, reloadProteinCB} = this.props
+            mouseOverReplId, mouseLeaveSampleCB, showPopupCB, removePopupCB, popup, datasets} = this.props
 
         const samples = _.map(proteinData, (p, i) => {
             const replicates = _.map(p.proteins, (oneProt, i) => {
@@ -36,12 +35,13 @@ class PeptideVizContainer extends Component {
                                          clickedRepl={clickedRepl}
                                          clickedSlices={clickedSlices}
                                          samples={samples}
-                                         mouseOverSampleId={mouseOverSampleId} mouseOverSampleCB={mouseOverSampleCB}
-                                         mouseOverReplId={mouseOverReplId} mouseOverReplCB={mouseOverReplCB}
-                                         mouseLeaveReplCB={mouseLeaveReplCB} mouseLeaveSampleCB={mouseLeaveSampleCB}
-                                         mouseClickReplCB={mouseClickReplCB} removeSelectedReplCB={removeSelectedReplCB}
-                                         showPopupCB={showPopupCB} removePopupCB={removePopupCB} popup={popup}
-                                         datasets={datasets} reloadProteinCB={reloadProteinCB}
+                                         mouseOverSampleId={mouseOverSampleId}
+                                         mouseOverReplId={mouseOverReplId}
+                                         mouseLeaveSampleCB={mouseLeaveSampleCB}
+                                         showPopupCB={showPopupCB}
+                                         removePopupCB={removePopupCB}
+                                         popup={popup}
+                                         datasets={datasets}
                             /> }
         </div>
     }
@@ -52,21 +52,16 @@ PeptideVizContainer.propTypes = {
     proteinData: PropTypes.array,
     sequenceData: PropTypes.object,
     zoom: PropTypes.object,
+    changeZoomRangeCB: PropTypes.func.isRequired,
     clickedRepl: PropTypes.array.isRequired,
     clickedSlices: PropTypes.array.isRequired,
     mouseOverSampleId: PropTypes.string,
     mouseOverReplId: PropTypes.string,
-    mouseOverSampleCB: PropTypes.func.isRequired,
-    mouseOverReplCB: PropTypes.func.isRequired,
     mouseLeaveSampleCB: PropTypes.func.isRequired,
-    mouseLeaveReplCB: PropTypes.func.isRequired,
-    mouseClickReplCB: PropTypes.func.isRequired,
-    removeSelectedReplCB: PropTypes.func.isRequired,
     showPopupCB: PropTypes.func.isRequired,
     removePopupCB: PropTypes.func.isRequired,
     popup: PropTypes.object,
     datasets: PropTypes.object.isRequired,
-    reloadProteinCB: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => {
@@ -87,15 +82,9 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         changeZoomRangeCB: (left, right, top, bottom) => dispatch(changePepZoomRange(left, right, top, bottom)),
-        mouseOverSampleCB: sampleIdx => { dispatch(mouseOverSample(sampleIdx)) },
-        mouseOverReplCB: replIdx => { dispatch(mouseOverRepl(replIdx)) },
         mouseLeaveSampleCB: () => { dispatch(mouseLeaveSample()) },
-        mouseLeaveReplCB: () => { dispatch(mouseLeaveRepl()) },
-        mouseClickReplCB: (sampleIdx, replIdx) => { dispatch(mouseClickRepl(sampleIdx, replIdx)) },
-        removeSelectedReplCB: (sampleIdx, replIdx) => { dispatch(removeRepl(sampleIdx, replIdx)) },
         showPopupCB: (popup) => { dispatch(showPepPopup(popup))},
         removePopupCB: () => { dispatch(removePepPopup())},
-        reloadProteinCB: (activeDatasetIds) => { dispatch(reloadProtein(activeDatasetIds))}
     }
 }
 
