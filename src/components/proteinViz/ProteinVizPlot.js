@@ -10,7 +10,7 @@ import { select, event, mouse } from 'd3-selection'
 import { sampleColor } from '../common/colorSettings'
 import TheoWeightLine from './TheoWeightLine'
 import ProteinVizLegendsContainer from '../legends/ProteinVizLegendsContainer'
-import ProteinMerges from "./ProteinMerges"
+import ProteinMergesContainer from "./ProteinMergesContainer"
 import PopOverSkeleton from "../common/popOverSkeleton"
 import ProteinTitle from "../common/ProteinTitle"
 
@@ -241,15 +241,9 @@ class ProteinVizPlot extends Component {
 
                     {this.plotMousePositionLine(mouseWeightPos)}
 
-                    {this.svg &&  <ProteinMerges proteinData={proteinData} theoMergedProteins={theoMergedProteins}
-                                                 unclickSliceCB={unclickSliceCB} clickSliceCB={clickSliceCB}
-                                                 mouseOverSampleId={mouseOverSampleId} mouseOverReplId={mouseOverReplId}
-                                                 zoomLeft={zoomLeft} zoomRight={zoomRight} clickedRepl={clickedRepl}
-                                                 showPopupCB={showPopupCB} removePopupCB={removePopupCB} popup={popup}
-                                                 clickedSlices={clickedSlices} history={history} xScale={this.state.xScale}
-                                                 yScale={this.state.yScale} margin={this.margin} svgParent={this.svg}
-                                                 scaleChanged={this.state.scaleChanged} datasets={datasets}>
-                                </ProteinMerges>}
+                    {this.svg &&  <ProteinMergesContainer xScale={this.state.xScale} yScale={this.state.yScale}
+                                                 margin={this.margin} svgParent={this.svg} scaleChanged={this.state.scaleChanged}>
+                                </ProteinMergesContainer>}
 
                     <ProteinVizLegendsContainer x={viewWidth-200} y={20} width={150}
                                      theoMolWeight={this.state.theoMolWeight}
