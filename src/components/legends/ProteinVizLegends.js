@@ -9,6 +9,12 @@ import { sampleColor } from '../common/colorSettings'
 
 class ProteinVizLegends extends PureComponent {
 
+    constructor(props) {
+        super(props);
+
+        this.state = {mouseOverLegend: false}
+    }
+
     // we need the legendIdx to get the right positions of the legends when expanding the replicates
     legendIdx = 1
 
@@ -58,8 +64,6 @@ class ProteinVizLegends extends PureComponent {
             return res
         }, [])
 
-        console.log(reloadProteinCB)
-
         reloadProteinCB(activeDatasets.join(','))
     }
 
@@ -74,25 +78,28 @@ class ProteinVizLegends extends PureComponent {
     /**
      * plot the sample dots
      */
-    sampleSymbol = (x, y, height, replId, mouseOverSampleIdx, sampleName, colorIdx) => {
-        const highlight = (sampleName === mouseOverSampleIdx)
-        return <circle cx={x} cy={y-height/3} r={(highlight) ? height/4 : height/6} fill={sampleColor(colorIdx)} >
+    sampleSymbol = (x, y, height, settings) => {
+        const highlight = (settings.sampleName === settings.mouseOverId)
+        const fillColor = settings.isActive ? sampleColor(settings.colorIdx) : "None"
+        const strokeColor = sampleColor(settings.colorIdx)
+
+        return <circle cx={x} cy={y-height/3} r={(highlight) ? height/4 : height/6} fill={fillColor} stroke={strokeColor}>
         </circle>
     }
 
     /**
      *
      */
-    replSymbol = (x, y, height, replId, mouseOverReplIdx, sampleName, colorIdx, isSelected) => {
-        const highlight = (replId === mouseOverReplIdx)
+    replSymbol = (x, y, height, settings) => {
+        const highlight = (settings.replId === settings.mouseOverId)
 
         return <line
         x1={x}
         y1={y-2}
         x2={x}
         y2={y-height+10}
-        stroke={sampleColor(colorIdx)}
-        strokeWidth={ (highlight || isSelected) ? 2 : 0.5 }
+        stroke={sampleColor(settings.colorIdx)}
+        strokeWidth={ (highlight || settings.isSelected) ? 2 : 0.5 }
         />
     }
 
@@ -126,6 +133,7 @@ class ProteinVizLegends extends PureComponent {
             isUnactiveable={true}
             changeSelection={() => this.changeSelection("replicate", sampleName, repl.idx)}
             showCheckbox={isSampleSelected}
+            isActive={repl.isActive}
        >
         </LegendField>
 
@@ -147,12 +155,17 @@ class ProteinVizLegends extends PureComponent {
 
         const isSampleSelected = _.some(clickedRepl, (x) => {return x.sampleIdx === sampleName})
         const colorIdx = datasets[sampleName].idx
+        const isActive = datasets[sampleName].isActive
         const showCheckbox = mouseOverSampleId === sampleName
+
+        // in case the sample is not active and we're not on the legend, we're not showing anything
+        if(! isActive && ! this.state.mouseOverLegend) return null
 
         const res =  <g key={sampleIdx}>
                 <LegendField
                     onMouseOver={this.mouseOverSample}
                     mouseOverId={mouseOverSampleId}
+                    mouseOverLegend={this.state.mouseOverLegend}
                     sampleName={sampleName}
                     colorIdx={colorIdx}
                     x={x} y={y+(this.legendIdx)*height} width={width} height={height}
@@ -160,9 +173,10 @@ class ProteinVizLegends extends PureComponent {
                     isUnactiveable={true}
                     changeSelection={() => this.changeSelection("sample", sampleName)}
                     showCheckbox={showCheckbox}
+                    isActive={isActive}
                 >
                 </LegendField>
-                { (sampleName === mouseOverSampleId || isSampleSelected) && _.map(sample.datasets, (repl) => this.plotReplicate(repl, x, y, height, sampleIdx, colorIdx, showCheckbox, sampleName)) }
+                { ((sampleName === mouseOverSampleId || isSampleSelected) && isActive) && _.map(sample.datasets, (repl) => this.plotReplicate(repl, x, y, height, sampleIdx, colorIdx, showCheckbox, sampleName)) }
         </g>
 
         this.legendIdx = this.legendIdx + 1
@@ -183,6 +197,15 @@ class ProteinVizLegends extends PureComponent {
         </LegendField>
     }
 
+    onMouseEnter = () => {
+        this.setState({mouseOverLegend: true})
+    }
+
+    onMouseLeave = () => {
+        this.setState({mouseOverLegend: false})
+    }
+
+
     render() {
         const { x, y, width, mouseOverSampleId, clickedRepl, datasets} = this.props;
 
@@ -197,7 +220,7 @@ class ProteinVizLegends extends PureComponent {
         const xShift = 12
         const yShift = 10
 
-        return <g>
+        return <g onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
             <rect
                 className="merged-legends-box"
                 x={x}

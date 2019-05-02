@@ -8,21 +8,21 @@ import {
     mouseClickRepl, mouseLeaveRepl, mouseLeaveSample, mouseOverRepl,
     mouseOverSample, removeRepl
 } from "../../actions/sampleSelection";
-import {reloadProtein} from "../../actions/loadProtein"
+import {reloadProtein, setDatasets} from "../../actions/loadProtein"
 
 class ProteinVizLegendsContainer extends Component {
 
     render(){
         const {x, y, width, theoMolWeight, clickedRepl, mouseOverSampleId, mouseOverSampleCB,
             mouseOverReplId, mouseOverReplCB, mouseLeaveReplCB, mouseLeaveSampleCB, mouseClickReplCB,
-            removeSelectedReplCB, datasets, reloadProteinCB} = this.props
+            removeSelectedReplCB, datasets, reloadProteinCB, setDatasets} = this.props
 
         return <ProteinVizLegends x={x} y={y} width={width} theoMolWeight={theoMolWeight} clickedRepl={clickedRepl}
                                  mouseOverSampleId={mouseOverSampleId} mouseOverSampleCB={mouseOverSampleCB}
                                  mouseOverReplId={mouseOverReplId} mouseOverReplCB={mouseOverReplCB}
                                  mouseLeaveReplCB={mouseLeaveReplCB} mouseLeaveSampleCB={mouseLeaveSampleCB}
                                  mouseClickReplCB={mouseClickReplCB} removeSelectedReplCB={removeSelectedReplCB}
-                                 datasets={datasets} reloadProteinCB={reloadProteinCB}
+                                 datasets={datasets} reloadProteinCB={reloadProteinCB} setDatasets={setDatasets}
                 >
                 </ProteinVizLegends>
     }
@@ -45,7 +45,7 @@ ProteinVizLegendsContainer.propTypes = {
     clickedRepl: PropTypes.array.isRequired,
     datasets: PropTypes.object.isRequired,
     reloadProteinCB: PropTypes.func.isRequired,
-    setDatasets: PropTypes.func.isRequired,
+    setDatasets: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => {
@@ -66,7 +66,8 @@ const mapDispatchToProps = (dispatch) => {
         mouseLeaveReplCB: () => { dispatch(mouseLeaveRepl()) },
         mouseClickReplCB: (sampleIdx, replIdx) => { dispatch(mouseClickRepl(sampleIdx, replIdx)) },
         removeSelectedReplCB: (sampleIdx, replIdx) => { dispatch(removeRepl(sampleIdx, replIdx)) },
-        reloadProteinCB: (activeDatasetIds) => { dispatch(reloadProtein(activeDatasetIds))}
+        reloadProteinCB: (activeDatasetIds) => { dispatch(reloadProtein(activeDatasetIds))},
+        setDatasets: (datasets) => { dispatch(setDatasets(datasets)) }
     }
 }
 

@@ -34,7 +34,7 @@ class SvgCheckbox extends Component {
     }
 
     render() {
-        const {x, y} = this.props
+        const {x, y, isActive} = this.props
 
         const thisWidth = 7
         const thisHeight = 7
@@ -62,7 +62,7 @@ class SvgCheckbox extends Component {
                 fill={"transparent"}
             />
 
-            <path stroke={this.state.color} fill="transparent" d={checkPath}></path>
+            { isActive && <path stroke={this.state.color} fill="transparent" d={checkPath}></path> }
         </g>
     }
 }
@@ -71,6 +71,7 @@ SvgCheckbox.propTypes = {
     changeSelection: PropTypes.func.isRequired,
     x: PropTypes.number.isRequired,
     y: PropTypes.number.isRequired,
+    isActive: PropTypes.bool.isRequired
 }
 
 export default (SvgCheckbox);
