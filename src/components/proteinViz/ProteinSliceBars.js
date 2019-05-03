@@ -16,6 +16,9 @@ class SliceBars extends PureComponent {
     plotOneProtein = (protein, color, keyName, highlight) => {
         const {zoomLeft, zoomRight} = this.props
 
+        // in case it got deactivated and the mouse is still over it we return null
+        if(! protein) return null
+
         const massFits = protein.dataSet.massFitResult.massFits
         const ints = protein.intensities
 

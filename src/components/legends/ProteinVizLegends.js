@@ -62,7 +62,7 @@ class ProteinVizLegends extends PureComponent {
             return res
         }, [])
 
-        const callOnComplete = () => {setDatasets(newDatasets)} 
+        const callOnComplete = () => {setDatasets(newDatasets)}
 
         reloadProteinCB(activeDatasets.join(','), callOnComplete)
     }
@@ -119,10 +119,10 @@ class ProteinVizLegends extends PureComponent {
 
        const res = <LegendField
             key={repl.idx}
-            clickeablePointer={true}
+            clickeablePointer={repl.isActive ? true : false}
             mouseClickReplCB={mouseClickReplCB}
             removeSelectedReplCB={removeSelectedReplCB}
-            onMouseOver={this.mouseOverReplicate}
+            onMouseOver={repl.isActive ? this.mouseOverReplicate : undefined}
             mouseOverId={mouseOverReplId}
             sampleName={sampleName}
             replId={repl.id}
