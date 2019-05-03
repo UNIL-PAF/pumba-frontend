@@ -53,8 +53,6 @@ class ProteinVizLegends extends PureComponent {
             }
         }
 
-        setDatasets(newDatasets)
-
         // reload protein with active datasets
         const activeDatasets = _.reduce(newDatasets, (res, val) => {
             if(val.isActive){
@@ -64,7 +62,9 @@ class ProteinVizLegends extends PureComponent {
             return res
         }, [])
 
-        reloadProteinCB(activeDatasets.join(','))
+        const callOnComplete = () => {setDatasets(newDatasets)} 
+
+        reloadProteinCB(activeDatasets.join(','), callOnComplete)
     }
 
     /**

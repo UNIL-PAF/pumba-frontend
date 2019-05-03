@@ -66,7 +66,7 @@ const mapDispatchToProps = (dispatch) => {
         mouseLeaveReplCB: () => { dispatch(mouseLeaveRepl()) },
         mouseClickReplCB: (sampleIdx, replIdx) => { dispatch(mouseClickRepl(sampleIdx, replIdx)) },
         removeSelectedReplCB: (sampleIdx, replIdx) => { dispatch(removeRepl(sampleIdx, replIdx)) },
-        reloadProteinCB: (activeDatasetIds) => { dispatch(reloadProtein(activeDatasetIds))},
+        reloadProteinCB: (activeDatasetIds, callOnComplete) => { dispatch(reloadProtein(activeDatasetIds, callOnComplete))},
         setDatasets: (datasets) => { dispatch(setDatasets(datasets)) }
     }
 }

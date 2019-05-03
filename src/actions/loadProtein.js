@@ -14,14 +14,14 @@ export const ADD_SEQUENCE_DATA = 'ADD_SEQUENCE_DATA'
 export const SET_DATASETS = 'SET_DATASETS'
 
 
-export function reloadProtein(activeDatasetIds){
+export function reloadProtein(activeDatasetIds, callOnComplete){
     return function (dispatch, getState) {
         const proteinId = getState().loadProtein.proteinData[0].mainProteinId
-        dispatch(fetchProtein(proteinId, activeDatasetIds, true))
+        dispatch(fetchProtein(proteinId, activeDatasetIds, true, callOnComplete))
     }
 }
 
-export function fetchProtein(proteinId, datasetIds, noReset){
+export function fetchProtein(proteinId, datasetIds, noReset, callOnComplete){
     return function (dispatch) {
         dispatch(requestProtein(proteinId))
 
@@ -41,14 +41,17 @@ export function fetchProtein(proteinId, datasetIds, noReset){
                 return response.json()
             })
             .then(json => {
-                if(! noReset){
-                    // let's take the FASTA data from the first entry (should always be OK)
-                    const dataBaseName = json[0].proteins[0].dataSet.dataBaseName
-                    dispatch(fetchSequence(proteinId, dataBaseName))
-                    dispatch(gotoViz(true))
-                }
+                    if(! noReset){
+                        // let's take the FASTA data from the first entry (should always be OK)
+                        const dataBaseName = json[0].proteins[0].dataSet.dataBaseName
+                        dispatch(fetchSequence(proteinId, dataBaseName))
+                        dispatch(gotoViz(true))
+                    }
                     dispatch(addProteinData(json))
                     dispatch(proteinIsLoaded())
+
+                    // call the callback if there is a function
+                    if(callOnComplete) callOnComplete()
                 }
             )
             .catch(err => {
