@@ -6,7 +6,7 @@ export const SHOW_SLICE_POPUP = 'SHOW_SLICE_POPUP'
 export const REMOVE_SLICE_POPUP = 'REMOVE_SLICE_POPUP'
 export const RESET_PROTEIN_VIEW = 'RESET_PROTEIN_VIEW'
 
-export function changeZoomAndFilter(left, right){
+export function computeTheoMergedProteins(left, right){
     return function (dispatch, getState) {
         const proteinData = getState().loadProtein.proteinData
 
@@ -22,6 +22,12 @@ export function changeZoomAndFilter(left, right){
         })
 
         dispatch(changeTheoMergedProteins(theoMergedProteins))
+    }
+}
+
+export function changeZoomAndFilter(left, right){
+    return function (dispatch) {
+        dispatch(computeTheoMergedProteins(left, right))
         dispatch(changeZoomRange(left, right))
     }
 }

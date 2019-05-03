@@ -1,7 +1,7 @@
 import fetch from 'cross-fetch'
 import pumbaConfig from '../config'
 import { resetSampleSelection } from "./sampleSelection"
-import { resetProteinView } from "./proteinVizActions"
+import {resetProteinView, computeTheoMergedProteins} from "./proteinVizActions"
 import {resetPeptideView} from "./peptideVizActions";
 import * as _ from 'lodash';
 
@@ -22,7 +22,7 @@ export function reloadProtein(activeDatasetIds, callOnComplete){
 }
 
 export function fetchProtein(proteinId, datasetIds, noReset, callOnComplete){
-    return function (dispatch) {
+    return function (dispatch, getState) {
         dispatch(requestProtein(proteinId))
 
         // we reset the error message to undefined
@@ -52,6 +52,11 @@ export function fetchProtein(proteinId, datasetIds, noReset, callOnComplete){
 
                     // call the callback if there is a function
                     if(callOnComplete) callOnComplete()
+
+                    // in case there is a zoom we have to reset the precalculated data
+                    if(noReset && getState().proteinViz.zoomLeft){
+                        dispatch(computeTheoMergedProteins(getState().proteinViz.zoomLeft, getState().proteinViz.zoomRight))
+                    }
                 }
             )
             .catch(err => {
