@@ -44,6 +44,10 @@ class ProteinMerges extends PureComponent {
             history, margin, xScale, yScale, svgParent, scaleChanged, datasets, proteinData} = this.props
 
         const proteins = _.find(proteinData, (p) => { return p.sample === sampleName})
+
+        // if we unactivate a sample with a selected replicate it will have no protein
+        if(! proteins) return null
+
         const color = sampleColor(datasets[proteins.sample].idx)
 
         return <ProteinSliceBars key={sampleName + ':' + replId} sampleName={sampleName} replId={replId} margin={margin} xScale={xScale}
