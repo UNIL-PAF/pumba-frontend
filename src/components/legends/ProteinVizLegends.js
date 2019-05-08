@@ -176,7 +176,7 @@ class ProteinVizLegends extends PureComponent {
                     isActive={isActive}
                 >
                 </LegendField>
-                { ((sampleName === mouseOverSampleId || isSampleSelected) && isActive) && _.map(sample.datasets, (repl) => this.plotReplicate(repl, x, y, height, sampleIdx, colorIdx, showCheckbox, sampleName)) }
+                { ((this.state.mouseOverLegend || isSampleSelected) && isActive && _.map(sample.datasets, (repl) => this.plotReplicate(repl, x, y, height, sampleIdx, colorIdx, showCheckbox, sampleName))) }
         </g>
 
         this.legendIdx = this.legendIdx + 1
@@ -207,16 +207,18 @@ class ProteinVizLegends extends PureComponent {
 
 
     render() {
-        const { x, y, width, mouseOverSampleId, clickedRepl, datasets} = this.props;
+        const { x, y, width, clickedRepl, datasets} = this.props;
 
         // transform the sample into a sorted array
         const samples = _.sortBy(_.values(_.mapValues(datasets, (value, key) => { value.name = key; return value; })), ['idx'])
 
         const legendHeight = 20
         const selectedSampleIdx = _.countBy(clickedRepl, "sampleIdx")
-        const mouseOverReplNr = (mouseOverSampleId !== undefined && (! selectedSampleIdx[mouseOverSampleId])) ? datasets[mouseOverSampleId].datasets.length : 0
-        const nrActiveDatasets = _.filter(datasets, (d) => {return d.isAvailable}).length
-        const nrLegends = nrActiveDatasets + mouseOverReplNr + _.reduce(selectedSampleIdx, (res, v, k) => {return res + datasets[k].datasets.length}, 0)
+        const nrRep = (this.state.mouseOverLegend ? _.sum(_.map(datasets, (d) => { return d.isActive && d.datasets.length})) : 0)
+        const nrActiveDatasets = _.filter(datasets, (d) => {return d.isAvailable && (d.isActive || this.state.mouseOverLegend)}).length
+        const selectedReplNr = (! this.state.mouseOverLegend ? _.reduce(selectedSampleIdx, (res, v, k) => {return res + (datasets[k].isActive ? datasets[k].datasets.length : 0)}, 0) : 0)
+
+        const nrLegends = nrActiveDatasets + nrRep + selectedReplNr
         const xShift = 12
         const yShift = 10
 
@@ -247,8 +249,8 @@ ProteinVizLegends.propTypes = {
     y: PropTypes.number.isRequired,
     width: PropTypes.number.isRequired,
     theoMolWeight: PropTypes.number.isRequired,
-    mouseOverSampleId: PropTypes.string,
     mouseOverReplId: PropTypes.string,
+    mouseOverSampleId: PropTypes.string,
     mouseOverSampleCB: PropTypes.func.isRequired,
     mouseOverReplCB: PropTypes.func.isRequired,
     mouseLeaveReplCB: PropTypes.func.isRequired,
