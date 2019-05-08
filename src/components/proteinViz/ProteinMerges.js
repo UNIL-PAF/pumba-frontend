@@ -13,6 +13,9 @@ class ProteinMerges extends PureComponent {
     plotOneProteinMerge = (proteinMerge, proteinInfo) => {
         const {datasets, mouseOverSampleId} = this.props
 
+        // in case the sample was deactivated
+        if(! proteinInfo) return null
+
         const sampleIdx = datasets[proteinInfo.sample].idx
         const sampleName = datasets[proteinInfo.sample].name
         const sampleCol = sampleColor(sampleIdx)

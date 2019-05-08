@@ -139,6 +139,9 @@ class ProteinVizPlot extends Component {
         return <g>
                 {_.map(mergedData, (md, i) => {
 
+                    // in case a sample is unselected
+                    if(! proteinData[i]) return null
+
                     const idx = datasets[proteinData[i].sample].idx
 
                     // find the correct intensity
