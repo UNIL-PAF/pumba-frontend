@@ -130,6 +130,7 @@ class ProteinVizLegends extends PureComponent {
             isSelected={isSelected}
             x={x+5} y={y+(this.legendIdx)*height} width={width} height={height}
             text={repl.name} legend={this.replSymbol}
+            textColor={repl.isActive ? "black" : "silver"}
             isUnactiveable={true}
             changeSelection={() => this.changeSelection("replicate", sampleName, repl.idx)}
             showCheckbox={isSampleSelected}
@@ -170,6 +171,7 @@ class ProteinVizLegends extends PureComponent {
                     colorIdx={colorIdx}
                     x={x} y={y+(this.legendIdx)*height} width={width} height={height}
                     text={sampleName} legend={this.sampleSymbol}
+                    textColor={isActive ? "black" : "silver"}
                     isUnactiveable={true}
                     changeSelection={() => this.changeSelection("sample", sampleName)}
                     showCheckbox={showCheckbox}

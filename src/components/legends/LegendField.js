@@ -25,7 +25,7 @@ class LegendField extends Component {
     render() {
         const { x, y, width, text, height, legend, onMouseOver, mouseOverId,
             clickeablePointer, isSelected, colorIdx, isUnactiveable, changeSelection,
-            showCheckbox, sampleName, replId, mouseOverLegend, isActive} = this.props;
+            showCheckbox, sampleName, replId, mouseOverLegend, isActive, textColor} = this.props;
 
         const legendSettings = {
             mouseOverLegend: mouseOverLegend,
@@ -54,7 +54,7 @@ class LegendField extends Component {
                 ry={5}
             />
             {isUnactiveable && showCheckbox && <SvgCheckbox x={x + 6} y={y + 2} changeSelection={changeSelection} isActive={isActive}></SvgCheckbox>}
-            <text x={x+width*0.25} y={yMiddle} fontFamily="sans-serif" fontSize={defaultFontSize}>{text}</text>
+            <text x={x+width*0.25} y={yMiddle} fontFamily="sans-serif" fontSize={defaultFontSize} fill={textColor || "black"}>{text}</text>
             { legend(x+10, y+height-2, height+4, legendSettings) }
             { (isSelected) && <CloseButton x={x + width} y={y + 2} onCloseCB={() => this.closeLegend(sampleName, replId)}></CloseButton> }
         </g>
@@ -81,6 +81,7 @@ LegendField.propTypes = {
     showCheckbox: PropTypes.bool,
     mouseOverLegend: PropTypes.bool,
     isActive: PropTypes.bool,
+    textColor: PropTypes.string
 };
 
 export default (LegendField);
