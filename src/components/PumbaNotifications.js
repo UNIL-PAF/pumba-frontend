@@ -13,7 +13,7 @@ class PumbaNotifications extends Component {
 
         return (
             <div>
-                {proteinIsLoading && <Alert className={"pumba-notification"} style={{position: "absolute"}}>
+                {proteinIsLoading && <Alert color="primary" className={"pumba-notification loading"} style={{position: "absolute"}}>
                     <LoadingSvgIcon iconHeight={20} iconWidth={20} hide={false}></LoadingSvgIcon> Loading ...
                 </Alert>}
             </div>

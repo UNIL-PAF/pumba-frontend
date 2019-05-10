@@ -37,7 +37,8 @@ class ProteinVizLegends extends PureComponent {
                     isAvailable: datasets[sampleName].isAvailable,
                     datasets: datasets[sampleName].datasets,
                     idx: datasets[sampleName].idx,
-                    isActive: ! datasets[sampleName].isActive
+                    isActive: ! datasets[sampleName].isActive,
+                    isChecked: ! datasets[sampleName].isActive
                 }
             }
         }else{
@@ -48,7 +49,8 @@ class ProteinVizLegends extends PureComponent {
                     isAvailable: datasets[sampleName].isAvailable,
                     datasets: newDatasetsArray,
                     idx: datasets[sampleName].idx,
-                    isActive: datasets[sampleName].isActive
+                    isActive: datasets[sampleName].isActive,
+                    isChecked: datasets[sampleName].isChecked,
                 }
             }
         }

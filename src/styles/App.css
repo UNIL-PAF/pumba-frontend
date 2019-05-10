@@ -180,7 +180,7 @@ svgCheckbox
 /****
 pumba notifications
  */
-.pumba-notification {
+.pumba-notification.loading {
   top: 60px;
   right: 20px;
   width: 200px;

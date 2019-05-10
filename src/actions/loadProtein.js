@@ -111,6 +111,7 @@ export function fetchDatasets(){
                 const samples = _.reduce(json, (res, val) => {
                     if(! res[val.sample]){
                         res[val.sample] = {}
+                        res[val.sample].isChecked = true
                         res[val.sample].isActive = true
                         res[val.sample].isAvailable = true
                         res[val.sample].datasets = []

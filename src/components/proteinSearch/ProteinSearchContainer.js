@@ -11,7 +11,7 @@ class ProteinSearchContainer extends React.Component{
 
     constructor(props) {
         super(props);
-        this.changeSampleActive = this.changeSampleActive.bind(this);
+        this.changeSampleChecked = this.changeSampleChecked.bind(this);
         this.loadProtein = this.loadProtein.bind(this);
     }
 
@@ -50,20 +50,21 @@ class ProteinSearchContainer extends React.Component{
                         id={sample}
                         type="checkbox"
                         checked={isAvailable}
-                        onChange={this.changeSampleActive}
+                        onChange={this.changeSampleChecked}
                         onKeyPress={this.keyClicked}
                     />{sample}
                 </Label>
             </FormGroup>
     }
 
-    changeSampleActive(event) {
+    changeSampleChecked(event) {
         const {datasets, setDatasets} = this.props
         const newDataset = {...datasets, [event.target.id]: {
-                isAvailable: !datasets[event.target.id].isAvailable,
+                isChecked: !datasets[event.target.id].isChecked,
                 datasets: datasets[event.target.id].datasets,
                 idx: datasets[event.target.id].idx,
-                isActive: !datasets[event.target.id].isAvailable
+                isAvailable: datasets[event.target.id].isAvailable,
+                isActive: datasets[event.target.id].isActive,
             }
         }
         setDatasets(newDataset)
@@ -73,9 +74,22 @@ class ProteinSearchContainer extends React.Component{
         const {onLoadProtein, datasets} = this.props
 
         const availableDatasets = _.reduce(datasets, (res, val) => {
-            if(val.isAvailable) res = res.concat(_.map(val.datasets, 'id'))
+            if(val.isChecked) res = res.concat(_.map(val.datasets, 'id'))
             return res
         }, [])
+
+        // set isAvailable and isActive to the value found in isChecked
+        const newDatasets = _.mapValues(datasets, (d) => {
+                d.isAvailable = d.isChecked
+                d.isActive = d.isChecked
+                d.datasets = _.map(d.datasets, (d2) => {
+                    d2.isActive = true
+                    return d2
+                })
+                return d
+            })
+
+        setDatasets(newDatasets)
 
         onLoadProtein(this.state.searchString, availableDatasets.join(','))
     }
@@ -104,7 +118,7 @@ class ProteinSearchContainer extends React.Component{
                 <Row>
                     <Col className="text-center" md={{ size: 4, offset: 4 }}>
                         {datasets && _.map(datasets, (val, key) => {
-                            return this.oneSample(key, val.isAvailable)
+                            return this.oneSample(key, val.isChecked)
                         })}
                     </Col>
                 </Row>
