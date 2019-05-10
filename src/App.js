@@ -6,10 +6,7 @@ import NavBar from './components/NavBar'
 import ProteinSearchContainer from './components/proteinSearch/ProteinSearchContainer'
 import ProteinViz from './components/proteinViz/ProteinVizContainer'
 import PeptideVizContainer from "./components/peptideViz/PeptideVizContainer";
-
-/*
- TODO use cross-fetch!
- */
+import PumbaNotifications from "./components/PumbaNotifications";
 
 const App = ({ history }) => {
     return (
@@ -22,6 +19,7 @@ const App = ({ history }) => {
                     <Route path="/peptides" component={PeptideVizContainer} />
                     <Route component={ProteinSearchContainer} />
                 </Switch>
+                <PumbaNotifications/>
             </div>
         </ConnectedRouter>
     )

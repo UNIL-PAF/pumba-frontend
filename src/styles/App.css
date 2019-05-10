@@ -176,3 +176,12 @@ svgCheckbox
 .pumba-svg-checkbox {
   cursor: pointer;
 }
+
+/****
+pumba notifications
+ */
+.pumba-notification {
+  top: 60px;
+  right: 20px;
+  width: 200px;
+}
