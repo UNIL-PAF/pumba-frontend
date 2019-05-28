@@ -41,6 +41,10 @@ export function fetchProtein(proteinId, datasetIds, noReset, callOnComplete){
                 return response.json()
             })
             .then(json => {
+
+                    // add a timestamp to the data
+                    json.timestamp = Date.now()
+
                     if(! noReset){
                         // let's take the FASTA data from the first entry (should always be OK)
                         const dataBaseName = json[0].proteins[0].dataSet.dataBaseName

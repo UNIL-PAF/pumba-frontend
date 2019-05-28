@@ -21,7 +21,10 @@ class ProteinVizPlot extends Component {
         super(props)
 
         const {proteinData} = this.props
+        this.state = this.computeLimits(proteinData)
+    }
 
+    computeLimits = (proteinData) => {
         const minMolWeightDa = Math.pow(10, _.min(_.map(proteinData, function(p){
             return p.theoMergedProtein.theoMolWeights[0]
         })))
@@ -43,11 +46,12 @@ class ProteinVizPlot extends Component {
         // just take the theoretical weight of the first protein, it should always be the same.
         const theoMolWeight = Math.log10(proteinData[0].proteins[0].theoMolWeight)
 
-        this.state = {
+        return {
             xScale: scaleLinear().range([0, this.props.viewWidth - this.margin.left - this.margin.right]).domain([this.minMolWeight, this.maxMolWeight]),
             yScale: scaleLinear().range([this.props.viewHeight - this.margin.top - this.margin.bottom, 0]).domain([0, maxInt]),
             theoMolWeight: theoMolWeight,
-            scaleChanged: 0
+            scaleChanged: 0,
+            proteinDataTimestamp: proteinData.timestamp
         }
     }
 
@@ -98,7 +102,7 @@ class ProteinVizPlot extends Component {
     }
 
     componentDidUpdate(){
-        const {zoomLeft, zoomRight} = this.props
+        const {zoomLeft, zoomRight, proteinData} = this.props
 
         // we only update the axis and stuff if the zoom or data changed
         if(zoomLeft && this.state.zoomLeft !== zoomLeft && this.state.zoomRight !== zoomRight){
@@ -116,6 +120,12 @@ class ProteinVizPlot extends Component {
             // remember the current zoom state
             this.setState({zoomLeft: zoomLeft, zoomRight: zoomRight, scaleChanged: newScaleChanged})
         }
+
+        if(this.state.proteinDataTimestamp && (this.state.proteinDataTimestamp !== proteinData.timestamp)){
+            this.setState(this.computeLimits(proteinData))
+            this.setState({proteinDataTimestamp: proteinData.timestamp})
+        }
+
     }
 
     // set the margins
