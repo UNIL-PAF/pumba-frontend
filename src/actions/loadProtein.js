@@ -43,7 +43,7 @@ export function fetchProtein(proteinId, datasetIds, noReset, callOnComplete){
             .then(json => {
 
                     // add a timestamp to the data
-                    json.timestamp = Date.now()
+                    json.timestamp = noReset ? getState().loadProtein.proteinData.timestamp : Date.now()
 
                     if(! noReset){
                         // let's take the FASTA data from the first entry (should always be OK)
