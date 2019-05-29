@@ -119,19 +119,25 @@ export function fetchDatasets(){
                         res[val.sample].isActive = true
                         res[val.sample].isAvailable = true
                         res[val.sample].datasets = []
-                        res[val.sample].idx = idx ++;
+                        //res[val.sample].idx = idx ++;
                     }
                     res[val.sample].datasets.push({id: val.id, name: val.name, isActive: true})
                     return res
                 }, {})
 
-                const samplesWithIdx = _.mapValues(samples, (s) => {
+                // order samples
+                const sortedNames = (Object.keys(samples)).sort()
+
+                const samplesWithIdx = _.keyBy(_.map(sortedNames, (name) => {
+                    var s = samples[name]
                     s.datasets =  _.map(s.datasets, (d, idx) => {
                         d.idx = idx
                         return d
                     })
-                    return s
-                })
+                    s.idx = idx ++;
+                    s.name = name
+                    return s;
+                }), 'name')
 
                 dispatch(setDatasets(samplesWithIdx))
             })
