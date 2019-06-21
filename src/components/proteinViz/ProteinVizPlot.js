@@ -198,7 +198,7 @@ class ProteinVizPlot extends Component {
                 <text
                     x={mouseX - 18}
                     y={11}
-                    fontSize={"10px"}
+                    fontSize={"50%"}
                     fontFamily={"sans-serif"}
                 >{Math.round(Math.pow(10, mouseWeightPos)) + " kDa"}</text>
             </g>

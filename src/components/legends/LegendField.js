@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import CloseButton from '../common/CloseButton'
 import SvgCheckbox from '../common/svgCheckbox'
 
-const defaultFontSize = "8px"
+const defaultFontSize = "50%"
 
 class LegendField extends Component {
 
