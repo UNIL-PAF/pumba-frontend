@@ -129,7 +129,7 @@ class ProteinVizPlot extends Component {
     }
 
     // set the margins
-    margin = {top: 10, right: 0, bottom: 30, left: 0};
+    margin = {top: 10, right: 40, bottom: 30, left: 20};
 
 
     plotTheoMolWeightLine = () => {
@@ -220,7 +220,7 @@ class ProteinVizPlot extends Component {
         const {viewWidth, viewHeight, mouseLeaveSampleCB, popup, proteinData, history} = this.props
 
         // the mol weight at the mouse position
-        const mouseWeightPos = this.state.xScale.invert(this.state.mouseX)
+        const mouseWeightPos = this.state.xScale.invert(this.state.mouseX - this.margin.left)
 
         return <div id={"protein-plot"}>
             <svg className="protein-svg"
