@@ -226,7 +226,15 @@ class ProteinVizLegends extends PureComponent {
         const xShift = 12
         const yShift = 10
 
-        return <g onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+        return <svg className="legend-svg"
+                    viewBox={`0 0 400 400`}
+                    width="100%"
+                    height="100%"
+                    style={{top: 300, left: 600, position: "absolute", pointerEvents: "none"}}
+            //position="fixed"
+            //preserveAspectRatio='none'
+        >
+        <g onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} style={{pointerEvents: "auto"}}>
             <rect
                 className="merged-legends-box"
                 x={x}
@@ -244,7 +252,7 @@ class ProteinVizLegends extends PureComponent {
 
             <g>{_.map(samples, (s) => this.plotSample(s, x+xShift, y+yShift, legendHeight))}</g>
         </g>
-
+        </svg>
     }
 }
 

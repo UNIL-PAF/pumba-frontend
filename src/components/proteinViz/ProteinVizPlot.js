@@ -256,10 +256,10 @@ class ProteinVizPlot extends Component {
                                                  margin={this.margin} svgParent={this.svg} scaleChanged={this.state.scaleChanged}>
                                 </ProteinMergesContainer>}
 
-                    <ProteinVizLegendsContainer x={viewWidth-200} y={20} width={150}
+                    /*<ProteinVizLegendsContainer x={viewWidth-200} y={20} width={150}
                                      theoMolWeight={this.state.theoMolWeight}
                     >
-                    </ProteinVizLegendsContainer>
+                    </ProteinVizLegendsContainer>*/
 
                     {popup && this.plotPopup()}
                 </g>

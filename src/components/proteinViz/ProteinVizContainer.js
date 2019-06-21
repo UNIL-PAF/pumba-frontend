@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 import ProteinVizPlot from "./ProteinVizPlot";
 import { mouseLeaveSample, clickSlice, unclickSlice} from "../../actions/sampleSelection";
 import {changeZoomAndFilter, removeSlicePopup, showSlicePopup} from "../../actions/proteinVizActions";
+import ProteinVizLegendsContainer from '../legends/ProteinVizLegendsContainer'
 
 class ProteinVizContainer extends Component {
 
@@ -26,7 +27,11 @@ class ProteinVizContainer extends Component {
                              showPopupCB={showPopupCB} removePopupCB={removePopupCB} popup={popup}
                              clickedSlices={clickedSlices} clickSliceCB={clickSliceCB} unclickSliceCB={unclickSliceCB}
                              history={history} datasets={datasets}
-        /> }
+        />
+        }
+            <ProteinVizLegendsContainer x={0} y={0} width={150} theoMolWeight={2} >
+            </ProteinVizLegendsContainer>
+
         </div>
     }
 
