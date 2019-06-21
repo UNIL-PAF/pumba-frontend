@@ -52,7 +52,7 @@ class PeptideViz extends PureComponent {
     }
 
     // set the margins
-    margin = {top: 5, right: 10, bottom: 30, left: 40};
+    margin = {top: 5, right: 10, bottom: 40, left: 40};
 
 
     componentDidMount(){
