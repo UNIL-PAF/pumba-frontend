@@ -22,6 +22,8 @@ class ProteinVizPlot extends Component {
 
         const {proteinData} = this.props
         this.state = this.computeLimits(proteinData)
+        this.svg = React.createRef()
+        this.brushG = React.createRef()
     }
 
     computeLimits = (proteinData) => {
@@ -66,7 +68,7 @@ class ProteinVizPlot extends Component {
             this.props.changeZoomRangeCB(newDomain[0], newDomain[1])
 
             // remove the brush area
-            this.brushG.call(brushX().move, null)
+            this.state.brush.call(brushX().move, null)
         }
     }
 
@@ -88,17 +90,26 @@ class ProteinVizPlot extends Component {
         select(this.yAxis)
             .call(yAxis)
 
-        setTimeout( () => this.brushG.call(brushX(this.state.xScale).on('end', this.brushend)) )
+        const brushSelect = select(this.brushG.current)
+        this.setState({brush: brushSelect})
+        setTimeout( () => brushSelect.call(brushX(this.state.xScale).on('end', this.brushend)) )
+    }
 
-        // set the mouseX position
-        this.brushG.on('mousemove', () => {
-            const x = mouse(this.svg)[0]
-            const xWithoutMargin = x - this.margin.left
-            this.setState({mouseX: xWithoutMargin})
-        })
 
-        // we have to update after the "this.svg" has been set
-        this.forceUpdate()
+    mouseMove = (e) => {
+
+        const rect = this.svg.current.getBoundingClientRect()
+        //const xWithoutMargin = e.clientX - rect.left - this.margin.left - rect.y
+
+        var point = this.svg.current.createSVGPoint()
+        point.x = e.clientX
+        point.y = e.clientY;
+        point = point.matrixTransform(this.svg.current.getScreenCTM().inverse());
+
+        //console.log(point)
+
+        const x = point.x - this.margin.left
+        this.setState({mouseX: x})
     }
 
     componentDidUpdate(){
@@ -227,12 +238,11 @@ class ProteinVizPlot extends Component {
                  viewBox={`0 0 ${viewWidth} ${viewHeight}`}
                  width="100%"
                  height="100%"
-                 ref={r => this.svg = r}
-                 //position="fixed"
-                 //preserveAspectRatio='none'
+                 ref={this.svg}
+                 onMouseMove={(e) => this.mouseMove(e)}
             >
 
-                <g className="brush-g" ref={r => this.brushG = select(r)} onDoubleClick={this.zoomOut}
+                <g className="brush-g" ref={this.brushG} onDoubleClick={this.zoomOut}
                    onMouseEnter={() => mouseLeaveSampleCB()}
                    transform={'translate(' + this.margin.left + ',' + this.margin.top + ')'}/> }
 
@@ -257,7 +267,7 @@ class ProteinVizPlot extends Component {
                                 </ProteinMergesContainer>}
 
                     <ProteinVizLegendsContainer x={viewWidth-200} y={20} width={150}
-                                     theoMolWeight={this.state.theoMolWeight}
+                                     theoMolWeight={this.state.theoMolWeight} parentSvg={this.svg}
                     >
                     </ProteinVizLegendsContainer>
 

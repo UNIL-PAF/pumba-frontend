@@ -1,6 +1,7 @@
 import React, {
     PureComponent,
 } from 'react';
+import { mouse } from 'd3-selection'
 import PropTypes from 'prop-types';
 import LegendField from './LegendField'
 import TheoWeightLine from '../proteinViz/TheoWeightLine'
@@ -12,7 +13,7 @@ class ProteinVizLegends extends PureComponent {
     constructor(props) {
         super(props);
 
-        this.state = {mouseOverLegend: false}
+        this.state = { mouseOverLegend: false }
     }
 
     // we need the legendIdx to get the right positions of the legends when expanding the replicates
@@ -68,6 +69,7 @@ class ProteinVizLegends extends PureComponent {
 
         reloadProteinCB(activeDatasets.join(','), callOnComplete)
     }
+
 
     /**
      * plot the symbol for the theo weight line
@@ -209,6 +211,18 @@ class ProteinVizLegends extends PureComponent {
         this.setState({mouseOverLegend: false})
     }
 
+    startMoving = () => {
+        console.log("startMoving")
+    }
+
+    moveLegend = (e) => {
+        console.log("moveLegend", e.clientX, e.clientY)
+    }
+
+    stopMoving = () => {
+        console.log("stopMoving")
+    }
+
 
     render() {
         const { x, y, width, clickedRepl, datasets} = this.props;
@@ -238,6 +252,17 @@ class ProteinVizLegends extends PureComponent {
                 fill={"white"}
                 stroke={"grey"}
                 strokeWidth={1}
+            />
+
+            <rect
+                x={x}
+                y={y}
+                width={10}
+                height={10}
+                fill={"green"}
+                onMouseDown={this.startMoving}
+                onMouseMove={this.moveLegend}
+                onMouseUp={this.stopMoving}
             />
 
             { this.plotTheoMolWeight(x + xShift, y+yShift, legendHeight) }

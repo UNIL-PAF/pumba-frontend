@@ -15,14 +15,14 @@ class ProteinVizLegendsContainer extends Component {
     render(){
         const {x, y, width, theoMolWeight, clickedRepl, mouseOverSampleId, mouseOverSampleCB,
             mouseOverReplId, mouseOverReplCB, mouseLeaveReplCB, mouseLeaveSampleCB, mouseClickReplCB,
-            removeSelectedReplCB, datasets, reloadProteinCB, setDatasets} = this.props
+            removeSelectedReplCB, datasets, reloadProteinCB, setDatasets, parentSvg} = this.props
 
         return <ProteinVizLegends x={x} y={y} width={width} theoMolWeight={theoMolWeight} clickedRepl={clickedRepl}
                                  mouseOverSampleId={mouseOverSampleId} mouseOverSampleCB={mouseOverSampleCB}
                                  mouseOverReplId={mouseOverReplId} mouseOverReplCB={mouseOverReplCB}
                                  mouseLeaveReplCB={mouseLeaveReplCB} mouseLeaveSampleCB={mouseLeaveSampleCB}
                                  mouseClickReplCB={mouseClickReplCB} removeSelectedReplCB={removeSelectedReplCB}
-                                 datasets={datasets} reloadProteinCB={reloadProteinCB} setDatasets={setDatasets}
+                                 datasets={datasets} reloadProteinCB={reloadProteinCB} setDatasets={setDatasets} parentSvg={parentSvg}
                 >
                 </ProteinVizLegends>
     }
@@ -45,7 +45,8 @@ ProteinVizLegendsContainer.propTypes = {
     clickedRepl: PropTypes.array.isRequired,
     datasets: PropTypes.object.isRequired,
     reloadProteinCB: PropTypes.func.isRequired,
-    setDatasets: PropTypes.func.isRequired
+    setDatasets: PropTypes.func.isRequired,
+    setDatasets: PropTypes.object.isRequired
 };
 
 const mapStateToProps = (state) => {
