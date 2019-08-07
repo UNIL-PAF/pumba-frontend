@@ -9,20 +9,23 @@ import {
     mouseOverSample, removeRepl
 } from "../../actions/sampleSelection";
 import {reloadProtein, setDatasets} from "../../actions/loadProtein"
+import {setMoveLegend} from "../../actions/legendActions";
 
 class ProteinVizLegendsContainer extends Component {
 
     render(){
         const {x, y, width, theoMolWeight, clickedRepl, mouseOverSampleId, mouseOverSampleCB,
             mouseOverReplId, mouseOverReplCB, mouseLeaveReplCB, mouseLeaveSampleCB, mouseClickReplCB,
-            removeSelectedReplCB, datasets, reloadProteinCB, setDatasets, parentSvg} = this.props
+            removeSelectedReplCB, datasets, reloadProteinCB, setDatasets, parentSvg,
+            legendIsMoving, setMoveLegend} = this.props
 
         return <ProteinVizLegends x={x} y={y} width={width} theoMolWeight={theoMolWeight} clickedRepl={clickedRepl}
                                  mouseOverSampleId={mouseOverSampleId} mouseOverSampleCB={mouseOverSampleCB}
                                  mouseOverReplId={mouseOverReplId} mouseOverReplCB={mouseOverReplCB}
                                  mouseLeaveReplCB={mouseLeaveReplCB} mouseLeaveSampleCB={mouseLeaveSampleCB}
                                  mouseClickReplCB={mouseClickReplCB} removeSelectedReplCB={removeSelectedReplCB}
-                                 datasets={datasets} reloadProteinCB={reloadProteinCB} setDatasets={setDatasets} parentSvg={parentSvg}
+                                 datasets={datasets} reloadProteinCB={reloadProteinCB} setDatasets={setDatasets}
+                                 parentSvg={parentSvg} legendIsMoving={legendIsMoving} setMoveLegend={setMoveLegend}
                 >
                 </ProteinVizLegends>
     }
@@ -46,7 +49,8 @@ ProteinVizLegendsContainer.propTypes = {
     datasets: PropTypes.object.isRequired,
     reloadProteinCB: PropTypes.func.isRequired,
     setDatasets: PropTypes.func.isRequired,
-    setDatasets: PropTypes.object.isRequired
+    legendIsMoving: PropTypes.bool.isRequired,
+    setMoveLegend: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => {
@@ -54,7 +58,8 @@ const mapStateToProps = (state) => {
         clickedRepl : state.sampleSelection.clickedRepl,
         mouseOverSampleId : state.sampleSelection.mouseOverSampleId,
         mouseOverReplId : state.sampleSelection.mouseOverReplId,
-        datasets: state.loadProtein.datasets
+        datasets: state.loadProtein.datasets,
+        legendIsMoving: state.legend.legendIsMoving
     }
     return props
 }
@@ -68,7 +73,8 @@ const mapDispatchToProps = (dispatch) => {
         mouseClickReplCB: (sampleIdx, replIdx) => { dispatch(mouseClickRepl(sampleIdx, replIdx)) },
         removeSelectedReplCB: (sampleIdx, replIdx) => { dispatch(removeRepl(sampleIdx, replIdx)) },
         reloadProteinCB: (activeDatasetIds, callOnComplete) => { dispatch(reloadProtein(activeDatasetIds, callOnComplete))},
-        setDatasets: (datasets) => { dispatch(setDatasets(datasets)) }
+        setDatasets: (datasets) => { dispatch(setDatasets(datasets)) },
+        setMoveLegend: (isMoving) => { dispatch(setMoveLegend(isMoving))}
     }
 }
 

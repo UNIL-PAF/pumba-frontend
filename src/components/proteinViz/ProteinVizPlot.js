@@ -78,6 +78,8 @@ class ProteinVizPlot extends Component {
     }
 
     componentDidMount(){
+        const {setLegendPos, viewWidth} = this.props
+
         // add the x-axis
         const xAxis = axisBottom(this.state.xScale)
             .tickFormat((d) => { return Math.round(Math.pow(10,d)) + ' kDa'; })
@@ -97,16 +99,17 @@ class ProteinVizPlot extends Component {
 
 
     mouseMove = (e) => {
-
-        const rect = this.svg.current.getBoundingClientRect()
-        //const xWithoutMargin = e.clientX - rect.left - this.margin.left - rect.y
+        const {setLegendPos, legendIsMoving} = this.props
 
         var point = this.svg.current.createSVGPoint()
         point.x = e.clientX
         point.y = e.clientY;
         point = point.matrixTransform(this.svg.current.getScreenCTM().inverse());
 
-        //console.log(point)
+        // move the legend
+        if(legendIsMoving){
+            setLegendPos(point.x - this.margin.left - 5, point.y - this.margin.top - 5)
+        }
 
         const x = point.x - this.margin.left
         this.setState({mouseX: x})
@@ -228,7 +231,10 @@ class ProteinVizPlot extends Component {
     }
 
     render() {
-        const {viewWidth, viewHeight, mouseLeaveSampleCB, popup, proteinData, history} = this.props
+        const {viewWidth, viewHeight, mouseLeaveSampleCB, popup, proteinData, history, legendPos} = this.props
+
+        // set the initial legend position
+        const localLegendPos = legendPos ? legendPos : {x: viewWidth-200, y: 20}
 
         // the mol weight at the mouse position
         const mouseWeightPos = this.state.xScale.invert(this.state.mouseX - this.margin.left)
@@ -266,7 +272,7 @@ class ProteinVizPlot extends Component {
                                                  margin={this.margin} svgParent={this.svg} scaleChanged={this.state.scaleChanged}>
                                 </ProteinMergesContainer>}
 
-                    <ProteinVizLegendsContainer x={viewWidth-200} y={20} width={150}
+                    <ProteinVizLegendsContainer x={localLegendPos.x} y={localLegendPos.y} width={150}
                                      theoMolWeight={this.state.theoMolWeight} parentSvg={this.svg}
                     >
                     </ProteinVizLegendsContainer>
@@ -298,7 +304,9 @@ ProteinVizPlot.propTypes = {
     popup: PropTypes.object,
     clickedSlices: PropTypes.array.isRequired,
     history: PropTypes.object.isRequired,
-    datasets: PropTypes.object.isRequired
+    datasets: PropTypes.object.isRequired,
+    legendPos: PropTypes.object,
+    setLegendPos: PropTypes.func.isRequired,
 };
 
 export default ProteinVizPlot

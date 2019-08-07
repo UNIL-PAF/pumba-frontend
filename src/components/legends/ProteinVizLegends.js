@@ -211,21 +211,19 @@ class ProteinVizLegends extends PureComponent {
         this.setState({mouseOverLegend: false})
     }
 
-    startMoving = () => {
-        console.log("startMoving")
-    }
-
-    moveLegend = (e) => {
-        console.log("moveLegend", e.clientX, e.clientY)
+    startMoving = (e) => {
+        const {setMoveLegend} = this.props
+        setMoveLegend(true)
     }
 
     stopMoving = () => {
-        console.log("stopMoving")
+        const {setMoveLegend} = this.props
+        setMoveLegend(false)
     }
 
 
     render() {
-        const { x, y, width, clickedRepl, datasets} = this.props;
+        const { x, y, width, clickedRepl, datasets, legendIsMoving} = this.props;
 
         // transform the sample into a sorted array
         const samples = _.sortBy(_.values(_.mapValues(datasets, (value, key) => { value.name = key; return value; })), ['idx'])
@@ -259,9 +257,8 @@ class ProteinVizLegends extends PureComponent {
                 y={y}
                 width={10}
                 height={10}
-                fill={"green"}
+                fill={legendIsMoving ? "red" : "green"}
                 onMouseDown={this.startMoving}
-                onMouseMove={this.moveLegend}
                 onMouseUp={this.stopMoving}
             />
 
@@ -290,6 +287,8 @@ ProteinVizLegends.propTypes = {
     datasets: PropTypes.object.isRequired,
     reloadProteinCB: PropTypes.func.isRequired,
     setDatasets: PropTypes.func.isRequired,
+    legendIsMoving: PropTypes.bool.isRequired,
+    setMoveLegend: PropTypes.func.isRequired
 };
 
 export default (ProteinVizLegends);

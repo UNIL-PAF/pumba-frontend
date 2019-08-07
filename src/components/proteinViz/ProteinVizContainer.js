@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 import ProteinVizPlot from "./ProteinVizPlot";
 import { mouseLeaveSample, clickSlice, unclickSlice} from "../../actions/sampleSelection";
 import {changeZoomAndFilter, removeSlicePopup, showSlicePopup} from "../../actions/proteinVizActions";
+import {setLegendPos} from "../../actions/legendActions";
 
 class ProteinVizContainer extends Component {
 
@@ -13,7 +14,7 @@ class ProteinVizContainer extends Component {
         const {proteinData, mouseOverSampleId, mouseOverReplId, mouseLeaveSampleCB, zoomLeft, zoomRight,
             changeZoomRangeCB, theoMergedProteins,
             clickedRepl, showPopupCB, removePopupCB, popup, clickedSlices,
-            clickSliceCB, unclickSliceCB, history, datasets} = this.props
+            clickSliceCB, unclickSliceCB, history, datasets, legendPos, setLegendPos, legendIsMoving} = this.props
 
         return <div id={"protein-viz"}>
         { proteinData && <ProteinVizPlot proteinData={proteinData} viewWidth={800} viewHeight={400}
@@ -25,7 +26,8 @@ class ProteinVizContainer extends Component {
                              clickedRepl={clickedRepl}
                              showPopupCB={showPopupCB} removePopupCB={removePopupCB} popup={popup}
                              clickedSlices={clickedSlices} clickSliceCB={clickSliceCB} unclickSliceCB={unclickSliceCB}
-                             history={history} datasets={datasets}
+                             history={history} datasets={datasets} legendPos={legendPos} setLegendPos={setLegendPos}
+                             legendIsMoving={legendIsMoving}
         /> }
         </div>
     }
@@ -50,6 +52,9 @@ ProteinVizContainer.propTypes = {
     clickedSlices: PropTypes.array.isRequired,
     history: PropTypes.object.isRequired,
     datasets: PropTypes.object.isRequired,
+    legendPos: PropTypes.object,
+    setLegendPos: PropTypes.func.isRequired,
+    legendIsMoving: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => {
@@ -63,7 +68,9 @@ const mapStateToProps = (state) => {
         theoMergedProteins: state.proteinViz.theoMergedProteins,
         popup: state.proteinViz.popup,
         clickedSlices: state.sampleSelection.clickedSlices,
-        datasets: state.loadProtein.datasets
+        datasets: state.loadProtein.datasets,
+        legendPos: state.legend.legendPos,
+        legendIsMoving: state.legend.legendIsMoving
     }
     return props
 }
@@ -75,7 +82,8 @@ const mapDispatchToProps = (dispatch) => {
         showPopupCB: (popup) => { dispatch(showSlicePopup(popup))},
         removePopupCB: () => { dispatch(removeSlicePopup())},
         clickSliceCB: (slice) => { dispatch(clickSlice(slice))},
-        unclickSliceCB: (slice) => { dispatch(unclickSlice(slice))}
+        unclickSliceCB: (slice) => { dispatch(unclickSlice(slice))},
+        setLegendPos: (x, y) => { dispatch(setLegendPos(x, y))}
     }
 }
 
