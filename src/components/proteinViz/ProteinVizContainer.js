@@ -83,7 +83,7 @@ const mapDispatchToProps = (dispatch) => {
         removePopupCB: () => { dispatch(removeSlicePopup())},
         clickSliceCB: (slice) => { dispatch(clickSlice(slice))},
         unclickSliceCB: (slice) => { dispatch(unclickSlice(slice))},
-        setLegendPos: (x, y) => { dispatch(setLegendPos(x, y))}
+        setLegendPos: (view, x, y) => { dispatch(setLegendPos(view, x, y))}
     }
 }
 

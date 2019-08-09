@@ -19,6 +19,9 @@ class PeptideViz extends PureComponent {
     constructor(props) {
         super(props)
 
+        this.svg = React.createRef()
+        this.brushG = React.createRef()
+
         const {proteinData, viewWidth, viewHeight, zoom, sequenceData} = this.props
 
         const minMolWeightDa = Math.pow(10, _.min(_.map(proteinData, function(p){
@@ -47,7 +50,8 @@ class PeptideViz extends PureComponent {
             yScale: scaleLinear().range([viewHeight - this.margin.top - this.margin.bottom, 0]).domain([zoomTop, zoomBottom]),
             theoMolWeight: theoMolWeight,
             zoomLeft: zoomLeft,
-            zoomRight: zoomRight
+            zoomRight: zoomRight,
+            zoomCounter: 0
         }
     }
 
@@ -67,10 +71,9 @@ class PeptideViz extends PureComponent {
         select(this.xAxis)
             .call(xAxis)
 
-        setTimeout( () => this.brushG.call(brush(this.state.xScale, this.state.yScale).on('end', this.brushend)) )
-
-        // we have to update after the "this.svg" has been set
-        this.forceUpdate()
+        const brushSelect = select(this.brushG.current)
+        this.setState({brush: brushSelect})
+        setTimeout( () => brushSelect.call(brush(this.state.xScale).on('end', this.brushend)) )
     }
 
     componentDidUpdate(){
@@ -103,6 +106,27 @@ class PeptideViz extends PureComponent {
 
     }
 
+    mouseMove = (e) => {
+        const {setLegendPos, legendIsMoving} = this.props
+
+        var point = this.svg.current.createSVGPoint()
+        point.x = e.clientX
+        point.y = e.clientY;
+        point = point.matrixTransform(this.svg.current.getScreenCTM().inverse());
+
+        // move the legend
+        if(legendIsMoving){
+            setLegendPos("peptide", point.x - 5, point.y - 5)
+        }
+
+        this.setState({mouseX: point.x, mouseY: point.y})
+    }
+
+    getMousePos = () => {
+        const {mouseX, mouseY} = this.state
+        return [mouseX, mouseY]
+    }
+
     brushend = () => {
         var s = event.selection;
         if(s){
@@ -114,11 +138,13 @@ class PeptideViz extends PureComponent {
                 return this.state.yScale.invert(a[1])
             }));
 
-
             this.props.changeZoomRangeCB(xZoom[0], xZoom[1], yZoom[0], yZoom[1])
 
+            // change the zoom counter to update Peptides
+            this.setState({zoomCounter: this.state.zoomCounter + 1})
+
             // remove the brush area
-            this.brushG.call(brush().move, null)
+            this.state.brush.call(brush().move, null)
         }
     }
 
@@ -143,7 +169,7 @@ class PeptideViz extends PureComponent {
         const {proteinData, clickedRepl, clickedSlices, mouseOverSampleId, mouseOverReplId,
             showPopupCB, removePopupCB, datasets} = this.props
 
-        const {zoomLeft, zoomRight} = this.state
+        const {zoomLeft, zoomRight, zoomCounter} = this.state
 
         // we need this variable to get the correct replIdx
         var replIdx = 0;
@@ -194,6 +220,8 @@ class PeptideViz extends PureComponent {
                         sliceIsClicked={sliceIsClicked}
                         showPopupCB={showPopupCB}
                         removePopupCB={removePopupCB}
+                        getMousePos={this.getMousePos}
+                        zoomCounter={zoomCounter}
                     />
                 })
             })
@@ -228,20 +256,24 @@ class PeptideViz extends PureComponent {
     }
 
     render(){
-        const {viewWidth, viewHeight, mouseLeaveSampleCB, popup, proteinData} = this.props
+        const {legendPos, viewWidth, viewHeight, mouseLeaveSampleCB, popup, proteinData} = this.props
+
+        // set the initial legend position
+        const localLegendPos = (legendPos && legendPos.peptide) ? legendPos.peptide : {x: viewWidth-100, y: 20}
 
         return <div id={"peptide-plot"}>
             <svg className="peptide-svg"
                  viewBox={`0 0 ${viewWidth} ${viewHeight}`}
                  width="100%"
                  height="100%"
-                 ref={r => this.svg = r}
+                 ref={this.svg}
+                 onMouseMove={(e) => this.mouseMove(e)}
             >
                 <g className="pep-y-axis" ref={r => this.yAxis = r}
                    transform={'translate(' + this.margin.left + ',' + this.margin.top + ')'}/>
                 <g className="pep-x-axis" ref={r => this.xAxis = r}
                    transform={'translate(' + this.margin.left + ',' + (viewHeight - this.margin.bottom) + ')'}/>
-                <g className="brush-g" ref={r => this.brushG = select(r)} onDoubleClick={this.zoomOut}
+                <g className="brush-g" ref={this.brushG} onDoubleClick={this.zoomOut}
                    onMouseEnter={() => mouseLeaveSampleCB()}
                    transform={'translate(' + this.margin.left + ',' + this.margin.top + ')'}/>
                 <g className="peptide-viz-g"
@@ -253,7 +285,7 @@ class PeptideViz extends PureComponent {
                     { this.plotAminoAcidBar() }
                     { this.svg && this.plotPeptides() }
                 </g>
-                <ProteinVizLegendsContainer x={viewWidth-200} y={20} width={150} theoMolWeight={this.state.theoMolWeight}>
+                <ProteinVizLegendsContainer x={localLegendPos.x} y={localLegendPos.y} width={150} theoMolWeight={this.state.theoMolWeight}>
                 </ProteinVizLegendsContainer>
                 {popup && this.plotPopup()}
             </svg>
@@ -278,6 +310,9 @@ PeptideViz.propTypes = {
     removePopupCB: PropTypes.func.isRequired,
     popup: PropTypes.object,
     datasets: PropTypes.object.isRequired,
+    legendPos: PropTypes.object,
+    setLegendPos: PropTypes.func.isRequired,
+    legendIsMoving: PropTypes.bool.isRequired,
 };
 
 export default (PeptideViz)

@@ -7,12 +7,14 @@ import { connect } from 'react-redux'
 import PeptideViz from './PeptideViz'
 import {changePepZoomRange, removePepPopup, showPepPopup} from "../../actions/peptideVizActions";
 import {mouseLeaveSample} from "../../actions/sampleSelection";
+import {setLegendPos} from "../../actions/legendActions";
 
 class PeptideVizContainer extends Component {
 
     render(){
         const {proteinData, sequenceData, zoom, changeZoomRangeCB, clickedRepl, clickedSlices, mouseOverSampleId,
-            mouseOverReplId, mouseLeaveSampleCB, showPopupCB, removePopupCB, popup, datasets} = this.props
+            mouseOverReplId, mouseLeaveSampleCB, showPopupCB, removePopupCB, popup, datasets, legendPos, setLegendPos,
+            legendIsMoving} = this.props
 
         const samples = _.map(proteinData, (p, i) => {
             const replicates = _.map(p.proteins, (oneProt, i) => {
@@ -38,6 +40,9 @@ class PeptideVizContainer extends Component {
                                          removePopupCB={removePopupCB}
                                          popup={popup}
                                          datasets={datasets}
+                                         legendPos={legendPos}
+                                         setLegendPos={setLegendPos}
+                                         legendIsMoving={legendIsMoving}
                             /> }
         </div>
     }
@@ -58,6 +63,9 @@ PeptideVizContainer.propTypes = {
     removePopupCB: PropTypes.func.isRequired,
     popup: PropTypes.object,
     datasets: PropTypes.object.isRequired,
+    legendPos: PropTypes.object,
+    setLegendPos: PropTypes.func.isRequired,
+    legendIsMoving: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => {
@@ -70,7 +78,9 @@ const mapStateToProps = (state) => {
         mouseOverSampleId : state.sampleSelection.mouseOverSampleId,
         mouseOverReplId : state.sampleSelection.mouseOverReplId,
         popup: state.peptideViz.popup,
-        datasets: state.loadProtein.datasets
+        datasets: state.loadProtein.datasets,
+        legendPos: state.legend.legendPos,
+        legendIsMoving: state.legend.legendIsMoving
     }
     return props
 }
@@ -81,6 +91,7 @@ const mapDispatchToProps = (dispatch) => {
         mouseLeaveSampleCB: () => { dispatch(mouseLeaveSample()) },
         showPopupCB: (popup) => { dispatch(showPepPopup(popup))},
         removePopupCB: () => { dispatch(removePepPopup())},
+        setLegendPos: (view, x, y) => { dispatch(setLegendPos(view, x, y))}
     }
 }
 

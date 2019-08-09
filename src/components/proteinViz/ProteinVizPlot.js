@@ -78,8 +78,6 @@ class ProteinVizPlot extends Component {
     }
 
     componentDidMount(){
-        const {setLegendPos, viewWidth} = this.props
-
         // add the x-axis
         const xAxis = axisBottom(this.state.xScale)
             .tickFormat((d) => { return Math.round(Math.pow(10,d)) + ' kDa'; })
@@ -108,7 +106,7 @@ class ProteinVizPlot extends Component {
 
         // move the legend
         if(legendIsMoving){
-            setLegendPos(point.x - this.margin.left - 5, point.y - this.margin.top - 5)
+            setLegendPos("protein", point.x - this.margin.left - 5, point.y - this.margin.top - 5)
         }
 
         const x = point.x - this.margin.left
@@ -234,7 +232,7 @@ class ProteinVizPlot extends Component {
         const {viewWidth, viewHeight, mouseLeaveSampleCB, popup, proteinData, history, legendPos} = this.props
 
         // set the initial legend position
-        const localLegendPos = legendPos ? legendPos : {x: viewWidth-200, y: 20}
+        const localLegendPos = (legendPos && legendPos.protein) ? legendPos.protein : {x: viewWidth-200, y: 20}
 
         // the mol weight at the mouse position
         const mouseWeightPos = this.state.xScale.invert(this.state.mouseX - this.margin.left)

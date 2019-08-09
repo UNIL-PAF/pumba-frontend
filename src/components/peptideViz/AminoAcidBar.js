@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 
 class AminoAcidBar extends PureComponent {
 
-
     render() {
         const { sequence, zoomLeft, zoomRight, xScale, yPos } = this.props;
 

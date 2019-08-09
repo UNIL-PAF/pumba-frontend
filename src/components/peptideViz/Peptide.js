@@ -1,17 +1,16 @@
 import React, {
-    Component,
+    Component, PureComponent,
 } from 'react'
 import PropTypes from 'prop-types'
 import { select, mouse } from 'd3-selection'
 
-class Peptide extends Component {
+class Peptide extends PureComponent {
 
     defaultRectHeight = 1;
     selRectHeight = 1;
 
     constructor(props){
         super(props)
-
         this.state = this.setDefaultRect();
     }
 
@@ -30,38 +29,30 @@ class Peptide extends Component {
         };
     }
 
-    componentDidMount(){
-        const {svgParent, pepInfo, showPopupCB, sampleName, replName, sliceMolWeight} = this.props;
+    onMouseEnter = (event) => {
+        const {getMousePos, pepInfo, showPopupCB, sampleName, replName, sliceMolWeight} = this.props
 
-        // this event we have to call using D3 in order to get the mouse position correctly
-        select(this.rectDom).on('mouseenter', () => {
-            this.setState({'mouseIsOver': true})
-            const [x,y] = mouse(svgParent)
+        const mousePos = getMousePos()
+        this.setState({'mouseIsOver': true})
 
-            var popUpContent = {
-                Sample: sampleName,
-                Replicate: replName,
-                Sequence: pepInfo.aminoAcidBefore + "." + pepInfo.sequence + "." + pepInfo.aminoAcidAfter,
-                "Start pos" : pepInfo.startPos,
-                "End pos" : pepInfo.endPos,
-                //"Pep mol weight": Math.pow(10, pepInfo.theoMass).toFixed(2),
-                "Razor pep": pepInfo.isRazor ? "True": "False",
-                "Mol weight": Math.pow(10, sliceMolWeight).toFixed(2) + " kDa",
-                "Gel slice": pepInfo.sliceNr,
-            }
-            const popUp = {x: x, y: y, content: popUpContent}
-            showPopupCB(popUp)
-        })
+        var popUpContent = {
+            Sample: sampleName,
+            Replicate: replName,
+            Sequence: pepInfo.aminoAcidBefore + "." + pepInfo.sequence + "." + pepInfo.aminoAcidAfter,
+            "Start pos" : pepInfo.startPos,
+            "End pos" : pepInfo.endPos,
+            //"Pep mol weight": Math.pow(10, pepInfo.theoMass).toFixed(2),
+            "Razor pep": pepInfo.isRazor ? "True": "False",
+            "Mol weight": Math.pow(10, sliceMolWeight).toFixed(2) + " kDa",
+            "Gel slice": pepInfo.sliceNr,
+        }
+        const popUp = {x: mousePos[0], y: mousePos[1], content: popUpContent}
+        showPopupCB(popUp)
+    }
 
-        select(this.rectDom).on('mouseout', () => {
-            this.setState({'mouseIsOver': false})
-            this.props.removePopupCB()
-        })
-
-        // select(this.rectDom).on('click', () => {
-        //     const [x,y] = mouse(svgParent)
-        //     this.props.clickOnPep(this.rectDom.id, x, y)
-        // })
+    onMouseLeave = (event) => {
+        this.setState({'mouseIsOver': false})
+        this.props.removePopupCB()
     }
 
     render() {
@@ -95,7 +86,8 @@ class Peptide extends Component {
                 fill={fill}
                 fillOpacity={fillOpacity}
                 stroke={stroke}
-                ref={r => this.rectDom = r}
+                onMouseEnter={(e) => this.onMouseEnter(e)}
+                onMouseLeave={(e) => this.onMouseLeave(e)}
             />
         )
 
@@ -115,7 +107,9 @@ Peptide.propTypes = {
     sliceIsClicked: PropTypes.bool.isRequired,
     showPopupCB: PropTypes.func.isRequired,
     removePopupCB: PropTypes.func.isRequired,
-    color: PropTypes.string.isRequired
+    color: PropTypes.string.isRequired,
+    getMousePos: PropTypes.func.isRequired,
+    zoomCounter: PropTypes.number.isRequired
 };
 
 
