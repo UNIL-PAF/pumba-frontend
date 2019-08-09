@@ -17,7 +17,7 @@ class ProteinTitle extends PureComponent {
 
         return <g>
             <text
-                className={"protein-title"}
+                className={"protein-title unselecteable"}
                 x={80}
                 y={20}
             >

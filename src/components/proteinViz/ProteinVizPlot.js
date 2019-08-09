@@ -208,6 +208,7 @@ class ProteinVizPlot extends Component {
                     ry={3}
                 ></rect>
                 <text
+                    className={"unselecteable"}
                     x={mouseX - 18}
                     y={11}
                     fontSize={"50%"}
