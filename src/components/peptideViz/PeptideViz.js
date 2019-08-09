@@ -116,7 +116,7 @@ class PeptideViz extends PureComponent {
 
         // move the legend
         if(legendIsMoving){
-            setLegendPos("peptide", point.x - 5, point.y - 5)
+            setLegendPos("peptide", point.x - 8, point.y - 5)
         }
 
         this.setState({mouseX: point.x, mouseY: point.y})

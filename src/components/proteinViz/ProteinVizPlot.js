@@ -106,7 +106,7 @@ class ProteinVizPlot extends Component {
 
         // move the legend
         if(legendIsMoving){
-            setLegendPos("protein", point.x - this.margin.left - 5, point.y - this.margin.top - 5)
+            setLegendPos("protein", point.x - this.margin.left - 8, point.y - this.margin.top - 5)
         }
 
         const x = point.x - this.margin.left
