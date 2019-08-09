@@ -7,6 +7,7 @@ import LegendField from './LegendField'
 import TheoWeightLine from '../proteinViz/TheoWeightLine'
 import * as _ from 'lodash';
 import { sampleColor } from '../common/colorSettings'
+import MoveButton from "../common/MoveButton";
 
 class ProteinVizLegends extends PureComponent {
 
@@ -232,15 +233,16 @@ class ProteinVizLegends extends PureComponent {
 
     render() {
         const { x, y, width, clickedRepl, datasets, legendIsMoving} = this.props;
+        const {mouseOverLegend, cursor} = this.state
 
         // transform the sample into a sorted array
         const samples = _.sortBy(_.values(_.mapValues(datasets, (value, key) => { value.name = key; return value; })), ['idx'])
 
         const legendHeight = 20
         const selectedSampleIdx = _.countBy(clickedRepl, "sampleIdx")
-        const nrRep = (this.state.mouseOverLegend ? _.sum(_.map(datasets, (d) => { return d.isActive && d.datasets.length})) : 0)
-        const nrActiveDatasets = _.filter(datasets, (d) => {return d.isAvailable && (d.isActive || this.state.mouseOverLegend)}).length
-        const selectedReplNr = (! this.state.mouseOverLegend ? _.reduce(selectedSampleIdx, (res, v, k) => {return res + (datasets[k].isActive ? datasets[k].datasets.length : 0)}, 0) : 0)
+        const nrRep = (mouseOverLegend ? _.sum(_.map(datasets, (d) => { return d.isActive && d.datasets.length})) : 0)
+        const nrActiveDatasets = _.filter(datasets, (d) => {return d.isAvailable && (d.isActive || mouseOverLegend)}).length
+        const selectedReplNr = (! mouseOverLegend ? _.reduce(selectedSampleIdx, (res, v, k) => {return res + (datasets[k].isActive ? datasets[k].datasets.length : 0)}, 0) : 0)
 
         const nrLegends = nrActiveDatasets + nrRep + selectedReplNr
         const xShift = 12
@@ -260,15 +262,7 @@ class ProteinVizLegends extends PureComponent {
                 strokeWidth={1}
             />
 
-            <rect
-                x={x}
-                y={y}
-                width={10}
-                height={10}
-                fill={legendIsMoving ? "red" : "green"}
-                onMouseDown={this.startMoving}
-                onMouseUp={this.stopMoving}
-            />
+            {mouseOverLegend && <MoveButton x={x + 2} y={y + 2} onMouseDown={this.startMoving} onMouseUp={this.stopMoving} legendIsMoving={legendIsMoving}></MoveButton>}
 
             { this.plotTheoMolWeight(x + xShift, y+yShift, legendHeight) }
 
