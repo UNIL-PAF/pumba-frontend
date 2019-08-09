@@ -75,8 +75,16 @@ class ProteinVizLegends extends PureComponent {
      * plot the symbol for the theo weight line
      */
     theoMolSymbol = (x, y, height) => {
-        return <TheoWeightLine xPos={x} yTop={y-1} height={height+10}>
-        </TheoWeightLine>
+        const yMargins = 5
+        const yShift = 3
+
+        return <line
+            className="theo-weight-line"
+            x1={x}
+            y1={y - yMargins + yShift}
+            x2={x}
+            y2={ y - height  + yMargins + yShift}
+        />
     }
 
     /**
