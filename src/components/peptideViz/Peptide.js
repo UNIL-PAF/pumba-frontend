@@ -109,7 +109,7 @@ Peptide.propTypes = {
     removePopupCB: PropTypes.func.isRequired,
     color: PropTypes.string.isRequired,
     getMousePos: PropTypes.func.isRequired,
-    zoomCounter: PropTypes.number.isRequired
+    pepCounter: PropTypes.number.isRequired
 };
 
 

@@ -51,7 +51,8 @@ class PeptideViz extends PureComponent {
             theoMolWeight: theoMolWeight,
             zoomLeft: zoomLeft,
             zoomRight: zoomRight,
-            zoomCounter: 0
+            zoomCounter: 0,
+            pepCounter: 0
         }
     }
 
@@ -76,16 +77,16 @@ class PeptideViz extends PureComponent {
         setTimeout( () => brushSelect.call(brush(this.state.xScale).on('end', this.brushend)) )
     }
 
-    componentDidUpdate(){
+    componentDidUpdate(prevProps, prevState){
         const {zoom, sequenceData} = this.props
 
-        const zoomLeft = (zoom === undefined) ? 1 : zoom.left;
-        const zoomRight = (zoom === undefined) ? sequenceData.length : zoom.right;
-        const zoomTop = (zoom === undefined) ? this.minMolWeight : zoom.top
-        const zoomBottom = (zoom === undefined) ? this.maxMolWeight : zoom.bottom
-
         // we only update the axis and stuff if the zoom changed
-        if(zoomLeft && this.state.zoomLeft !== zoomLeft && this.state.zoomRight !== zoomRight){
+        if(prevState.zoomCounter !== this.state.zoomCounter){
+            const zoomLeft = (zoom === undefined) ? 1 : zoom.left;
+            const zoomRight = (zoom === undefined) ? sequenceData.length : zoom.right;
+            const zoomTop = (zoom === undefined) ? this.minMolWeight : zoom.top
+            const zoomBottom = (zoom === undefined) ? this.maxMolWeight : zoom.bottom
+
             // change the scale after zooming
             this.state.xScale.domain([zoomLeft, zoomRight]);
             this.state.yScale.domain([zoomTop, zoomBottom])
@@ -101,7 +102,7 @@ class PeptideViz extends PureComponent {
                 .call(xAxis)
 
             // remember the current zoom state
-            this.setState({zoomLeft: zoomLeft, zoomRight: zoomRight})
+            this.setState({zoomLeft: zoomLeft, zoomRight: zoomRight, pepCounter: this.state.pepCounter + 1})
         }
 
     }
@@ -150,6 +151,8 @@ class PeptideViz extends PureComponent {
 
     zoomOut = () => {
         this.props.changeZoomRangeCB(undefined, undefined, undefined, undefined)
+        // change the zoom counter to update Peptides
+        this.setState({zoomCounter: this.state.zoomCounter + 1})
     }
 
     plotAminoAcidBar = () => {
@@ -169,7 +172,7 @@ class PeptideViz extends PureComponent {
         const {proteinData, clickedRepl, clickedSlices, mouseOverSampleId, mouseOverReplId,
             showPopupCB, removePopupCB, datasets} = this.props
 
-        const {zoomLeft, zoomRight, zoomCounter} = this.state
+        const {zoomLeft, zoomRight, pepCounter} = this.state
 
         // we need this variable to get the correct replIdx
         var replIdx = 0;
@@ -221,7 +224,7 @@ class PeptideViz extends PureComponent {
                         showPopupCB={showPopupCB}
                         removePopupCB={removePopupCB}
                         getMousePos={this.getMousePos}
-                        zoomCounter={zoomCounter}
+                        pepCounter={pepCounter}
                     />
                 })
             })
