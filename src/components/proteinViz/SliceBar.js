@@ -2,7 +2,6 @@ import React, {
     PureComponent,
 } from 'react'
 import PropTypes from 'prop-types'
-import {mouse, select} from "d3-selection";
 
 
 class SliceBar extends PureComponent {
