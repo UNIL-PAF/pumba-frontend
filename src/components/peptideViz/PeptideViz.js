@@ -102,7 +102,7 @@ class PeptideViz extends PureComponent {
                 .call(xAxis)
 
             // remember the current zoom state
-            this.setState({zoomLeft: zoomLeft, zoomRight: zoomRight, pepCounter: this.state.pepCounter + 1})
+            this.setState({zoomLeft: zoomLeft, zoomRight: zoomRight, zoomTop: zoomTop, pepCounter: this.state.pepCounter + 1})
         }
 
     }
@@ -172,7 +172,7 @@ class PeptideViz extends PureComponent {
         const {proteinData, clickedRepl, clickedSlices, mouseOverSampleId, mouseOverReplId,
             showPopupCB, removePopupCB, datasets} = this.props
 
-        const {zoomLeft, zoomRight, pepCounter} = this.state
+        const {zoomLeft, zoomRight, zoomTop, pepCounter} = this.state
 
         // we need this variable to get the correct replIdx
         var replIdx = 0;
@@ -181,20 +181,21 @@ class PeptideViz extends PureComponent {
             return sample.proteins.map((protein, j) => {
                 replIdx = replIdx + 1
 
+                const massFits = protein.dataSet.massFitResult.massFits
+
                 const pepWithIdx = _.map(protein.peptides, function(p, i){
                     p.idx = i
+                    p.sliceMolWeight = massFits[p.sliceNr-1]
                     return p
                 })
 
                 const fltProt = _.filter(pepWithIdx, (pep) => {
-                    return pep.endPos > zoomLeft && pep.startPos < zoomRight
+                    return pep.endPos > zoomLeft && pep.startPos < zoomRight && (! zoomTop || pep.sliceMolWeight >= zoomTop)
                 })
 
                 const sliceFromReplIsClicked = _.some(clickedSlices, (slice) => {
                     return sample.sample === slice.sample && protein.dataSet.name === slice.replicate
                 })
-
-                const massFits = protein.dataSet.massFitResult.massFits
 
                 return fltProt.map((peptide, k) => {
                     // check if given replicate is activated on proteinViz
@@ -216,7 +217,7 @@ class PeptideViz extends PureComponent {
                         color={sampleColor(datasets[sample.sample].idx)}
                         replName={protein.dataSet.name}
                         svgParent={this.svg}
-                        sliceMolWeight={massFits[peptide.sliceNr-1]}
+                        sliceMolWeight={peptide.sliceMolWeight}
                         pepInfo={peptide}
                         key={i+':'+j+':'+ peptide.idx}
                         highlightRepl={replIsClicked || highlightRepl}
