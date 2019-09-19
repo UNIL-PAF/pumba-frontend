@@ -1,8 +1,7 @@
 import React, {
-    Component, PureComponent,
+    PureComponent,
 } from 'react'
 import PropTypes from 'prop-types'
-import { select, mouse } from 'd3-selection'
 
 class Peptide extends PureComponent {
 

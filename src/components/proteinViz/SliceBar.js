@@ -7,24 +7,20 @@ import {mouse, select} from "d3-selection";
 
 class SliceBar extends PureComponent {
 
-    componentDidMount(){
-        const {svgParent, popOverCB, sliceIdx, removePopOverCB, clickCB, mouseIsOver, isHighlighted} = this.props;
+    onMouseOver = () => {
+        const {getMousePos, mouseIsOver, isHighlighted, sliceIdx, popOverCB} = this.props
+        const [x, y] = getMousePos()
+        const showRemoveMessage = mouseIsOver & isHighlighted
+        popOverCB(sliceIdx, x, y, showRemoveMessage)
+    }
 
-        // this event we have to call using D3 in order to get the mouse position correctly
-        select(this.rectDom).on('mouseover', () => {
-            const [x,y] = mouse(svgParent)
-            // showSlicePopOverCB
-            const showRemoveMessage = mouseIsOver & isHighlighted
-            popOverCB(sliceIdx, x, y, showRemoveMessage)
-        })
+    onMouseOut = () => {
+        this.props.removePopOverCB()
+    }
 
-        select(this.rectDom).on('mouseout', () => {
-            removePopOverCB()
-        })
-
-        select(this.rectDom).on('click', () => {
-            clickCB(sliceIdx)
-        })
+    onClick = () => {
+        const {clickCB, sliceIdx} = this.props
+        clickCB(sliceIdx)
     }
 
     plotBackgroundRect = (xPos, yPos, width, height) => {
@@ -36,7 +32,9 @@ class SliceBar extends PureComponent {
             height={height}
             stroke={"white"}
             fill={"white"}
-            ref={r => this.rectDom = r}
+            onMouseOver={() => this.onMouseOver()}
+            onMouseOut={() => this.onMouseOut()}
+            onClick={() => this.onClick()}
         />
     }
 
@@ -78,7 +76,8 @@ SliceBar.propTypes = {
     clickCB: PropTypes.func.isRequired,
     sliceIdx: PropTypes.number.isRequired,
     isHighlighted: PropTypes.bool.isRequired,
-    mouseIsOver: PropTypes.bool
+    mouseIsOver: PropTypes.bool,
+    getMousePos: PropTypes.func.isRequired,
 };
 
 export default SliceBar

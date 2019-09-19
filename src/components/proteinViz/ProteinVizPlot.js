@@ -6,7 +6,7 @@ import { scaleLinear } from 'd3-scale'
 import * as _ from 'lodash'
 import { axisLeft, axisBottom } from 'd3-axis'
 import {brushX} from 'd3-brush'
-import { select, event, mouse } from 'd3-selection'
+import { select, event } from 'd3-selection'
 import { sampleColor } from '../common/colorSettings'
 import TheoWeightLine from './TheoWeightLine'
 import ProteinVizLegendsContainer from '../legends/ProteinVizLegendsContainer'
@@ -96,6 +96,12 @@ class ProteinVizPlot extends Component {
     }
 
 
+    getMousePos = () => {
+        const {mouseX, mouseY} = this.state
+        return [mouseX, mouseY]
+    }
+
+
     mouseMove = (e) => {
         const {setLegendPos, legendIsMoving} = this.props
 
@@ -104,13 +110,15 @@ class ProteinVizPlot extends Component {
         point.y = e.clientY;
         point = point.matrixTransform(this.svg.current.getScreenCTM().inverse());
 
+        const x = point.x - this.margin.left
+        const y = point.y - this.margin.top
+
         // move the legend
         if(legendIsMoving){
-            setLegendPos("protein", point.x - this.margin.left - 8, point.y - this.margin.top - 5)
+            setLegendPos("protein", x - 8, y - 5)
         }
 
-        const x = point.x - this.margin.left
-        this.setState({mouseX: x})
+        this.setState({mouseX: x, mouseY: y})
     }
 
     componentDidUpdate(){
@@ -268,7 +276,8 @@ class ProteinVizPlot extends Component {
                     {this.plotMousePositionLine(mouseWeightPos)}
 
                     {this.svg &&  <ProteinMergesContainer xScale={this.state.xScale} yScale={this.state.yScale} history={history}
-                                                 margin={this.margin} svgParent={this.svg} scaleChanged={this.state.scaleChanged}>
+                                                 margin={this.margin} svgParent={this.svg} scaleChanged={this.state.scaleChanged}
+                                                getMousePos={this.getMousePos}>
                                 </ProteinMergesContainer>}
 
                     <ProteinVizLegendsContainer x={localLegendPos.x} y={localLegendPos.y} width={150}

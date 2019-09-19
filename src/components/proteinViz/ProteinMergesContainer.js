@@ -1,5 +1,5 @@
 import React, {
-    Component
+    PureComponent
 } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
@@ -7,12 +7,13 @@ import { clickSlice, unclickSlice} from "../../actions/sampleSelection";
 import {removeSlicePopup, showSlicePopup} from "../../actions/proteinVizActions";
 import ProteinMerges from "./ProteinMerges";
 
-class ProteinMergesContainer extends Component {
+class ProteinMergesContainer extends PureComponent {
 
     render(){
         const {proteinData, mouseOverSampleId, mouseOverReplId, zoomLeft, zoomRight,
             theoMergedProteins, clickedRepl, showPopupCB, removePopupCB, popup, clickedSlices,
-            clickSliceCB, unclickSliceCB, history, datasets, xScale, yScale, margin, svgParent, scaleChanged} = this.props
+            clickSliceCB, unclickSliceCB, history, datasets, xScale, yScale, margin, svgParent,
+            scaleChanged, getMousePos} = this.props
 
         return <ProteinMerges proteinData={proteinData} theoMergedProteins={theoMergedProteins}
                               unclickSliceCB={unclickSliceCB} clickSliceCB={clickSliceCB}
@@ -21,7 +22,7 @@ class ProteinMergesContainer extends Component {
                               showPopupCB={showPopupCB} removePopupCB={removePopupCB} popup={popup}
                               clickedSlices={clickedSlices} history={history} xScale={xScale}
                               yScale={yScale} margin={margin} svgParent={svgParent}
-                              scaleChanged={scaleChanged} datasets={datasets}>
+                              scaleChanged={scaleChanged} datasets={datasets} getMousePos={getMousePos}>
         </ProteinMerges>
     }
 
@@ -47,7 +48,8 @@ ProteinMergesContainer.propTypes = {
     yScale: PropTypes.func.isRequired,
     margin: PropTypes.object.isRequired,
     svgParent: PropTypes.object.isRequired,
-    scaleChanged: PropTypes.number.isRequired
+    scaleChanged: PropTypes.number.isRequired,
+    getMousePos: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => {

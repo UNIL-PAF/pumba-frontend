@@ -81,7 +81,7 @@ class SliceBars extends PureComponent {
     }
 
     plotOneSlice = (mass, int, color, keyName, highlight, protein, sliceIdx) => {
-        const {margin, xScale, yScale, svgParent, clickedSlices, mouseOverTag} = this.props
+        const {margin, xScale, yScale, svgParent, clickedSlices, mouseOverTag, getMousePos} = this.props
 
         const showSlicePopOverCB = (sliceIdx, x, y) => {return this.showPopOverCB(protein, sliceIdx, x, y)}
         const clickSliceCB = (sliceIdx) => {return this.clickCB(protein, sliceIdx)}
@@ -94,7 +94,9 @@ class SliceBars extends PureComponent {
         return <SliceBar
             key={keyName} mass={mass} int={int} color={color} xScale={xScale} yScale={yScale} margin={margin}
             highlight={highlight} svgParent={svgParent} popOverCB={showSlicePopOverCB} removePopOverCB={this.removePopOverCB}
-            sliceIdx={sliceIdx} clickCB={clickSliceCB} isHighlighted={isHighlighted} mouseIsOver={mouseOverTag === sliceTag}/>
+            sliceIdx={sliceIdx} clickCB={clickSliceCB} isHighlighted={isHighlighted} mouseIsOver={mouseOverTag === sliceTag}
+            getMousePos={getMousePos}
+        ></SliceBar>
     }
 
     render() {
@@ -126,7 +128,8 @@ SliceBars.propTypes = {
     mouseOverTag: PropTypes.string,
     clickedSlices: PropTypes.array.isRequired,
     history: PropTypes.object.isRequired,
-    scaleChanged: PropTypes.number.isRequired
+    scaleChanged: PropTypes.number.isRequired,
+    getMousePos: PropTypes.func.isRequired
 };
 
 export default SliceBars

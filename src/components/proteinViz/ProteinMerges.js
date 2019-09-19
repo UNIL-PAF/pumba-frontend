@@ -44,7 +44,7 @@ class ProteinMerges extends PureComponent {
 
     plotSliceBars = (sampleName, replId) => {
         const {zoomLeft, zoomRight, showPopupCB, removePopupCB, clickSliceCB, unclickSliceCB, clickedSlices, popup,
-            history, margin, xScale, yScale, svgParent, scaleChanged, datasets, proteinData} = this.props
+            history, margin, xScale, yScale, svgParent, scaleChanged, datasets, proteinData, getMousePos} = this.props
 
         const proteins = _.find(proteinData, (p) => { return p.sample === sampleName})
 
@@ -57,7 +57,7 @@ class ProteinMerges extends PureComponent {
                                  yScale={yScale} zoomLeft={zoomLeft} zoomRight={zoomRight} proteins={proteins}
                                  svgParent={svgParent} showPopupCB={showPopupCB} removePopupCB={removePopupCB}
                                  clickSliceCB={clickSliceCB} unclickSliceCB={unclickSliceCB} clickedSlices={clickedSlices} mouseOverTag={popup ? popup.tag : undefined}
-                                 history={history} scaleChanged={scaleChanged} color={color}
+                                 history={history} scaleChanged={scaleChanged} color={color} getMousePos={getMousePos}
         />
     }
 
@@ -97,7 +97,8 @@ ProteinMerges.propTypes = {
     margin: PropTypes.object.isRequired,
     svgParent: PropTypes.object.isRequired,
     scaleChanged: PropTypes.number.isRequired,
-    datasets: PropTypes.object.isRequired
+    datasets: PropTypes.object.isRequired,
+    getMousePos: PropTypes.func.isRequired
 };
 
 export default ProteinMerges

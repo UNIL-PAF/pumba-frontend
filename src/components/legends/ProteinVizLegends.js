@@ -1,10 +1,8 @@
 import React, {
     PureComponent,
 } from 'react';
-import { mouse } from 'd3-selection'
 import PropTypes from 'prop-types';
 import LegendField from './LegendField'
-import TheoWeightLine from '../proteinViz/TheoWeightLine'
 import * as _ from 'lodash';
 import { sampleColor } from '../common/colorSettings'
 import MoveButton from "../common/MoveButton";
@@ -233,7 +231,7 @@ class ProteinVizLegends extends PureComponent {
 
     render() {
         const { x, y, width, clickedRepl, datasets, legendIsMoving} = this.props;
-        const {mouseOverLegend, cursor} = this.state
+        const {mouseOverLegend} = this.state
 
         // transform the sample into a sorted array
         const samples = _.sortBy(_.values(_.mapValues(datasets, (value, key) => { value.name = key; return value; })), ['idx'])
