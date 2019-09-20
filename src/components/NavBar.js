@@ -28,6 +28,11 @@ const NavBar = () => (
                           <NavLink tag={Link} to="/peptides">Peptide view</NavLink>
                       </LinkContainer>
                   </NavItem>
+                  <NavItem>
+                      <LinkContainer to="/gels">
+                          <NavLink tag={Link} to="/gels">Gel view</NavLink>
+                      </LinkContainer>
+                  </NavItem>
               </Nav>
               <Nav className="ml-auto" navbar>
                   <NavItem>

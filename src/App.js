@@ -5,8 +5,9 @@ import { Route, Switch } from 'react-router'
 import NavBar from './components/NavBar'
 import ProteinSearchContainer from './components/proteinSearch/ProteinSearchContainer'
 import ProteinViz from './components/proteinViz/ProteinVizContainer'
-import PeptideVizContainer from "./components/peptideViz/PeptideVizContainer";
-import PumbaNotifications from "./components/PumbaNotifications";
+import PeptideVizContainer from "./components/peptideViz/PeptideVizContainer"
+import GelVizContainer from "./components/gelViz/GelVizContainer"
+import PumbaNotifications from "./components/PumbaNotifications"
 
 const App = ({ history }) => {
     return (
@@ -17,6 +18,7 @@ const App = ({ history }) => {
                     <Route exact path="/" component={ProteinSearchContainer} />
                     <Route path="/proteins" component={ProteinViz} />
                     <Route path="/peptides" component={PeptideVizContainer} />
+                    <Route exact path="/gels" component={GelVizContainer} />
                     <Route component={ProteinSearchContainer} />
                 </Switch>
                 <PumbaNotifications/>
