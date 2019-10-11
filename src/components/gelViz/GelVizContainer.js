@@ -15,8 +15,6 @@ class GelVizContainer extends PureComponent {
 
         return <div id={"gel-viz"}>
             { proteinData && <GelViz proteinData={proteinData}
-                                         viewWidth={800}
-                                         viewHeight={400}
                                          datasets={datasets}
 
             /> }

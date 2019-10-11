@@ -8,6 +8,7 @@ import { Provider } from 'react-redux'
 import './styles/index.css';
 import './styles/App.css';
 import './styles/PeptideView.css';
+import './styles/GelView.css';
 import '../node_modules/bootstrap/dist/css/bootstrap.css';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';

@@ -12,6 +12,7 @@ export const PROTEIN_LOAD_ERROR = 'PROTEIN_LOAD_ERROR'
 export const GOTO_VIZ = 'GOTO_VIZ'
 export const ADD_SEQUENCE_DATA = 'ADD_SEQUENCE_DATA'
 export const SET_DATASETS = 'SET_DATASETS'
+export const SET_SORTED_DATASET_NAMES = 'SET_SORTED_DATASET_NAMES'
 
 
 export function reloadProtein(activeDatasetIds, callOnComplete){
@@ -140,6 +141,7 @@ export function fetchDatasets(){
                 }), 'name')
 
                 dispatch(setDatasets(samplesWithIdx))
+                dispatch(setSortedDatasetNames(sortedNames))
             })
             .catch(err => {
                 // we have to catch error messages differently for if backend is on or off.
@@ -181,4 +183,8 @@ export const gotoViz = (gotoViz) => ({
 
 export const addSequenceData = (sequenceData) => ({
     type: ADD_SEQUENCE_DATA, sequenceData: sequenceData
+})
+
+export const setSortedDatasetNames = (datasetNames) => ({
+    type: SET_SORTED_DATASET_NAMES, datasetNames: datasetNames
 })

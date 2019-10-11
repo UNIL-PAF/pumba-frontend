@@ -1,26 +1,32 @@
 import React, {
-    Component,
+    PureComponent
 } from 'react'
 import PropTypes from 'prop-types'
+import GelSlice from "../gelViz/GelSlice"
 
 
-class GelViz extends Component {
+class GelViz extends PureComponent {
+
+
+    plotOneGel = () => {
+        const {proteinData, datasets} = this.props
+
+        return <div>
+            <GelSlice
+            proteinData={proteinData}
+            datasets={datasets}
+            viewWidth={100}
+            viewHeight={400}></GelSlice>
+        </div>
+    }
 
     render() {
-        const {viewWidth, viewHeight} = this.props
+        const {proteinData, datasets} = this.props
 
-        console.log("got rendered")
+        console.log(proteinData)
+        console.log(datasets)
 
         return <div id={"gel-plot"}>
-                <svg className="gel-svg"
-                     viewBox={`0 0 ${viewWidth} ${viewHeight}`}
-                     width="100%"
-                     height="100%"
-                >
-                    <g>
-                        <text x={50} y={50}>coucou</text>
-                    </g>
-                </svg>
             </div>
     }
 

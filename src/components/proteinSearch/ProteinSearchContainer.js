@@ -95,7 +95,7 @@ class ProteinSearchContainer extends React.Component{
     }
 
     render(){
-        const {proteinIsLoading, error, datasets} = this.props
+        const {proteinIsLoading, error, datasets, datasetNames} = this.props
 
         return <div>
             <br/>
@@ -117,8 +117,8 @@ class ProteinSearchContainer extends React.Component{
                 </FormGroup>
                 <Row>
                     <Col className="text-center" md={{ size: 4, offset: 4 }}>
-                        {datasets && _.map(datasets, (val, key) => {
-                            return this.oneSample(key, val.isChecked)
+                        {datasets && _.map(datasetNames, (name) => {
+                            return this.oneSample(name, datasets[name].isChecked)
                         })}
                     </Col>
                 </Row>
@@ -150,7 +150,8 @@ ProteinSearchContainer.propTypes = {
     history: PropTypes.object.isRequired,
     loadDatasets: PropTypes.func.isRequired,
     setDatasets: PropTypes.func.isRequired,
-    datasets: PropTypes.object
+    datasets: PropTypes.object,
+    datasetNames: PropTypes.array
 };
 
 const mapStateToProps = (state) => {
@@ -159,7 +160,8 @@ const mapStateToProps = (state) => {
         proteinData: state.loadProtein.proteinData,
         error: state.loadProtein.error,
         gotoViz: state.loadProtein.gotoViz,
-        datasets: state.loadProtein.datasets
+        datasets: state.loadProtein.datasets,
+        datasetNames: state.loadProtein.datasetNames
     }
     return props
 }
