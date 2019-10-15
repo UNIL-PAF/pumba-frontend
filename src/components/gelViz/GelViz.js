@@ -13,6 +13,8 @@ class GelViz extends PureComponent {
 
     // set the margins
     margin = {top: 5, right: 10, bottom: 40, left: 40}
+    sliceWidth = 40
+    sliceSpacing = 10
 
     constructor(props) {
         super(props)
@@ -47,28 +49,26 @@ class GelViz extends PureComponent {
         const yAxis = axisLeft(this.state.yScale)
             .tickValues([1, 1.204119982655925, 1.397940008672038, 1.602059991327962, 1.812913356642856, 2, 2.204119982655925,2.397940008672038,2.602059991327962,2.778151250383644])
             .tickFormat((d) => { return Math.round(Math.pow(10,d)) + ' kDa'; })
-            //.tickValues([1, 2, 3, 5, 8, 13, 21]);
 
         const yAxisSelect = select(this.yAxis.current)
         yAxisSelect.call(yAxis)
     }
 
 
-    plotOneGel = (datasetName) => {
-        const {proteinData, datasets} = this.props
+    plotOneGel = (datasetName, i) => {
+        const {proteinData, datasets, viewHeight} = this.props
 
         const subProteinData = _.filter(proteinData, (p) => p.sample === datasetName)
         const dataset = datasets[datasetName]
 
-        console.log(subProteinData)
-        console.log(dataset)
-        console.log(datasetName)
-
         return <GelSlice
-                key={'gel-slice-' + datasetName}
-                proteinData={subProteinData}
+                key={'gel-slice-' + i}
+                proteinData={subProteinData[0]}
                 dataset={dataset}
-                width={10}
+                sliceWidth={this.sliceWidth}
+                sliceHeight={viewHeight - this.margin.top - this.margin.bottom}
+                xPos={i * (this.sliceWidth + this.sliceSpacing) + this.margin.left + 10}
+                yPos={this.margin.top}
                 >
                 </GelSlice>
     }
@@ -86,7 +86,7 @@ class GelViz extends PureComponent {
                          height="100%"
                     >
                         <g className="gel-y-axis" ref={this.yAxis} transform={'translate(' + this.margin.left + ',' + this.margin.top + ')'}/>
-                        {_.map(datasetNames, (datasetName) => {return this.plotOneGel(datasetName)})}
+                        {_.map(datasetNames, (datasetName, i) => {return this.plotOneGel(datasetName, i)})}
                     </svg>
                 </div>
     }
