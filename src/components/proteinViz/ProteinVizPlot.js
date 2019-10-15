@@ -80,6 +80,7 @@ class ProteinVizPlot extends Component {
     componentDidMount(){
         // add the x-axis
         const xAxis = axisBottom(this.state.xScale)
+            .tickValues([1, 1.204119982655925, 1.397940008672038, 1.602059991327962, 1.812913356642856, 2, 2.204119982655925,2.397940008672038,2.602059991327962,2.778151250383644])
             .tickFormat((d) => { return Math.round(Math.pow(10,d)) + ' kDa'; })
 
         select(this.xAxis).call(xAxis)

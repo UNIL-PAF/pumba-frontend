@@ -2,21 +2,22 @@ import React, {
     PureComponent
 } from 'react'
 import PropTypes from 'prop-types'
-import * as _ from 'lodash';
 import { connect } from 'react-redux'
 import GelViz from './GelViz'
 
 class GelVizContainer extends PureComponent {
 
     render(){
-        const {proteinData, datasets} = this.props
+        const {proteinData, datasets, datasetNames} = this.props
 
         console.log(proteinData)
 
         return <div id={"gel-viz"}>
             { proteinData && <GelViz proteinData={proteinData}
-                                         datasets={datasets}
-
+                                     datasets={datasets}
+                                     datasetNames={datasetNames}
+                                     viewWidth={800}
+                                     viewHeight={400}
             /> }
         </div>
     }
@@ -25,13 +26,15 @@ class GelVizContainer extends PureComponent {
 
 GelVizContainer.propTypes = {
     proteinData: PropTypes.array,
-    datasets: PropTypes.object.isRequired
+    datasets: PropTypes.object,
+    datasetNames: PropTypes.array,
 };
 
 const mapStateToProps = (state) => {
     const props = {
         proteinData: state.loadProtein.proteinData,
         datasets: state.loadProtein.datasets,
+        datasetNames: state.loadProtein.datasetNames
     }
     return props
 }

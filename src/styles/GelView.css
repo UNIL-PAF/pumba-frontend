@@ -1,4 +1,29 @@
-.gel-slice {
-    width: 100px;
+#gel-viz {
+    height: calc(100% - 60px);
+    width: 100%;
+    /*padding-bottom: 60px;*/
+}
+
+#gel-plot {
     height: 100%;
+    width: 100%;
+}
+
+.gel-y-axis {
+    font-size: 50%;
+    font-weight: lighter;
+}
+
+.gel-y-axis line {
+    stroke: #404040;
+    stroke-width: 0.5;
+}
+
+.gel-y-axis path {
+    stroke: #404040;
+    stroke-width: 0.5;
+}
+
+.gel-y-axis text {
+    fill: #404040
 }
