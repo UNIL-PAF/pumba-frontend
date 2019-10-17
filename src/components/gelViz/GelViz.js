@@ -2,19 +2,19 @@ import React, {
     PureComponent
 } from 'react'
 import PropTypes from 'prop-types'
-import GelSlice from "../gelViz/GelSlice"
+import GelSlice from "./GelSlice"
 import * as _ from 'lodash';
 import {scaleLinear} from "d3-scale";
 import {axisLeft} from "d3-axis";
 import {select} from "d3-selection";
 
-
 class GelViz extends PureComponent {
 
     // set the margins
-    margin = {top: 5, right: 10, bottom: 40, left: 40}
+    margin = {top: 100, right: 10, bottom: 40, left: 40}
     sliceWidth = 40
     sliceSpacing = 10
+    amplify = 5
 
     constructor(props) {
         super(props)
@@ -40,7 +40,9 @@ class GelViz extends PureComponent {
 
         this.state = {
             yScale: scaleLinear().range([viewHeight - this.margin.top - this.margin.bottom, 0]).domain([minMolWeight, maxMolWeight]),
-            theoMolWeight: theoMolWeight
+            theoMolWeight: theoMolWeight,
+            proteinDataTimestamp: proteinData.timestamp,
+            maxInt: this.getMaxInt()
         }
     }
 
@@ -54,30 +56,88 @@ class GelViz extends PureComponent {
         yAxisSelect.call(yAxis)
     }
 
+    componentDidUpdate(){
+        const {proteinData} = this.props
 
-    plotOneGel = (datasetName, i) => {
-        const {proteinData, datasets, viewHeight} = this.props
+        if(this.state.proteinDataTimestamp && (this.state.proteinDataTimestamp !== proteinData.timestamp)){
+            this.setState({maxInt: this.getMaxInt()})
+        }
+    }
 
-        const subProteinData = _.filter(proteinData, (p) => p.sample === datasetName)
-        const dataset = datasets[datasetName]
+    getMaxInt = () => {
+        return _.max(_.map(this.props.proteinData, function(pd){
+            return _.max(_.map(pd.proteins, function(p){
+                return _.max(p.intensities)
+            }))
+        }))
+    }
+
+    plotMergedGel = (thisProteinData, title, slicePos) => {
+        const {viewHeight} = this.props
+
+        const mergedData = { molWeights: thisProteinData.theoMergedProtein.theoMolWeights, intensities: thisProteinData.theoMergedProtein.intensities}
 
         return <GelSlice
-                key={'gel-slice-' + i}
-                proteinData={subProteinData[0]}
-                dataset={dataset}
+            key={'gel-slice-' + title}
+            title={title}
+            sliceWidth={this.sliceWidth}
+            sliceHeight={viewHeight - this.margin.top - this.margin.bottom}
+            xPos={slicePos * (this.sliceWidth + this.sliceSpacing) + this.margin.left + 10}
+            yPos={this.margin.top}
+            yScale={this.state.yScale}
+            maxInt={this.state.maxInt}
+            mergedData={mergedData}
+            amplify={this.amplify}
+        >
+        </GelSlice>
+    }
+
+    plotOrigGel = (activeDatasets, thisProteinData, slicePos) => {
+        const {viewHeight} = this.props
+
+        return _.map(activeDatasets, (dataset, k) => {
+            const selData = _.find(thisProteinData.proteins, (p) => { return p.dataSet.id === dataset.id})
+            const datasetData = {massFits: selData.dataSet.massFitResult.massFits, intensities: selData.intensities}
+            return <GelSlice
+                key={'gel-slice-' + dataset.name}
+                title={dataset.name}
                 sliceWidth={this.sliceWidth}
                 sliceHeight={viewHeight - this.margin.top - this.margin.bottom}
-                xPos={i * (this.sliceWidth + this.sliceSpacing) + this.margin.left + 10}
+                xPos={(slicePos + k) * (this.sliceWidth + this.sliceSpacing) + this.margin.left + 10}
                 yPos={this.margin.top}
-                >
-                </GelSlice>
+                yScale={this.state.yScale}
+                maxInt={this.state.maxInt}
+                datasetData={datasetData}
+                amplify={this.amplify}
+            >
+            </GelSlice>
+        })
+    }
+
+
+    plotGels = () => {
+        const {datasets, proteinData} = this.props
+
+        const activeDatasets = _.filter(datasets, 'isActive')
+        let slicePos = 0
+
+        return _.map(activeDatasets, (dataset) => {
+            const thisProteinData = _.find(proteinData, (p) => { return p.sample === dataset.name})
+            const activeDatasets = _.filter(dataset.datasets, 'isActive')
+
+            const origSlicePos = slicePos
+            slicePos += (1 + activeDatasets.length)
+
+            return <g key={'slice-group-' + dataset.name}>
+                {this.plotMergedGel(thisProteinData, dataset.name, origSlicePos)}
+                {this.plotOrigGel(activeDatasets, thisProteinData, origSlicePos + 1)}
+            </g>
+
+        })
     }
 
     render() {
-        const {proteinData, datasets, datasetNames, viewWidth, viewHeight} = this.props
-
-        console.log(proteinData)
-        console.log(datasets)
+        const {datasetNames, viewWidth, viewHeight} = this.props
 
         return  <div id={"gel-plot"}>
                     <svg className="gel-svg"
@@ -86,7 +146,7 @@ class GelViz extends PureComponent {
                          height="100%"
                     >
                         <g className="gel-y-axis" ref={this.yAxis} transform={'translate(' + this.margin.left + ',' + this.margin.top + ')'}/>
-                        {_.map(datasetNames, (datasetName, i) => {return this.plotOneGel(datasetName, i)})}
+                        {this.plotGels()}
                     </svg>
                 </div>
     }

@@ -10,8 +10,6 @@ class GelVizContainer extends PureComponent {
     render(){
         const {proteinData, datasets, datasetNames} = this.props
 
-        console.log(proteinData)
-
         return <div id={"gel-viz"}>
             { proteinData && <GelViz proteinData={proteinData}
                                      datasets={datasets}

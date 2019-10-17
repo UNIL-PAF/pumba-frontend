@@ -2,42 +2,68 @@ import React, {
     PureComponent
 } from 'react'
 import PropTypes from 'prop-types'
-import {scaleLinear} from "d3-scale";
-import {axisBottom, axisLeft} from "d3-axis";
-import {select} from "d3-selection";
-import * as _ from 'lodash';
+import MergedGelSlice from "./MergedGelSlice"
+import DatasetGelSlice from "./DatasetGelSlice"
+
 
 class GelSlice extends PureComponent {
 
-    plotTheoMergedProtein = () =>{
-        const {proteinData} = this.props
+    plotSlice = () => {
+        const {mergedData} = this.props
 
-        console.log(proteinData.theoMergedProtein)
-        const a =  _.map(_.range(proteinData.theoMergedProtein.theoMolWeights.length), (i) => {
-            return [proteinData.theoMergedProtein.theoMolWeights[i], proteinData.theoMergedProtein.intensities[i]]
-        })
-        console.log(a)
-
+        if(mergedData){
+            return this.plotMergedData()
+        }else{
+            return this.plotDatasetData()
+        }
     }
 
+    plotDatasetData = () => {
+        const {xPos, yPos, sliceWidth, sliceHeight, datasetData, amplify, maxInt, yScale} = this.props
+
+        return <DatasetGelSlice
+            datasetData={datasetData}
+            sliceWidth={sliceWidth}
+            sliceHeight={sliceHeight}
+            xPos={xPos}
+            yPos={yPos}
+            maxInt={maxInt}
+            yScale={yScale}
+            amplify={amplify}
+        >
+        </DatasetGelSlice>
+    }
+
+    plotMergedData = () => {
+        const {xPos, yPos, sliceWidth, sliceHeight, mergedData, amplify, maxInt, yScale} = this.props
+
+        return <MergedGelSlice
+            mergedData={mergedData}
+            sliceWidth={sliceWidth}
+            sliceHeight={sliceHeight}
+            xPos={xPos}
+            yPos={yPos}
+            maxInt={maxInt}
+            yScale={yScale}
+            amplify={amplify}
+        >
+        </MergedGelSlice>
+    }
+
+
     render() {
-        const {dataset, xPos, yPos, sliceWidth, sliceHeight, proteinData} = this.props
+        const {xPos, yPos, sliceWidth, sliceHeight, title} = this.props
 
-        console.log(proteinData)
-        console.log(dataset)
-
-        const rectStyle = {fill: '#FAFAFA'}
-
-        this.plotTheoMergedProtein()
-
-        return <g key={'gel-slice-' + dataset.sample}>
+        return <g key={'gel-slice-' + title}>
                     <rect
+                        className={'gel-slice'}
                         width={sliceWidth}
                         height={sliceHeight}
                         transform={'translate(' + xPos + ',' + yPos + ')'}
-                        style={rectStyle}
                     >
                     </rect>
+                    <text transform={'translate(' + (xPos+10) + ',' + (yPos-10) + ') rotate(-45)'} >{title}</text>
+                    {this.plotSlice()}
                 </g>
     }
 
@@ -45,12 +71,17 @@ class GelSlice extends PureComponent {
 }
 
 GelSlice.propTypes = {
-    proteinData: PropTypes.array.isRequired,
-    dataset: PropTypes.object.isRequired,
+    mergedData: PropTypes.object,
+    datasetData: PropTypes.object,
     sliceWidth: PropTypes.number.isRequired,
     sliceHeight: PropTypes.number.isRequired,
     xPos: PropTypes.number.isRequired,
-    xPos: PropTypes.number.isRequired,
+    yPos: PropTypes.number.isRequired,
+    title: PropTypes.string.isRequired,
+    maxInt: PropTypes.number.isRequired,
+    amplify: PropTypes.number.isRequired,
+    yScale: PropTypes.func.isRequired
+
 };
 
 export default GelSlice
