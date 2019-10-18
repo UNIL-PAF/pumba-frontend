@@ -14,7 +14,7 @@ class DatasetGelSlice extends PureComponent {
         const yPositions = _.map(datasetData.massFits, (m) => {return yScale(m)})
 
         const getLimitLower = (i) => {
-            if(i === arrLength) {
+            if(i === arrLength-1) {
                 return sliceHeight
             }else{
                 const h = (yPositions[i+1] - yPositions[i]) / 2
@@ -28,7 +28,6 @@ class DatasetGelSlice extends PureComponent {
             }else{
                 const h = (yPositions[i] - yPositions[i-1]) / 2
                 return (yPositions[i] - h)
-
             }
         }
 
@@ -39,8 +38,6 @@ class DatasetGelSlice extends PureComponent {
                 const colVal = (intensity / maxInt) * amplify
                 const corrCol = greyScale(colVal > 1 ? 1 : colVal)
                 const rectStyle = {fill: corrCol, stroke: corrCol, strokeWidth: 0.4}
-
-                if(!(yPos + upperLimit)) console.log(yPos, upperLimit, i)
 
                 const rect = <rect
                     key={'orig-slice-' + i}
