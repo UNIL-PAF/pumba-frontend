@@ -105,9 +105,13 @@ class GelViz extends PureComponent {
         return _.map(activeDatasets, (dataset, k) => {
             const selData = _.find(thisProteinData.proteins, (p) => { return p.dataSet.id === dataset.id})
             const datasetData = {massFits: selData.dataSet.massFitResult.massFits, intensities: selData.intensities}
+
+            console.log()
+
             return <GelSlice
                 key={'gel-slice-' + dataset.name}
-                title={dataset.name}
+                title={dataset.sample}
+                subTitle={dataset.name}
                 sliceWidth={this.sliceWidth}
                 sliceHeight={viewHeight - this.margin.top - this.margin.bottom}
                 xPos={(slicePos + k) * (this.sliceWidth + this.sliceSpacing) + this.margin.left + 10}
@@ -145,7 +149,7 @@ class GelViz extends PureComponent {
     }
 
     render() {
-        const {datasetNames, viewWidth, viewHeight} = this.props
+        const {viewWidth, viewHeight} = this.props
 
         return  <div id={"gel-plot"}>
                     <svg className="gel-svg"
@@ -164,7 +168,6 @@ class GelViz extends PureComponent {
 GelViz.propTypes = {
     proteinData: PropTypes.array.isRequired,
     datasets: PropTypes.object.isRequired,
-    datasetNames: PropTypes.array.isRequired,
     viewWidth: PropTypes.number.isRequired,
     viewHeight: PropTypes.number.isRequired,
 };

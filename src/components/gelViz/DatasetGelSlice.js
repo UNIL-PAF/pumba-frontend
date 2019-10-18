@@ -59,8 +59,6 @@ class DatasetGelSlice extends PureComponent {
             {this.plotDataset()}
         </g>
     }
-
-
 }
 
 DatasetGelSlice.propTypes = {
