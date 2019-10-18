@@ -7,6 +7,7 @@ import * as _ from 'lodash';
 import {scaleLinear} from "d3-scale";
 import {axisLeft} from "d3-axis";
 import {select} from "d3-selection";
+import {interpolateHsl} from "d3-interpolate";
 
 class GelViz extends PureComponent {
 
@@ -14,7 +15,12 @@ class GelViz extends PureComponent {
     margin = {top: 100, right: 10, bottom: 40, left: 40}
     sliceWidth = 40
     sliceSpacing = 10
+
+    // TODO put a slider
     amplify = 5
+
+    // grey scale
+    greyScale = interpolateHsl("#FAFAFA", "#444444")
 
     constructor(props) {
         super(props)
@@ -88,6 +94,7 @@ class GelViz extends PureComponent {
             maxInt={this.state.maxInt}
             mergedData={mergedData}
             amplify={this.amplify}
+            greyScale={this.greyScale}
         >
         </GelSlice>
     }
@@ -109,6 +116,7 @@ class GelViz extends PureComponent {
                 maxInt={this.state.maxInt}
                 datasetData={datasetData}
                 amplify={this.amplify}
+                greyScale={this.greyScale}
             >
             </GelSlice>
         })

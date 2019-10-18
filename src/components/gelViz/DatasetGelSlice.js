@@ -3,19 +3,19 @@ import React, {
 } from 'react'
 import PropTypes from 'prop-types'
 import * as _ from 'lodash';
-import {interpolateGreys} from 'd3-scale-chromatic'
+import {interpolateHsl} from 'd3-interpolate'
 
 class DatasetGelSlice extends PureComponent {
 
     plotDataset = () =>{
-        const {datasetData, sliceHeight, sliceWidth, xPos, yPos, yScale, maxInt, amplify} = this.props
+        const {datasetData, sliceHeight, sliceWidth, xPos, yPos, yScale, maxInt, amplify, greyScale} = this.props
 
         const arrLength = datasetData.massFits.length
         const yPositions = _.map(datasetData.massFits, (m) => {return yScale(m)})
 
         const getLimitLower = (i) => {
-            if(i === 0) {
-                return yPos + sliceHeight
+            if(i === arrLength) {
+                return sliceHeight
             }else{
                 const h = (yPositions[i+1] - yPositions[i]) / 2
                 return (yPositions[i] + h)
@@ -23,11 +23,12 @@ class DatasetGelSlice extends PureComponent {
         }
 
         const getLimitUpper = (i) => {
-            if(i === arrLength){
-                return yPos
+            if(i === 0) {
+                return 0
             }else{
                 const h = (yPositions[i] - yPositions[i-1]) / 2
                 return (yPositions[i] - h)
+
             }
         }
 
@@ -36,12 +37,10 @@ class DatasetGelSlice extends PureComponent {
                 const upperLimit = getLimitUpper(i)
                 const lowerLimit = getLimitLower(i)
                 const colVal = (intensity / maxInt) * amplify
-                const corrColVal = (colVal > 1 ? 1 : colVal)
-                const rectStyle = {fill: interpolateGreys(corrColVal)}
+                const corrCol = greyScale(colVal > 1 ? 1 : colVal)
+                const rectStyle = {fill: corrCol, stroke: corrCol, strokeWidth: 0.4}
 
-                if((lowerLimit - upperLimit) < 0){
-                    console.log(i, lowerLimit, upperLimit)
-                }
+                if(!(yPos + upperLimit)) console.log(yPos, upperLimit, i)
 
                 const rect = <rect
                     key={'orig-slice-' + i}
@@ -75,7 +74,8 @@ DatasetGelSlice.propTypes = {
     yPos: PropTypes.number.isRequired,
     maxInt: PropTypes.number.isRequired,
     yScale: PropTypes.func.isRequired,
-    amplify: PropTypes.number.isRequired
+    amplify: PropTypes.number.isRequired,
+    greyScale: PropTypes.func.isRequired
 
 };
 

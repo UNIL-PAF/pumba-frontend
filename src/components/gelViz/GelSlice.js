@@ -19,7 +19,7 @@ class GelSlice extends PureComponent {
     }
 
     plotDatasetData = () => {
-        const {xPos, yPos, sliceWidth, sliceHeight, datasetData, amplify, maxInt, yScale} = this.props
+        const {xPos, yPos, sliceWidth, sliceHeight, datasetData, amplify, maxInt, yScale, greyScale} = this.props
 
         return <DatasetGelSlice
             datasetData={datasetData}
@@ -30,12 +30,13 @@ class GelSlice extends PureComponent {
             maxInt={maxInt}
             yScale={yScale}
             amplify={amplify}
+            greyScale={greyScale}
         >
         </DatasetGelSlice>
     }
 
     plotMergedData = () => {
-        const {xPos, yPos, sliceWidth, sliceHeight, mergedData, amplify, maxInt, yScale} = this.props
+        const {xPos, yPos, sliceWidth, sliceHeight, mergedData, amplify, maxInt, yScale, greyScale} = this.props
 
         return <MergedGelSlice
             mergedData={mergedData}
@@ -46,6 +47,7 @@ class GelSlice extends PureComponent {
             maxInt={maxInt}
             yScale={yScale}
             amplify={amplify}
+            greyScale={greyScale}
         >
         </MergedGelSlice>
     }
@@ -80,7 +82,8 @@ GelSlice.propTypes = {
     title: PropTypes.string.isRequired,
     maxInt: PropTypes.number.isRequired,
     amplify: PropTypes.number.isRequired,
-    yScale: PropTypes.func.isRequired
+    yScale: PropTypes.func.isRequired,
+    greyScale: PropTypes.func.isRequired
 
 };
 

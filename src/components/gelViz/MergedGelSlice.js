@@ -8,7 +8,7 @@ import {interpolateGreys} from 'd3-scale-chromatic'
 class MergedGelSlice extends PureComponent {
 
     plotTheoMergedProtein = () =>{
-        const {mergedData, sliceHeight, sliceWidth, xPos, yPos, yScale, maxInt, amplify} = this.props
+        const {mergedData, sliceHeight, sliceWidth, xPos, yPos, yScale, maxInt, amplify, greyScale} = this.props
 
         const rectHeight = sliceHeight / mergedData.molWeights.length
         const zippedData = _.zip(mergedData.molWeights, mergedData.intensities)
@@ -17,8 +17,8 @@ class MergedGelSlice extends PureComponent {
         return _.map(fltData, (d, i) => {
             const rectY = yPos + yScale(d[0])
             const colVal = (d[1] / maxInt) * amplify
-            const corrColVal = (colVal > 1 ? 1 : colVal)
-            const rectStyle = {fill: interpolateGreys(corrColVal)}
+            const corrColVal = greyScale(colVal > 1 ? 1 : colVal)
+            const rectStyle = {fill: corrColVal, stroke: corrColVal, strokeWidth: 0.1}
 
             return <rect
                 key={'theo-slice-' + i}
@@ -48,7 +48,8 @@ MergedGelSlice.propTypes = {
     yPos: PropTypes.number.isRequired,
     maxInt: PropTypes.number.isRequired,
     yScale: PropTypes.func.isRequired,
-    amplify: PropTypes.number.isRequired
+    amplify: PropTypes.number.isRequired,
+    greyScale: PropTypes.func.isRequired
 
 };
 
