@@ -12,7 +12,7 @@ import {interpolateHsl} from "d3-interpolate";
 class GelViz extends PureComponent {
 
     // set the margins
-    margin = {top: 100, right: 10, bottom: 40, left: 40}
+    margin = {top: 60, right: 10, bottom: 40, left: 40}
     sliceWidth = 40
     sliceSpacing = 10
 
@@ -86,6 +86,7 @@ class GelViz extends PureComponent {
         return <GelSlice
             key={'gel-slice-' + title}
             title={title}
+            subTitle={'Merged'}
             sliceWidth={this.sliceWidth}
             sliceHeight={viewHeight - this.margin.top - this.margin.bottom}
             xPos={slicePos * (this.sliceWidth + this.sliceSpacing) + this.margin.left + 10}
@@ -99,7 +100,7 @@ class GelViz extends PureComponent {
         </GelSlice>
     }
 
-    plotOrigGel = (activeDatasets, thisProteinData, slicePos) => {
+    plotOrigGel = (activeDatasets, thisProteinData, slicePos, sampleName) => {
         const {viewHeight} = this.props
 
         return _.map(activeDatasets, (dataset, k) => {
@@ -110,7 +111,7 @@ class GelViz extends PureComponent {
 
             return <GelSlice
                 key={'gel-slice-' + dataset.name}
-                title={dataset.sample}
+                title={sampleName}
                 subTitle={dataset.name}
                 sliceWidth={this.sliceWidth}
                 sliceHeight={viewHeight - this.margin.top - this.margin.bottom}
@@ -142,7 +143,7 @@ class GelViz extends PureComponent {
 
             return <g key={'slice-group-' + dataset.name}>
                 {this.plotMergedGel(thisProteinData, dataset.name, origSlicePos)}
-                {this.plotOrigGel(activeDatasets, thisProteinData, origSlicePos + 1)}
+                {this.plotOrigGel(activeDatasets, thisProteinData, origSlicePos + 1, dataset.name)}
             </g>
 
         })

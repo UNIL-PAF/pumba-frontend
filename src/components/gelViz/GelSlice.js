@@ -54,7 +54,7 @@ class GelSlice extends PureComponent {
 
 
     render() {
-        const {xPos, yPos, sliceWidth, sliceHeight, title} = this.props
+        const {xPos, yPos, sliceWidth, sliceHeight, title, subTitle} = this.props
 
         return <g key={'gel-slice-' + title}>
                     <rect
@@ -64,7 +64,10 @@ class GelSlice extends PureComponent {
                         transform={'translate(' + xPos + ',' + yPos + ')'}
                     >
                     </rect>
-                    <text transform={'translate(' + (xPos+10) + ',' + (yPos-10) + ') rotate(-45)'} >{title}</text>
+                    <g transform={'translate(' + (xPos+10) + ',' + (yPos-10) + ') rotate(-45)'}>
+                            <text fontSize={12} fontWeight={'bold'}>{title}</text>
+                            <text y={10} fontSize={10}>{subTitle}</text>
+                    </g>
                     {this.plotSlice()}
                 </g>
     }
@@ -80,6 +83,7 @@ GelSlice.propTypes = {
     xPos: PropTypes.number.isRequired,
     yPos: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,
+    subTitle: PropTypes.string.isRequired,
     maxInt: PropTypes.number.isRequired,
     amplify: PropTypes.number.isRequired,
     yScale: PropTypes.func.isRequired,
