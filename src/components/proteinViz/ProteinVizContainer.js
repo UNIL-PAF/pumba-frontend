@@ -13,7 +13,7 @@ class ProteinVizContainer extends Component {
     render(){
         const {proteinData, mouseOverSampleId, mouseOverReplId, mouseLeaveSampleCB, zoomLeft, zoomRight,
             changeZoomRangeCB, theoMergedProteins,
-            clickedRepl, showPopupCB, removePopupCB, popup, clickedSlices,
+            showPopupCB, removePopupCB, popup, clickedSlices,
             clickSliceCB, unclickSliceCB, history, datasets, legendPos, setLegendPos, legendIsMoving} = this.props
 
         return <div id={"protein-viz"}>
@@ -23,7 +23,6 @@ class ProteinVizContainer extends Component {
                              mouseLeaveSampleCB={mouseLeaveSampleCB}
                              changeZoomRangeCB={changeZoomRangeCB} zoomLeft={zoomLeft} zoomRight={zoomRight}
                              theoMergedProteins={theoMergedProteins}
-                             clickedRepl={clickedRepl}
                              showPopupCB={showPopupCB} removePopupCB={removePopupCB} popup={popup}
                              clickedSlices={clickedSlices} clickSliceCB={clickSliceCB} unclickSliceCB={unclickSliceCB}
                              history={history} datasets={datasets} legendPos={legendPos} setLegendPos={setLegendPos}
@@ -45,7 +44,6 @@ ProteinVizContainer.propTypes = {
     removePopupCB: PropTypes.func.isRequired,
     clickSliceCB: PropTypes.func.isRequired,
     unclickSliceCB: PropTypes.func.isRequired,
-    clickedRepl: PropTypes.array.isRequired,
     zoomLeft: PropTypes.number,
     zoomRight: PropTypes.number,
     popup: PropTypes.object,
@@ -62,7 +60,6 @@ const mapStateToProps = (state) => {
         proteinData: state.loadProtein.proteinData,
         mouseOverSampleId : state.sampleSelection.mouseOverSampleId,
         mouseOverReplId : state.sampleSelection.mouseOverReplId,
-        clickedRepl : state.sampleSelection.clickedRepl,
         zoomLeft: state.proteinViz.zoomLeft,
         zoomRight: state.proteinViz.zoomRight,
         theoMergedProteins: state.proteinViz.theoMergedProteins,

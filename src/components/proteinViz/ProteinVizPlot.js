@@ -307,7 +307,6 @@ ProteinVizPlot.propTypes = {
     changeZoomRangeCB: PropTypes.func.isRequired,
     zoomLeft: PropTypes.number,
     zoomRight: PropTypes.number,
-    clickedRepl: PropTypes.array.isRequired,
     showPopupCB: PropTypes.func.isRequired,
     removePopupCB: PropTypes.func.isRequired,
     popup: PropTypes.object,
