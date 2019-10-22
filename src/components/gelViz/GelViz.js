@@ -41,12 +41,13 @@ class GelViz extends PureComponent {
         const minMolWeight = Math.log10(minMolWeightDa - 1)
         const maxMolWeight = Math.log10(maxMolWeightDa + 10)
 
+        this.yScale = scaleLinear().range([viewHeight - this.margin.top - this.margin.bottom, 0]).domain([minMolWeight, maxMolWeight])
+
         // just take the theoretical weight of the first protein, it should always be the same.
-        const theoMolWeight = Math.log10(proteinData[0].proteins[0].theoMolWeight)
+        this.theoMolWeight = proteinData[0].proteins[0].theoMolWeight
+        this.theoMolWeightPos = this.yScale(Math.log10(proteinData[0].proteins[0].theoMolWeight)) + this.margin.top
 
         this.state = {
-            yScale: scaleLinear().range([viewHeight - this.margin.top - this.margin.bottom, 0]).domain([minMolWeight, maxMolWeight]),
-            theoMolWeight: theoMolWeight,
             proteinDataTimestamp: proteinData.timestamp,
             maxInt: this.getMaxInt()
         }
@@ -54,7 +55,7 @@ class GelViz extends PureComponent {
 
     componentDidMount(){
         // add the y-axis
-        const yAxis = axisLeft(this.state.yScale)
+        const yAxis = axisLeft(this.yScale)
             .tickValues([1, 1.204119982655925, 1.397940008672038, 1.602059991327962, 1.812913356642856, 2, 2.204119982655925,2.397940008672038,2.602059991327962,2.778151250383644])
             .tickFormat((d) => { return Math.round(Math.pow(10,d)) + ' kDa'; })
 
@@ -91,7 +92,7 @@ class GelViz extends PureComponent {
             sliceHeight={viewHeight - this.margin.top - this.margin.bottom}
             xPos={slicePos * (this.sliceWidth + this.sliceSpacing) + this.margin.left + 10}
             yPos={this.margin.top}
-            yScale={this.state.yScale}
+            yScale={this.yScale}
             maxInt={this.state.maxInt}
             mergedData={mergedData}
             amplify={this.amplify}
@@ -121,7 +122,7 @@ class GelViz extends PureComponent {
                 sliceHeight={viewHeight - this.margin.top - this.margin.bottom}
                 xPos={(slicePos + k) * (this.sliceWidth + this.sliceSpacing) + this.margin.left + 10}
                 yPos={this.margin.top}
-                yScale={this.state.yScale}
+                yScale={this.yScale}
                 maxInt={this.state.maxInt}
                 datasetData={datasetData}
                 amplify={this.amplify}
@@ -134,6 +135,8 @@ class GelViz extends PureComponent {
 
     plotGels = () => {
         const {datasets, proteinData} = this.props
+
+        console.log(datasets)
 
         const activeDatasets = _.filter(datasets, 'isActive')
         let slicePos = 0
@@ -157,6 +160,23 @@ class GelViz extends PureComponent {
         })
     }
 
+    plotTheoMolWeight = () => {
+        const rightPos = this.props.viewWidth - this.margin.left
+
+        return <g>
+            <line
+                className={"theo-line-gel"}
+                x1={this.margin.left}
+                y1={this.theoMolWeightPos}
+                x2={rightPos}
+                y2={this.theoMolWeightPos}
+                stroke={"red"}
+                strokeWidth={ 1 }
+            ></line>
+            <text x={rightPos} y={this.theoMolWeightPos}>{this.theoMolWeight}</text>
+        </g>
+    }
+
     render() {
         const {viewWidth, viewHeight} = this.props
 
@@ -168,6 +188,7 @@ class GelViz extends PureComponent {
                     >
                         <g className="gel-y-axis" ref={this.yAxis} transform={'translate(' + this.margin.left + ',' + this.margin.top + ')'}/>
                         {this.plotGels()}
+                        {this.plotTheoMolWeight()}
                     </svg>
                 </div>
     }
