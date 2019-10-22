@@ -105,9 +105,13 @@ class GelViz extends PureComponent {
 
         return _.map(activeDatasets, (dataset, k) => {
             const selData = _.find(thisProteinData.proteins, (p) => { return p.dataSet.id === dataset.id})
-            const datasetData = {massFits: selData.dataSet.massFitResult.massFits, intensities: selData.intensities}
 
-            console.log()
+            // TODO this shouldnt happen. We should filter the datasets on that before
+            if(! selData){
+                return null
+            }
+
+            const datasetData = {massFits: selData.dataSet.massFitResult.massFits, intensities: selData.intensities}
 
             return <GelSlice
                 key={'gel-slice-' + dataset.name}
@@ -136,6 +140,10 @@ class GelViz extends PureComponent {
 
         return _.map(activeDatasets, (dataset) => {
             const thisProteinData = _.find(proteinData, (p) => { return p.sample === dataset.name})
+
+            // return null if there is no data
+            if(! thisProteinData) return null
+
             const activeDatasets = _.filter(dataset.datasets, 'isActive')
 
             const origSlicePos = slicePos
