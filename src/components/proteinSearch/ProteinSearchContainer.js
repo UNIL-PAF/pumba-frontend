@@ -31,7 +31,7 @@ class ProteinSearchContainer extends React.Component{
 
         // let's move to the ProteinViz, but only once
         if (gotoViz){
-            history.push('/proteins')
+            history.push('/lanes')
             gotoProteinViz(false)
         }
     }

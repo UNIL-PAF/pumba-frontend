@@ -19,18 +19,18 @@ const NavBar = () => (
                       </LinkContainer>
                   </NavItem>
                   <NavItem>
-                      <LinkContainer to="/proteins">
-                        <NavLink tag={Link} to="/proteins">Protein view</NavLink>
+                      <LinkContainer to="/lanes">
+                          <NavLink tag={Link} to="/lanes">Lanes</NavLink>
+                      </LinkContainer>
+                  </NavItem>
+                  <NavItem>
+                      <LinkContainer to="/graph">
+                        <NavLink tag={Link} to="/graph">Graph</NavLink>
                       </LinkContainer>
                   </NavItem>
                   <NavItem>
                       <LinkContainer to="/peptides">
-                          <NavLink tag={Link} to="/peptides">Peptide view</NavLink>
-                      </LinkContainer>
-                  </NavItem>
-                  <NavItem>
-                      <LinkContainer to="/gels">
-                          <NavLink tag={Link} to="/gels">Gel view</NavLink>
+                          <NavLink tag={Link} to="/peptides">Peptides</NavLink>
                       </LinkContainer>
                   </NavItem>
               </Nav>

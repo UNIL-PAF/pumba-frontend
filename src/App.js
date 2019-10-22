@@ -16,9 +16,9 @@ const App = ({ history }) => {
                 <NavBar />
                 <Switch>
                     <Route exact path="/" component={ProteinSearchContainer} />
-                    <Route path="/proteins" component={ProteinViz} />
+                    <Route path="/graph" component={ProteinViz} />
                     <Route path="/peptides" component={PeptideVizContainer} />
-                    <Route exact path="/gels" component={GelVizContainer} />
+                    <Route path="/lanes" component={GelVizContainer} />
                     <Route component={ProteinSearchContainer} />
                 </Switch>
                 <PumbaNotifications/>
