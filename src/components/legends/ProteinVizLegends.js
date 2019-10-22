@@ -123,16 +123,15 @@ class ProteinVizLegends extends PureComponent {
 
     plotReplicate = (repl, x, y, height, sampleIdx, colorIdx, isSampleSelected, sampleName) => {
         this.legendIdx = this.legendIdx + 1
-        const {mouseOverReplId, width, mouseClickReplCB, clickedRepl, removeSelectedReplCB} = this.props
+        const {mouseOverReplId, width, mouseClickReplCB, removeSelectedReplCB, datasets} = this.props
 
         // check if it is selected
-        const isSelected = _.some(clickedRepl, (x) => {return x.sampleIdx === sampleName && x.replIdx === repl.id})
+        const isSelected = (_.find(datasets[sampleName].datasets, (x) => {return x.id === repl.id})).isSelected
 
        const res = <LegendField
             key={repl.idx}
             clickeablePointer={repl.isActive ? true : false}
             mouseClickReplCB={mouseClickReplCB}
-            removeSelectedReplCB={removeSelectedReplCB}
             onMouseOver={repl.isActive ? this.mouseOverReplicate : undefined}
             mouseOverId={mouseOverReplId}
             sampleName={sampleName}
@@ -158,14 +157,14 @@ class ProteinVizLegends extends PureComponent {
     }
 
     plotSample = (sample, x, y, height) => {
-        const {width, mouseOverSampleId, clickedRepl, datasets} = this.props
+        const {width, mouseOverSampleId, datasets} = this.props
         const sampleIdx = sample.idx
         const sampleName = sample.name
 
         // don't show anything in case this is an unavailable dataset
         if(! datasets[sampleName].isAvailable) return null
 
-        const isSampleSelected = _.some(clickedRepl, (x) => {return x.sampleIdx === sampleName})
+        const isSampleSelected = _.some(datasets[sampleName].datasets, (x) => {return x.isSelected})
         const colorIdx = datasets[sampleName].idx
         const isActive = datasets[sampleName].isActive
         const showCheckbox = mouseOverSampleId === sampleName
@@ -230,17 +229,16 @@ class ProteinVizLegends extends PureComponent {
 
 
     render() {
-        const { x, y, width, clickedRepl, datasets, legendIsMoving} = this.props;
+        const { x, y, width, datasets, legendIsMoving} = this.props;
         const {mouseOverLegend} = this.state
 
         // transform the sample into a sorted array
         const samples = _.sortBy(_.values(_.mapValues(datasets, (value, key) => { value.name = key; return value; })), ['idx'])
 
         const legendHeight = 20
-        const selectedSampleIdx = _.countBy(clickedRepl, "sampleIdx")
         const nrRep = (mouseOverLegend ? _.sum(_.map(datasets, (d) => { return d.isActive && d.datasets.length})) : 0)
         const nrActiveDatasets = _.filter(datasets, (d) => {return d.isAvailable && (d.isActive || mouseOverLegend)}).length
-        const selectedReplNr = (! mouseOverLegend ? _.reduce(selectedSampleIdx, (res, v, k) => {return res + (datasets[k].isActive ? datasets[k].datasets.length : 0)}, 0) : 0)
+        const selectedReplNr = (! mouseOverLegend ? _.reduce(datasets, (res, v, k) => {return res + (_.some(datasets[k].datasets, 'isSelected') ? datasets[k].datasets.length : 0)}, 0) : 0)
 
         const nrLegends = nrActiveDatasets + nrRep + selectedReplNr
         const xShift = 12
@@ -282,13 +280,12 @@ ProteinVizLegends.propTypes = {
     mouseLeaveReplCB: PropTypes.func.isRequired,
     mouseLeaveSampleCB: PropTypes.func.isRequired,
     mouseClickReplCB: PropTypes.func.isRequired,
-    removeSelectedReplCB: PropTypes.func.isRequired,
-    clickedRepl: PropTypes.array.isRequired,
     datasets: PropTypes.object.isRequired,
     reloadProteinCB: PropTypes.func.isRequired,
     setDatasets: PropTypes.func.isRequired,
     legendIsMoving: PropTypes.bool.isRequired,
-    setMoveLegend: PropTypes.func.isRequired
+    setMoveLegend: PropTypes.func.isRequired,
+    datasetChanged: PropTypes.number.isRequired,
 };
 
 export default (ProteinVizLegends);

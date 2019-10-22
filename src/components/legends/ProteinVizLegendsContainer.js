@@ -8,24 +8,23 @@ import {
     mouseClickRepl, mouseLeaveRepl, mouseLeaveSample, mouseOverRepl,
     mouseOverSample, removeRepl
 } from "../../actions/sampleSelection";
-import {reloadProtein, setDatasets} from "../../actions/loadProtein"
+import {reloadProtein, selectDataset, setDatasets} from "../../actions/loadProtein"
 import {setMoveLegend} from "../../actions/legendActions";
 
 class ProteinVizLegendsContainer extends Component {
 
     render(){
-        const {x, y, width, theoMolWeight, clickedRepl, mouseOverSampleId, mouseOverSampleCB,
+        const {x, y, width, theoMolWeight, mouseOverSampleId, mouseOverSampleCB,
             mouseOverReplId, mouseOverReplCB, mouseLeaveReplCB, mouseLeaveSampleCB, mouseClickReplCB,
-            removeSelectedReplCB, datasets, reloadProteinCB, setDatasets, parentSvg,
-            legendIsMoving, setMoveLegend} = this.props
+            datasets, reloadProteinCB, setDatasets, legendIsMoving, setMoveLegend, datasetChanged} = this.props
 
-        return <ProteinVizLegends x={x} y={y} width={width} theoMolWeight={theoMolWeight} clickedRepl={clickedRepl}
+        return <ProteinVizLegends x={x} y={y} width={width} theoMolWeight={theoMolWeight}
                                  mouseOverSampleId={mouseOverSampleId} mouseOverSampleCB={mouseOverSampleCB}
                                  mouseOverReplId={mouseOverReplId} mouseOverReplCB={mouseOverReplCB}
                                  mouseLeaveReplCB={mouseLeaveReplCB} mouseLeaveSampleCB={mouseLeaveSampleCB}
-                                 mouseClickReplCB={mouseClickReplCB} removeSelectedReplCB={removeSelectedReplCB}
+                                 mouseClickReplCB={mouseClickReplCB}
                                  datasets={datasets} reloadProteinCB={reloadProteinCB} setDatasets={setDatasets}
-                                 parentSvg={parentSvg} legendIsMoving={legendIsMoving} setMoveLegend={setMoveLegend}
+                                 legendIsMoving={legendIsMoving} setMoveLegend={setMoveLegend} datasetChanged={datasetChanged}
                 >
                 </ProteinVizLegends>
     }
@@ -44,13 +43,12 @@ ProteinVizLegendsContainer.propTypes = {
     mouseLeaveReplCB: PropTypes.func.isRequired,
     mouseLeaveSampleCB: PropTypes.func.isRequired,
     mouseClickReplCB: PropTypes.func.isRequired,
-    removeSelectedReplCB: PropTypes.func.isRequired,
-    clickedRepl: PropTypes.array.isRequired,
     datasets: PropTypes.object.isRequired,
     reloadProteinCB: PropTypes.func.isRequired,
     setDatasets: PropTypes.func.isRequired,
     legendIsMoving: PropTypes.bool.isRequired,
-    setMoveLegend: PropTypes.func.isRequired
+    setMoveLegend: PropTypes.func.isRequired,
+    datasetChanged: PropTypes.number.isRequired,
 };
 
 const mapStateToProps = (state) => {
@@ -59,7 +57,8 @@ const mapStateToProps = (state) => {
         mouseOverSampleId : state.sampleSelection.mouseOverSampleId,
         mouseOverReplId : state.sampleSelection.mouseOverReplId,
         datasets: state.loadProtein.datasets,
-        legendIsMoving: state.legend.legendIsMoving
+        legendIsMoving: state.legend.legendIsMoving,
+        datasetChanged: state.loadProtein.datasetChanged
     }
     return props
 }
@@ -70,11 +69,10 @@ const mapDispatchToProps = (dispatch) => {
         mouseOverReplCB: replIdx => { dispatch(mouseOverRepl(replIdx)) },
         mouseLeaveSampleCB: () => { dispatch(mouseLeaveSample()) },
         mouseLeaveReplCB: () => { dispatch(mouseLeaveRepl()) },
-        mouseClickReplCB: (sampleIdx, replIdx) => { dispatch(mouseClickRepl(sampleIdx, replIdx)) },
-        removeSelectedReplCB: (sampleIdx, replIdx) => { dispatch(removeRepl(sampleIdx, replIdx)) },
+        mouseClickReplCB: (sampleIdx, replIdx) => { dispatch(selectDataset(sampleIdx, replIdx)) },
         reloadProteinCB: (activeDatasetIds, callOnComplete) => { dispatch(reloadProtein(activeDatasetIds, callOnComplete))},
         setDatasets: (datasets) => { dispatch(setDatasets(datasets)) },
-        setMoveLegend: (isMoving) => { dispatch(setMoveLegend(isMoving))}
+        setMoveLegend: (isMoving) => { dispatch(setMoveLegend(isMoving))},
     }
 }
 

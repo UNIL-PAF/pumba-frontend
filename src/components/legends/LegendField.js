@@ -1,13 +1,12 @@
 import React, {
-    Component,
+    PureComponent,
 } from 'react';
 import PropTypes from 'prop-types';
-import CloseButton from '../common/CloseButton'
 import SvgCheckbox from '../common/svgCheckbox'
 
 const defaultFontSize = "50%"
 
-class LegendField extends Component {
+class LegendField extends PureComponent {
 
     clickOnLegend = () => {
         const {clickeablePointer, sampleName, mouseClickReplCB, replId} = this.props
@@ -45,9 +44,9 @@ class LegendField extends Component {
             <rect
                 className="merged-legend-field"
                 x={x+3}
-                y={y}
+                y={y+1}
                 width={width-3}
-                height={height-1}
+                height={height-3}
                 fill={"white"}
                 stroke={(isSelected) ? "silver" : undefined}
                 rx={5}
@@ -56,7 +55,6 @@ class LegendField extends Component {
             {isUnactiveable && showCheckbox && <SvgCheckbox x={x + 6} y={y + 2} changeSelection={changeSelection} isActive={isActive}></SvgCheckbox>}
             <text x={x+width*0.25} y={yMiddle} fontFamily="sans-serif" fontSize={defaultFontSize} fill={textColor || "black"}>{text}</text>
             { legend(x+10, y+height-2, height+4, legendSettings) }
-            { (isSelected) && <CloseButton x={x + width} y={y + 2} onCloseCB={() => this.closeLegend(sampleName, replId)}></CloseButton> }
         </g>
 
     }

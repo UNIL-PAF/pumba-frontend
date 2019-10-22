@@ -1,12 +1,27 @@
 import {
     REQUEST_PROTEIN, PROTEIN_IS_LOADED, ADD_PROTEIN_DATA, PROTEIN_LOAD_ERROR,
-    GOTO_VIZ, ADD_SEQUENCE_DATA, SET_DATASETS, SET_SORTED_DATASET_NAMES
+    GOTO_VIZ, ADD_SEQUENCE_DATA, SET_DATASETS, SET_SORTED_DATASET_NAMES, SELECT_DATASET
 } from '../actions/loadProtein'
+import * as _ from 'lodash';
 
 const initialState = {
     proteinIsLoading: false,
-    proteinData: null
+    proteinData: null,
+    datasetChanged: 0
 }
+
+const selectDataset = (state, sampleIdx, replIdx) => {
+    const newState = {...state}
+    const newDatasets = _.map(newState.datasets[sampleIdx].datasets, (d) => {
+        if(d.id === replIdx) d.isSelected = !d.isSelected
+        return d
+    })
+    newState.datasets[sampleIdx].datasets = newDatasets
+    newState.datasetChanged += 1
+    return newState
+}
+
+
 
 const loadProteinReducer = (state = initialState, action) => {
     switch (action.type) {
@@ -26,6 +41,8 @@ const loadProteinReducer = (state = initialState, action) => {
             return { ...state, gotoViz: action.gotoViz}
         case SET_SORTED_DATASET_NAMES:
             return { ...state, datasetNames: action.datasetNames}
+        case SELECT_DATASET:
+            return selectDataset(state, action.sampleIdx, action.replIdx)
         default:
             return state
     }
