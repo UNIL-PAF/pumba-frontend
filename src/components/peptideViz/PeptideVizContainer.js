@@ -12,9 +12,9 @@ import {setLegendPos} from "../../actions/legendActions";
 class PeptideVizContainer extends Component {
 
     render(){
-        const {proteinData, sequenceData, zoom, changeZoomRangeCB, clickedRepl, clickedSlices, mouseOverSampleId,
+        const {proteinData, sequenceData, zoom, changeZoomRangeCB, clickedSlices, mouseOverSampleId,
             mouseOverReplId, mouseLeaveSampleCB, showPopupCB, removePopupCB, popup, datasets, legendPos, setLegendPos,
-            legendIsMoving} = this.props
+            legendIsMoving, datasetChanged} = this.props
 
         const samples = _.map(proteinData, (p, i) => {
             const replicates = _.map(p.proteins, (oneProt, i) => {
@@ -30,7 +30,6 @@ class PeptideVizContainer extends Component {
                                          viewHeight={400}
                                          zoom={zoom}
                                          changeZoomRangeCB={changeZoomRangeCB}
-                                         clickedRepl={clickedRepl}
                                          clickedSlices={clickedSlices}
                                          samples={samples}
                                          mouseOverSampleId={mouseOverSampleId}
@@ -43,6 +42,7 @@ class PeptideVizContainer extends Component {
                                          legendPos={legendPos}
                                          setLegendPos={setLegendPos}
                                          legendIsMoving={legendIsMoving}
+                                         datasetChanged={datasetChanged}
                             /> }
         </div>
     }
@@ -54,7 +54,6 @@ PeptideVizContainer.propTypes = {
     sequenceData: PropTypes.object,
     zoom: PropTypes.object,
     changeZoomRangeCB: PropTypes.func.isRequired,
-    clickedRepl: PropTypes.array.isRequired,
     clickedSlices: PropTypes.array.isRequired,
     mouseOverSampleId: PropTypes.string,
     mouseOverReplId: PropTypes.string,
@@ -66,6 +65,7 @@ PeptideVizContainer.propTypes = {
     legendPos: PropTypes.object,
     setLegendPos: PropTypes.func.isRequired,
     legendIsMoving: PropTypes.bool.isRequired,
+    datasetChanged: PropTypes.number.isRequired,
 };
 
 const mapStateToProps = (state) => {
@@ -73,14 +73,14 @@ const mapStateToProps = (state) => {
         proteinData: state.loadProtein.proteinData,
         sequenceData: state.loadProtein.sequenceData,
         zoom: state.peptideViz.zoom,
-        clickedRepl : state.sampleSelection.clickedRepl,
         clickedSlices: state.sampleSelection.clickedSlices,
         mouseOverSampleId : state.sampleSelection.mouseOverSampleId,
         mouseOverReplId : state.sampleSelection.mouseOverReplId,
         popup: state.peptideViz.popup,
         datasets: state.loadProtein.datasets,
         legendPos: state.legend.legendPos,
-        legendIsMoving: state.legend.legendIsMoving
+        legendIsMoving: state.legend.legendIsMoving,
+        datasetChanged: state.loadProtein.datasetChanged
     }
     return props
 }

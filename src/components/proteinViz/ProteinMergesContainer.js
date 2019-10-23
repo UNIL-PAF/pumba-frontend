@@ -11,14 +11,14 @@ class ProteinMergesContainer extends PureComponent {
 
     render(){
         const {proteinData, mouseOverSampleId, mouseOverReplId, zoomLeft, zoomRight,
-            theoMergedProteins, clickedRepl, showPopupCB, removePopupCB, popup, clickedSlices,
+            theoMergedProteins, showPopupCB, removePopupCB, popup, clickedSlices,
             clickSliceCB, unclickSliceCB, history, datasets, xScale, yScale, margin, svgParent,
             scaleChanged, getMousePos, datasetChanged} = this.props
 
         return <ProteinMerges proteinData={proteinData} theoMergedProteins={theoMergedProteins}
                               unclickSliceCB={unclickSliceCB} clickSliceCB={clickSliceCB}
                               mouseOverSampleId={mouseOverSampleId} mouseOverReplId={mouseOverReplId}
-                              zoomLeft={zoomLeft} zoomRight={zoomRight} clickedRepl={clickedRepl}
+                              zoomLeft={zoomLeft} zoomRight={zoomRight}
                               showPopupCB={showPopupCB} removePopupCB={removePopupCB} popup={popup}
                               clickedSlices={clickedSlices} history={history} xScale={xScale}
                               yScale={yScale} margin={margin} svgParent={svgParent} datasetChanged={datasetChanged}

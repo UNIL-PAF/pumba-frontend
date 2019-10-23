@@ -53,7 +53,6 @@ ProteinVizLegendsContainer.propTypes = {
 
 const mapStateToProps = (state) => {
     const props = {
-        clickedRepl : state.sampleSelection.clickedRepl,
         mouseOverSampleId : state.sampleSelection.mouseOverSampleId,
         mouseOverReplId : state.sampleSelection.mouseOverReplId,
         datasets: state.loadProtein.datasets,

@@ -170,7 +170,7 @@ class PeptideViz extends PureComponent {
     }
 
     plotPeptides = () => {
-        const {proteinData, clickedRepl, clickedSlices, mouseOverSampleId, mouseOverReplId,
+        const {proteinData, clickedSlices, mouseOverSampleId, mouseOverReplId,
             showPopupCB, removePopupCB, datasets} = this.props
 
         const {zoomLeft, zoomRight, zoomTop, pepCounter} = this.state
@@ -200,9 +200,7 @@ class PeptideViz extends PureComponent {
 
                 return fltProt.map((peptide, k) => {
                     // check if given replicate is activated on proteinViz
-                    const replIsClicked = _.some(clickedRepl, (x) => {
-                        return x.sampleIdx === sample.sample && x.replIdx === protein.dataSet.id
-                    })
+                    const replIsClicked = _.some(datasets[sample.sample].datasets, (d) => { return d.id === protein.dataSet.id && d.isSelected})
 
                     const sliceIsClicked = _.some(clickedSlices, (slice) => {
                         return sliceFromReplIsClicked & (slice.idx+1) === peptide.sliceNr
@@ -305,7 +303,6 @@ PeptideViz.propTypes = {
     viewHeight: PropTypes.number.isRequired,
     zoom: PropTypes.object,
     changeZoomRangeCB: PropTypes.func,
-    clickedRepl: PropTypes.array.isRequired,
     clickedSlices: PropTypes.array.isRequired,
     sequenceData: PropTypes.object,
     mouseOverSampleId: PropTypes.string,
@@ -318,6 +315,7 @@ PeptideViz.propTypes = {
     legendPos: PropTypes.object,
     setLegendPos: PropTypes.func.isRequired,
     legendIsMoving: PropTypes.bool.isRequired,
+    datasetChanged: PropTypes.number.isRequired,
 };
 
 export default (PeptideViz)
