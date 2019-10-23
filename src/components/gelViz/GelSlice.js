@@ -52,9 +52,18 @@ class GelSlice extends PureComponent {
         </MergedGelSlice>
     }
 
+    onMouseClick = () => {
+        const {mouseClickCB, sampleName} = this.props
+
+        if(mouseClickCB){
+            mouseClickCB(sampleName)
+        }
+    }
 
     render() {
-        const {xPos, yPos, sliceWidth, sliceHeight, title, subTitle} = this.props
+        const {xPos, yPos, sliceWidth, sliceHeight, title, subTitle, mergedData} = this.props
+
+        const rectStyle = (mergedData ? {cursor: 'pointer'} : {})
 
         return <g key={'gel-slice-' + title}>
                     <rect
@@ -62,6 +71,8 @@ class GelSlice extends PureComponent {
                         width={sliceWidth}
                         height={sliceHeight}
                         transform={'translate(' + xPos + ',' + yPos + ')'}
+                        onClick={() => this.onMouseClick()}
+                        style={rectStyle}
                     >
                     </rect>
                     <g transform={'translate(' + (xPos+10) + ',' + (yPos-10) + ') rotate(-45)'}>
@@ -87,7 +98,9 @@ GelSlice.propTypes = {
     maxInt: PropTypes.number.isRequired,
     amplify: PropTypes.number.isRequired,
     yScale: PropTypes.func.isRequired,
-    greyScale: PropTypes.func.isRequired
+    greyScale: PropTypes.func.isRequired,
+    mouseClickCB: PropTypes.func,
+    sampleName: PropTypes.string
 
 };
 

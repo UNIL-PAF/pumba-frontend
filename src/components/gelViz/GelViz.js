@@ -79,8 +79,8 @@ class GelViz extends PureComponent {
         }))
     }
 
-    plotMergedGel = (thisProteinData, title, slicePos) => {
-        const {viewHeight} = this.props
+    plotMergedGel = (thisProteinData, title, slicePos, sampleName) => {
+        const {viewHeight, mouseClickSampleCB} = this.props
 
         const mergedData = { molWeights: thisProteinData.theoMergedProtein.theoMolWeights, intensities: thisProteinData.theoMergedProtein.intensities}
 
@@ -97,6 +97,8 @@ class GelViz extends PureComponent {
             mergedData={mergedData}
             amplify={this.amplify}
             greyScale={this.greyScale}
+            mouseClickCB={mouseClickSampleCB}
+            sampleName={sampleName}
         >
         </GelSlice>
     }
@@ -148,7 +150,7 @@ class GelViz extends PureComponent {
             const nrSelectedDatasets = _.reduce(dataset.datasets, (acc2, d2) => {return (d2.isSelected ? 1 : 0) + acc2}, 0)
 
             const plots =  <g key={'slice-group-' + dataset.name}>
-                {this.plotMergedGel(thisProteinData, dataset.name, slicePos)}
+                {this.plotMergedGel(thisProteinData, dataset.name, slicePos, dataset.name)}
                 {nrSelectedDatasets && this.plotOrigGels(dataset.datasets, thisProteinData, slicePos+1, dataset.name)}
             </g>
 
@@ -206,6 +208,7 @@ GelViz.propTypes = {
     datasets: PropTypes.object.isRequired,
     viewWidth: PropTypes.number.isRequired,
     viewHeight: PropTypes.number.isRequired,
+    mouseClickSampleCB: PropTypes.func.isRequired
 };
 
 export default GelViz

@@ -18,7 +18,12 @@ class MergedGelSlice extends PureComponent {
             const rectY = yPos + yScale(d[0])
             const colVal = (d[1] / maxInt) * amplify
             const corrColVal = greyScale(colVal > 1 ? 1 : colVal)
-            const rectStyle = {fill: corrColVal, stroke: corrColVal, strokeWidth: 0.1}
+            const rectStyle = {
+                fill: corrColVal,
+                stroke: corrColVal,
+                strokeWidth: 0.1,
+                pointerEvents: 'none'
+            }
 
             return <rect
                 key={'theo-slice-' + i}

@@ -14,6 +14,7 @@ export const ADD_SEQUENCE_DATA = 'ADD_SEQUENCE_DATA'
 export const SET_DATASETS = 'SET_DATASETS'
 export const SET_SORTED_DATASET_NAMES = 'SET_SORTED_DATASET_NAMES'
 export const SELECT_DATASET = 'SELECT_DATASET'
+export const SELECT_ALL_DATASETS = 'SELECT_ALL_DATASETS'
 
 
 export function reloadProtein(activeDatasetIds, callOnComplete){
@@ -192,4 +193,8 @@ export const setSortedDatasetNames = (datasetNames) => ({
 
 export const selectDataset = (sampleIdx, replIdx) => ({
     type: SELECT_DATASET, sampleIdx: sampleIdx, replIdx: replIdx
+})
+
+export const selectAllDatasets = (sampleIdx) => ({
+    type: SELECT_ALL_DATASETS, sampleIdx: sampleIdx
 })
