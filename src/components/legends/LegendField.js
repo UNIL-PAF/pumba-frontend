@@ -20,7 +20,6 @@ class LegendField extends PureComponent {
         this.props.removeSelectedReplCB(sampleIdx, replIdx)
     }
 
-
     render() {
         const { x, y, width, text, height, legend, onMouseOver, mouseOverId,
             clickeablePointer, isSelected, colorIdx, isUnactiveable, changeSelection,

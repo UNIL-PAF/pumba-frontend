@@ -122,6 +122,10 @@ class ProteinVizPlot extends Component {
         this.setState({mouseX: x, mouseY: y})
     }
 
+    mouseEnter = () => {
+
+    }
+
     componentDidUpdate(){
         const {zoomLeft, zoomRight, proteinData} = this.props
 
@@ -254,6 +258,7 @@ class ProteinVizPlot extends Component {
                  height="100%"
                  ref={this.svg}
                  onMouseMove={(e) => this.mouseMove(e)}
+                 onMouseEnter={(e) => this.mouseEnter(e)}
             >
 
                 <g className="brush-g" ref={this.brushG} onDoubleClick={this.zoomOut}

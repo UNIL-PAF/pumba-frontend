@@ -6,6 +6,7 @@ import LegendField from './LegendField'
 import * as _ from 'lodash';
 import { sampleColor } from '../common/colorSettings'
 import MoveButton from "../common/MoveButton";
+import {mouseLeaveRepl} from "../../actions/sampleSelection";
 
 class ProteinVizLegends extends PureComponent {
 
@@ -123,7 +124,7 @@ class ProteinVizLegends extends PureComponent {
 
     plotReplicate = (repl, x, y, height, sampleIdx, colorIdx, isSampleSelected, sampleName) => {
         this.legendIdx = this.legendIdx + 1
-        const {mouseOverReplId, width, mouseClickReplCB, removeSelectedReplCB, datasets} = this.props
+        const {mouseOverReplId, width, mouseClickReplCB, datasets} = this.props
 
         // check if it is selected
         const isSelected = (_.find(datasets[sampleName].datasets, (x) => {return x.id === repl.id})).isSelected
@@ -215,6 +216,7 @@ class ProteinVizLegends extends PureComponent {
 
     onMouseLeave = () => {
         this.setState({mouseOverLegend: false})
+        this.props.mouseLeaveReplCB()
     }
 
     startMoving = (e) => {
@@ -226,7 +228,6 @@ class ProteinVizLegends extends PureComponent {
         const {setMoveLegend} = this.props
         setMoveLegend(false)
     }
-
 
     render() {
         const { x, y, width, datasets, legendIsMoving} = this.props;
