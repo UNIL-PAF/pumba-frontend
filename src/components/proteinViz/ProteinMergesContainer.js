@@ -13,7 +13,7 @@ class ProteinMergesContainer extends PureComponent {
         const {proteinData, mouseOverSampleId, mouseOverReplId, zoomLeft, zoomRight,
             theoMergedProteins, clickedRepl, showPopupCB, removePopupCB, popup, clickedSlices,
             clickSliceCB, unclickSliceCB, history, datasets, xScale, yScale, margin, svgParent,
-            scaleChanged, getMousePos} = this.props
+            scaleChanged, getMousePos, datasetChanged} = this.props
 
         return <ProteinMerges proteinData={proteinData} theoMergedProteins={theoMergedProteins}
                               unclickSliceCB={unclickSliceCB} clickSliceCB={clickSliceCB}
@@ -21,7 +21,7 @@ class ProteinMergesContainer extends PureComponent {
                               zoomLeft={zoomLeft} zoomRight={zoomRight} clickedRepl={clickedRepl}
                               showPopupCB={showPopupCB} removePopupCB={removePopupCB} popup={popup}
                               clickedSlices={clickedSlices} history={history} xScale={xScale}
-                              yScale={yScale} margin={margin} svgParent={svgParent}
+                              yScale={yScale} margin={margin} svgParent={svgParent} datasetChanged={datasetChanged}
                               scaleChanged={scaleChanged} datasets={datasets} getMousePos={getMousePos}>
         </ProteinMerges>
     }
@@ -37,7 +37,6 @@ ProteinMergesContainer.propTypes = {
     removePopupCB: PropTypes.func.isRequired,
     clickSliceCB: PropTypes.func.isRequired,
     unclickSliceCB: PropTypes.func.isRequired,
-    clickedRepl: PropTypes.array.isRequired,
     zoomLeft: PropTypes.number,
     zoomRight: PropTypes.number,
     popup: PropTypes.object,
@@ -49,7 +48,8 @@ ProteinMergesContainer.propTypes = {
     margin: PropTypes.object.isRequired,
     svgParent: PropTypes.object.isRequired,
     scaleChanged: PropTypes.number.isRequired,
-    getMousePos: PropTypes.func.isRequired
+    getMousePos: PropTypes.func.isRequired,
+    datasetChanged: PropTypes.number.isRequired,
 };
 
 const mapStateToProps = (state) => {
@@ -57,13 +57,13 @@ const mapStateToProps = (state) => {
         proteinData: state.loadProtein.proteinData,
         mouseOverSampleId : state.sampleSelection.mouseOverSampleId,
         mouseOverReplId : state.sampleSelection.mouseOverReplId,
-        clickedRepl : state.sampleSelection.clickedRepl,
         zoomLeft: state.proteinViz.zoomLeft,
         zoomRight: state.proteinViz.zoomRight,
         theoMergedProteins: state.proteinViz.theoMergedProteins,
         popup: state.proteinViz.popup,
         clickedSlices: state.sampleSelection.clickedSlices,
-        datasets: state.loadProtein.datasets
+        datasets: state.loadProtein.datasets,
+        datasetChanged: state.loadProtein.datasetChanged
     }
     return props
 }

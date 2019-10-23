@@ -136,8 +136,6 @@ class GelViz extends PureComponent {
     plotGels = () => {
         const {datasets, proteinData} = this.props
 
-        console.log(datasets)
-
         const activeDatasets = _.filter(datasets, 'isActive')
         let slicePos = 0
 

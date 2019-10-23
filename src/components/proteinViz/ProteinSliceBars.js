@@ -6,7 +6,7 @@ import * as _ from 'lodash'
 import SliceBar from "./SliceBar"
 
 
-class SliceBars extends PureComponent {
+class   SliceBars extends PureComponent {
 
     constructor(props) {
         super(props)
@@ -100,11 +100,10 @@ class SliceBars extends PureComponent {
     }
 
     render() {
-        const {sampleName, replId, proteins, color} = this.props
-        const currentProtein = _.find(proteins.proteins, (p) => {return p.dataSet.id === replId})
+        const {sampleName, proteins, color} = this.props
 
         return  <g>
-            { this.plotOneProtein(currentProtein, color, "slice-bar-"+sampleName+"-", true) }
+            { this.plotOneProtein(proteins, color, "slice-bar-"+sampleName+"-", true) }
         </g>
     }
 
@@ -114,7 +113,6 @@ SliceBars.propTypes = {
     proteins: PropTypes.object.isRequired,
     sampleName: PropTypes.string.isRequired,
     color: PropTypes.string.isRequired,
-    replId: PropTypes.string.isRequired,
     margin: PropTypes.object.isRequired,
     xScale: PropTypes.func.isRequired,
     yScale: PropTypes.func.isRequired,

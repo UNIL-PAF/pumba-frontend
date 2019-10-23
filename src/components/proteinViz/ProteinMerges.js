@@ -42,27 +42,38 @@ class ProteinMerges extends PureComponent {
         return res
     }
 
-    plotSliceBars = (sampleName, replId) => {
+    plotSliceBars = () => {
         const {zoomLeft, zoomRight, showPopupCB, removePopupCB, clickSliceCB, unclickSliceCB, clickedSlices, popup,
-            history, margin, xScale, yScale, svgParent, scaleChanged, datasets, proteinData, getMousePos} = this.props
+            history, margin, xScale, yScale, svgParent, scaleChanged, datasets, proteinData, getMousePos,
+            mouseOverSampleId, mouseOverReplId} = this.props
 
-        const proteins = _.find(proteinData, (p) => { return p.sample === sampleName})
+        return _.flatMap(datasets, (v, sample) => {
+            const proteins = _.find(proteinData, (p) => { return p.sample === sample})
+            const color = sampleColor(v.idx)
 
-        // if we unactivate a sample with a selected replicate it will have no protein
-        if(! proteins) return null
+            return _.map(v.datasets, (d) => {
+                // check if the mouse is over this dataset
+                const mouseOverDataset = (mouseOverSampleId === sample && mouseOverReplId === d.id)
 
-        const color = sampleColor(datasets[proteins.sample].idx)
+                // only plot the bars if the dataset is selected
+                // if we unactivate a sample with a selected replicate it will have no protein
+                if(!mouseOverDataset && (!d.isSelected || !proteins)) return null
 
-        return <ProteinSliceBars key={sampleName + ':' + replId} sampleName={sampleName} replId={replId} margin={margin} xScale={xScale}
-                                 yScale={yScale} zoomLeft={zoomLeft} zoomRight={zoomRight} proteins={proteins}
-                                 svgParent={svgParent} showPopupCB={showPopupCB} removePopupCB={removePopupCB}
-                                 clickSliceCB={clickSliceCB} unclickSliceCB={unclickSliceCB} clickedSlices={clickedSlices} mouseOverTag={popup ? popup.tag : undefined}
-                                 history={history} scaleChanged={scaleChanged} color={color} getMousePos={getMousePos}
-        />
+                const oneProtein = _.find(proteins.proteins, (p) => { return p.dataSet.id === d.id})
+
+                return <ProteinSliceBars key={v.idx + ':' + d.idx} sampleName={sample} margin={margin} xScale={xScale}
+                                         yScale={yScale} zoomLeft={zoomLeft} zoomRight={zoomRight} proteins={oneProtein}
+                                         svgParent={svgParent} showPopupCB={showPopupCB} removePopupCB={removePopupCB}
+                                         clickSliceCB={clickSliceCB} unclickSliceCB={unclickSliceCB} clickedSlices={clickedSlices} mouseOverTag={popup ? popup.tag : undefined}
+                                         history={history} scaleChanged={scaleChanged} color={color} getMousePos={getMousePos}
+                />
+
+            })
+        })
     }
 
     render() {
-        const {proteinData, mouseOverSampleId, mouseOverReplId, theoMergedProteins, clickedRepl} = this.props
+        const {proteinData, theoMergedProteins} = this.props
 
         // theoMergedProteins contain the filtered values, based on the given zoom range
         // they were filtered in the merged2DPlotActions
@@ -70,8 +81,7 @@ class ProteinMerges extends PureComponent {
 
         return <g>
             { _.map(mergedData, (p, i) => this.plotOneProteinMerge(p, proteinData[i])) }
-            { typeof mouseOverReplId !== "undefined" && this.plotSliceBars(mouseOverSampleId, mouseOverReplId)}
-            { (clickedRepl.length === 0) || _.map(clickedRepl, (v) => {return this.plotSliceBars(v.sampleIdx, v.replIdx)}) }
+            { this.plotSliceBars() }
         </g>
     }
 
@@ -86,7 +96,6 @@ ProteinMerges.propTypes = {
     mouseOverReplId: PropTypes.string,
     zoomLeft: PropTypes.number,
     zoomRight: PropTypes.number,
-    clickedRepl: PropTypes.array.isRequired,
     showPopupCB: PropTypes.func.isRequired,
     removePopupCB: PropTypes.func.isRequired,
     popup: PropTypes.object,
@@ -98,7 +107,8 @@ ProteinMerges.propTypes = {
     svgParent: PropTypes.object.isRequired,
     scaleChanged: PropTypes.number.isRequired,
     datasets: PropTypes.object.isRequired,
-    getMousePos: PropTypes.func.isRequired
+    getMousePos: PropTypes.func.isRequired,
+    datasetChanged: PropTypes.number.isRequired,
 };
 
 export default ProteinMerges
