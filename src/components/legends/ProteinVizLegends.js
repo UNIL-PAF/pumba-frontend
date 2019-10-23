@@ -217,6 +217,7 @@ class ProteinVizLegends extends PureComponent {
     onMouseLeave = () => {
         this.setState({mouseOverLegend: false})
         this.props.mouseLeaveReplCB()
+        this.props.mouseLeaveSampleCB()
     }
 
     startMoving = (e) => {
