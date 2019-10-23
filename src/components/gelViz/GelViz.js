@@ -101,17 +101,15 @@ class GelViz extends PureComponent {
         </GelSlice>
     }
 
-    plotOrigGel = (activeDatasets, thisProteinData, slicePos, sampleName) => {
+    plotOrigGels = (datasets, thisProteinData, slicePos, sampleName) => {
         const {viewHeight} = this.props
 
-        return _.map(activeDatasets, (dataset, k) => {
-            const selData = _.find(thisProteinData.proteins, (p) => { return p.dataSet.id === dataset.id})
-
-            // TODO this shouldnt happen. We should filter the datasets on that before
-            if(! selData){
+        return _.map(datasets, (dataset, k) => {
+            if(! dataset.isSelected){
                 return null
             }
 
+            const selData = _.find(thisProteinData.proteins, (p) => { return p.dataSet.id === dataset.id})
             const datasetData = {massFits: selData.dataSet.massFitResult.massFits, intensities: selData.intensities}
 
             return <GelSlice
@@ -137,6 +135,7 @@ class GelViz extends PureComponent {
         const {datasets, proteinData} = this.props
 
         const activeDatasets = _.filter(datasets, 'isActive')
+
         let slicePos = 0
 
         return _.map(activeDatasets, (dataset) => {
@@ -145,38 +144,47 @@ class GelViz extends PureComponent {
             // return null if there is no data
             if(! thisProteinData) return null
 
-            const activeDatasets = _.filter(dataset.datasets, 'isActive')
+            //
+            const nrSelectedDatasets = _.reduce(dataset.datasets, (acc2, d2) => {return (d2.isSelected ? 1 : 0) + acc2}, 0)
 
-            const origSlicePos = slicePos
-            slicePos += (1 + activeDatasets.length)
-
-            return <g key={'slice-group-' + dataset.name}>
-                {this.plotMergedGel(thisProteinData, dataset.name, origSlicePos)}
-                {this.plotOrigGel(activeDatasets, thisProteinData, origSlicePos + 1, dataset.name)}
+            const plots =  <g key={'slice-group-' + dataset.name}>
+                {this.plotMergedGel(thisProteinData, dataset.name, slicePos)}
+                {nrSelectedDatasets && this.plotOrigGels(dataset.datasets, thisProteinData, slicePos+1, dataset.name)}
             </g>
 
+            slicePos += (1 +  nrSelectedDatasets)
+
+            return plots
         })
     }
 
-    plotTheoMolWeight = () => {
-        const rightPos = this.props.viewWidth - this.margin.left
+    plotTheoMolWeight = (totalSlicesWidth) => {
+
+        const xPos = totalSlicesWidth + this.margin.left + 20
 
         return <g>
             <line
                 className={"theo-line-gel"}
                 x1={this.margin.left}
                 y1={this.theoMolWeightPos}
-                x2={rightPos}
+                x2={xPos}
                 y2={this.theoMolWeightPos}
                 stroke={"red"}
                 strokeWidth={ 1 }
             ></line>
-            <text x={rightPos} y={this.theoMolWeightPos}>{this.theoMolWeight}</text>
+            <text x={xPos} y={this.theoMolWeightPos}>{this.theoMolWeight}</text>
         </g>
     }
 
     render() {
-        const {viewWidth, viewHeight} = this.props
+        const {viewWidth, viewHeight, datasets} = this.props
+
+        const nrSlices = _.reduce(datasets, (acc, d) => {
+            const selectedDatasets = (d.isActive ? _.reduce(d.datasets, (acc2, d2) => {return (d2.isSelected ? 1 : 0) + acc2}, 0) : 0)
+            return acc + selectedDatasets + 1
+        }, 0)
+
+        const totalSlicesWidth = nrSlices * (this.sliceWidth + this.sliceSpacing)
 
         return  <div id={"gel-plot"}>
                     <svg className="gel-svg"
@@ -186,7 +194,7 @@ class GelViz extends PureComponent {
                     >
                         <g className="gel-y-axis" ref={this.yAxis} transform={'translate(' + this.margin.left + ',' + this.margin.top + ')'}/>
                         {this.plotGels()}
-                        {this.plotTheoMolWeight()}
+                        {this.plotTheoMolWeight(totalSlicesWidth)}
                     </svg>
                 </div>
     }

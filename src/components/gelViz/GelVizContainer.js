@@ -8,29 +8,30 @@ import GelViz from './GelViz'
 class GelVizContainer extends PureComponent {
 
     render(){
-        const {proteinData, datasets} = this.props
+        const {proteinData, datasets, datasetChanged} = this.props
 
         return <div id={"gel-viz"}>
             { proteinData && <GelViz proteinData={proteinData}
                                      datasets={datasets}
+                                     datasetChanged={datasetChanged}
                                      viewWidth={800}
                                      viewHeight={400}
             /> }
         </div>
     }
-
 }
 
 GelVizContainer.propTypes = {
-    proteinData: PropTypes.array,
-    datasets: PropTypes.object,
-    datasetNames: PropTypes.array,
+    proteinData: PropTypes.array.isRequired,
+    datasets: PropTypes.object.isRequired,
+    datasetChanged: PropTypes.number.isRequired,
 };
 
 const mapStateToProps = (state) => {
     const props = {
         proteinData: state.loadProtein.proteinData,
-        datasets: state.loadProtein.datasets
+        datasets: state.loadProtein.datasets,
+        datasetChanged: state.loadProtein.datasetChanged
     }
     return props
 }
