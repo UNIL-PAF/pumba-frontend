@@ -215,3 +215,12 @@ pumba notifications
   right: 20px;
   width: 200px;
 }
+
+
+/****
+close button
+ */
+
+.pumba-close-button {
+  cursor: pointer;
+}

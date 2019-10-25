@@ -31,3 +31,7 @@
 .gel-slice {
     fill: #FAFAFA
 }
+
+.theo-line-gel {
+    pointer-events: none;
+}

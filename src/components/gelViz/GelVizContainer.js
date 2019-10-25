@@ -4,12 +4,12 @@ import React, {
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import GelViz from './GelViz'
-import {selectAllDatasets} from "../../actions/loadProtein";
+import {selectAllDatasets, selectDataset} from "../../actions/loadProtein";
 
 class GelVizContainer extends PureComponent {
 
     render(){
-        const {proteinData, datasets, datasetChanged, mouseClickSampleCB} = this.props
+        const {proteinData, datasets, datasetChanged, mouseClickSampleCB, mouseClickReplCB} = this.props
 
         return <div id={"gel-viz"}>
             { proteinData && <GelViz proteinData={proteinData}
@@ -18,6 +18,7 @@ class GelVizContainer extends PureComponent {
                                      viewWidth={800}
                                      viewHeight={400}
                                      mouseClickSampleCB={mouseClickSampleCB}
+                                     mouseClickReplCB={mouseClickReplCB}
             /> }
         </div>
     }
@@ -27,7 +28,8 @@ GelVizContainer.propTypes = {
     proteinData: PropTypes.array.isRequired,
     datasets: PropTypes.object.isRequired,
     datasetChanged: PropTypes.number.isRequired,
-    mouseClickSampleCB: PropTypes.func.isRequired
+    mouseClickSampleCB: PropTypes.func.isRequired,
+    mouseClickReplCB: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => {
@@ -42,6 +44,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         mouseClickSampleCB: (sampleIdx) => { dispatch(selectAllDatasets(sampleIdx)) },
+        mouseClickReplCB: (sampleIdx, replIdx) => { dispatch(selectDataset(sampleIdx, replIdx)) }
     }
 }
 

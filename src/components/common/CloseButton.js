@@ -1,12 +1,13 @@
 import React, {
-    Component,
+    PureComponent,
 } from 'react';
 import PropTypes from 'prop-types'
 
-const defaultRemoveCrossColor = "grey"
+const defaultRemoveCrossColor = "red"
 const defaultRemoveRectColor = "white"
+const defaultBorderColor = "red"
 
-class CloseButton extends Component {
+class CloseButton extends PureComponent {
 
     constructor(props) {
         super(props)
@@ -57,6 +58,7 @@ class CloseButton extends Component {
                 r={thisWidth + 0.5}
                 fill={this.state.removeRectColor}
                 fillOpacity={0.9}
+                stroke={defaultBorderColor}
             />
 
             <line
@@ -83,6 +85,7 @@ class CloseButton extends Component {
 
 CloseButton.propTypes = {
     onCloseCB: PropTypes.func.isRequired,
+    onMouseEnterCB: PropTypes.func,
     x: PropTypes.number.isRequired,
     y: PropTypes.number.isRequired,
 }

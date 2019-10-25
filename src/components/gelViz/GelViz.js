@@ -8,6 +8,7 @@ import {scaleLinear} from "d3-scale";
 import {axisLeft} from "d3-axis";
 import {select} from "d3-selection";
 import {interpolateHsl} from "d3-interpolate";
+import { sampleColor } from '../common/colorSettings'
 
 class GelViz extends PureComponent {
 
@@ -104,7 +105,9 @@ class GelViz extends PureComponent {
     }
 
     plotOrigGels = (datasets, thisProteinData, slicePos, sampleName) => {
-        const {viewHeight} = this.props
+        const {viewHeight, mouseClickReplCB} = this.props
+
+        let localPos = 0
 
         return _.map(datasets, (dataset, k) => {
             if(! dataset.isSelected){
@@ -114,24 +117,48 @@ class GelViz extends PureComponent {
             const selData = _.find(thisProteinData.proteins, (p) => { return p.dataSet.id === dataset.id})
             const datasetData = {massFits: selData.dataSet.massFitResult.massFits, intensities: selData.intensities}
 
-            return <GelSlice
+            const gelPlot =  <GelSlice
                 key={'gel-slice-' + dataset.name}
                 title={sampleName}
                 subTitle={dataset.name}
                 sliceWidth={this.sliceWidth}
                 sliceHeight={viewHeight - this.margin.top - this.margin.bottom}
-                xPos={(slicePos + k) * (this.sliceWidth + this.sliceSpacing) + this.margin.left + 10}
+                xPos={(slicePos + localPos) * (this.sliceWidth + this.sliceSpacing) + this.margin.left + 10}
                 yPos={this.margin.top}
                 yScale={this.yScale}
                 maxInt={this.state.maxInt}
                 datasetData={datasetData}
                 amplify={this.amplify}
                 greyScale={this.greyScale}
+                mouseClickReplCB={mouseClickReplCB}
+                sampleName={sampleName}
+                replId={dataset.id}
             >
             </GelSlice>
+
+            localPos += 1
+            return gelPlot
         })
     }
 
+    plotSampleRect = (slicePos, nrSelectedDatasets, datasetId) => {
+        const {viewHeight} = this.props
+
+        const sliceSize = this.sliceWidth + this.sliceSpacing
+        return  <rect
+                x={slicePos * sliceSize + this.margin.left+6}
+                y={this.margin.top}
+                rx={3}
+                ry={3}
+                width={(1+nrSelectedDatasets) * sliceSize - 2}
+                height={viewHeight - this.margin.top - this.margin.bottom}
+                fill={"none"}
+                stroke={sampleColor(datasetId)}
+                >
+                </rect>
+
+
+    }
 
     plotGels = () => {
         const {datasets, proteinData} = this.props
@@ -152,6 +179,7 @@ class GelViz extends PureComponent {
             const plots =  <g key={'slice-group-' + dataset.name}>
                 {this.plotMergedGel(thisProteinData, dataset.name, slicePos, dataset.name)}
                 {nrSelectedDatasets && this.plotOrigGels(dataset.datasets, thisProteinData, slicePos+1, dataset.name)}
+                {nrSelectedDatasets && this.plotSampleRect(slicePos, nrSelectedDatasets, dataset.idx)}
             </g>
 
             slicePos += (1 +  nrSelectedDatasets)
@@ -208,7 +236,8 @@ GelViz.propTypes = {
     datasets: PropTypes.object.isRequired,
     viewWidth: PropTypes.number.isRequired,
     viewHeight: PropTypes.number.isRequired,
-    mouseClickSampleCB: PropTypes.func.isRequired
+    mouseClickSampleCB: PropTypes.func.isRequired,
+    mouseClickReplCB: PropTypes.func.isRequired
 };
 
 export default GelViz
