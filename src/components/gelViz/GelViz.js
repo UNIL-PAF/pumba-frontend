@@ -80,6 +80,14 @@ class GelViz extends PureComponent {
         }))
     }
 
+    onMouseEnterMerged = (sampleId) => {
+        this.setState({mouseEnteredSample: sampleId})
+    }
+
+    onMouseLeaveMerged = () => {
+        this.setState({mouseEnteredSample: undefined})
+    }
+
     plotMergedGel = (thisProteinData, title, slicePos, sampleName) => {
         const {viewHeight, mouseClickSampleCB} = this.props
 
@@ -100,6 +108,8 @@ class GelViz extends PureComponent {
             greyScale={this.greyScale}
             mouseClickCB={mouseClickSampleCB}
             sampleName={sampleName}
+            onMouseEnterCB={() => {this.onMouseEnterMerged(sampleName)}}
+            onMouseLeaveCB={() => {this.onMouseLeaveMerged()}}
         >
         </GelSlice>
     }
@@ -117,6 +127,8 @@ class GelViz extends PureComponent {
             const selData = _.find(thisProteinData.proteins, (p) => { return p.dataSet.id === dataset.id})
             const datasetData = {massFits: selData.dataSet.massFitResult.massFits, intensities: selData.intensities}
 
+            const showCloseButton = (this.state.mouseEnteredSample === sampleName)
+
             const gelPlot =  <GelSlice
                 key={'gel-slice-' + dataset.name}
                 title={sampleName}
@@ -133,6 +145,7 @@ class GelViz extends PureComponent {
                 mouseClickReplCB={mouseClickReplCB}
                 sampleName={sampleName}
                 replId={dataset.id}
+                showCloseButton={showCloseButton}
             >
             </GelSlice>
 
@@ -162,9 +175,7 @@ class GelViz extends PureComponent {
 
     plotGels = () => {
         const {datasets, proteinData} = this.props
-
         const activeDatasets = _.filter(datasets, 'isActive')
-
         let slicePos = 0
 
         return _.map(activeDatasets, (dataset) => {

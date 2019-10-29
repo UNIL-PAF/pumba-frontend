@@ -11,10 +11,6 @@ class GelSlice extends PureComponent {
 
     constructor(props) {
         super(props)
-
-        this.state = {
-            showCloseButton: false
-        }
     }
 
     plotSlice = () => {
@@ -70,20 +66,20 @@ class GelSlice extends PureComponent {
     }
 
     onMouseEnter = () => {
-        const {datasetData} = this.props
+        const {onMouseEnterCB} = this.props
 
-        // only the close button when in dataset slice
-        if(datasetData){
-            this.setState({showCloseButton: true})
+        // call the callback if it's there
+        if(onMouseEnterCB){
+            onMouseEnterCB()
         }
     }
 
     onMouseLeave = () => {
-        const {datasetData} = this.props
+        const {onMouseLeaveCB} = this.props
 
-        // only the close button when in dataset slice
-        if(datasetData){
-            this.setState({showCloseButton: false})
+        // call the callback if it's there
+        if(onMouseLeaveCB){
+            onMouseLeaveCB()
         }
     }
 
@@ -93,7 +89,7 @@ class GelSlice extends PureComponent {
     }
 
     render() {
-        const {xPos, yPos, sliceWidth, sliceHeight, title, subTitle, mergedData} = this.props
+        const {xPos, yPos, sliceWidth, sliceHeight, title, subTitle, mergedData, showCloseButton} = this.props
 
         const rectStyle = (mergedData ? {cursor: 'pointer'} : {})
 
@@ -115,7 +111,7 @@ class GelSlice extends PureComponent {
                             <text y={10} fontSize={10}>{subTitle}</text>
                     </g>
                     {this.plotSlice()}
-                    {this.state.showCloseButton && <CloseButton x={xPos+sliceWidth} y={yPos} onCloseCB={this.closeButtonCB}></CloseButton>}
+                    {showCloseButton && <CloseButton x={xPos+sliceWidth} y={yPos} onCloseCB={this.closeButtonCB}></CloseButton>}
                 </g>
     }
 
@@ -138,7 +134,10 @@ GelSlice.propTypes = {
     mouseClickCB: PropTypes.func,
     sampleName: PropTypes.string,
     replId: PropTypes.string,
-    mouseClickReplCB: PropTypes.func.isRequired
+    mouseClickReplCB: PropTypes.func.isRequired,
+    onMouseEnterCB: PropTypes.func,
+    onMouseLeaveCB: PropTypes.func,
+    showCloseButton: PropTypes.bool,
 };
 
 export default GelSlice
