@@ -24,7 +24,7 @@ class GelSlice extends PureComponent {
     }
 
     plotDatasetData = () => {
-        const {xPos, yPos, sliceWidth, sliceHeight, datasetData, amplify, maxInt, yScale, greyScale} = this.props
+        const {xPos, yPos, sliceWidth, sliceHeight, datasetData, amplify, maxInt, yScale, greyScale, getMousePos} = this.props
 
         return <DatasetGelSlice
             datasetData={datasetData}
@@ -36,6 +36,7 @@ class GelSlice extends PureComponent {
             yScale={yScale}
             amplify={amplify}
             greyScale={greyScale}
+            getMousePos={getMousePos}
         >
         </DatasetGelSlice>
     }
@@ -138,6 +139,7 @@ GelSlice.propTypes = {
     onMouseEnterCB: PropTypes.func,
     onMouseLeaveCB: PropTypes.func,
     showCloseButton: PropTypes.bool,
+    getMousePos: PropTypes.func
 };
 
 export default GelSlice

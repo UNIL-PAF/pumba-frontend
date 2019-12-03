@@ -16,12 +16,28 @@ export const SET_SORTED_DATASET_NAMES = 'SET_SORTED_DATASET_NAMES'
 export const SELECT_DATASET = 'SELECT_DATASET'
 export const SELECT_ALL_DATASETS = 'SELECT_ALL_DATASETS'
 
-
 export function reloadProtein(activeDatasetIds, callOnComplete){
     return function (dispatch, getState) {
         const proteinId = getState().loadProtein.proteinData[0].mainProteinId
         dispatch(fetchProtein(proteinId, activeDatasetIds, true, callOnComplete))
     }
+}
+
+function addShortMergedData(json){
+    _.map(json, (d) => {
+        const molWeights = d.theoMergedProtein.theoMolWeights
+        const intensities = d.theoMergedProtein.intensities
+        const winSize = 10
+        const wins = _.range(0, molWeights.length-1, winSize)
+
+        const mergedMolWeights = _.map(wins, (w) => {
+            return _.reduce(molWeights.slice(w, w+winSize), (v, a) => v + a, 0) / winSize
+        })
+        const mergedIntensities = _.map(wins, (w) => {
+            return _.reduce(intensities.slice(w, w+winSize), (v, a) => v + a, 0) / winSize
+        })
+        d.shortMergedData = {molWeights: mergedMolWeights, intensities: mergedIntensities}
+    })
 }
 
 export function fetchProtein(proteinId, datasetIds, noReset, callOnComplete){
@@ -47,6 +63,9 @@ export function fetchProtein(proteinId, datasetIds, noReset, callOnComplete){
 
                     // add a timestamp to the data
                     json.timestamp = noReset ? getState().loadProtein.proteinData.timestamp : Date.now()
+
+                    // add a short version of the merged data for the gel view
+                    addShortMergedData(json)
 
                     if(! noReset){
                         // let's take the FASTA data from the first entry (should always be OK)

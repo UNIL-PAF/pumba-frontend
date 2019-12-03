@@ -29,6 +29,7 @@ class GelViz extends PureComponent {
         const {proteinData, viewHeight} = this.props
 
         this.yAxis = React.createRef()
+        this.svg = React.createRef()
 
         const minMolWeightDa = Math.pow(10, _.min(_.map(proteinData, function(p){
             return p.theoMergedProtein.theoMolWeights[0]
@@ -88,10 +89,27 @@ class GelViz extends PureComponent {
         this.setState({mouseEnteredSample: undefined})
     }
 
+    mouseMove = (e) => {
+        const {setLegendPos, legendIsMoving} = this.props
+
+        var point = this.svg.current.createSVGPoint()
+        point.x = e.clientX
+        point.y = e.clientY;
+        point = point.matrixTransform(this.svg.current.getScreenCTM().inverse());
+
+        const x = point.x - this.margin.left
+        const y = point.y - this.margin.top
+
+        this.setState({mouseX: x, mouseY: y})
+    }
+
+    getMousePos = () => {
+        const {mouseX, mouseY} = this.state
+        return [mouseX, mouseY]
+    }
+
     plotMergedGel = (thisProteinData, title, slicePos, sampleName) => {
         const {viewHeight, mouseClickSampleCB} = this.props
-
-        const mergedData = { molWeights: thisProteinData.theoMergedProtein.theoMolWeights, intensities: thisProteinData.theoMergedProtein.intensities}
 
         return <GelSlice
             key={'gel-slice-' + title}
@@ -103,7 +121,7 @@ class GelViz extends PureComponent {
             yPos={this.margin.top}
             yScale={this.yScale}
             maxInt={this.state.maxInt}
-            mergedData={mergedData}
+            mergedData={thisProteinData.shortMergedData}
             amplify={this.amplify}
             greyScale={this.greyScale}
             mouseClickCB={mouseClickSampleCB}
@@ -146,6 +164,7 @@ class GelViz extends PureComponent {
                 sampleName={sampleName}
                 replId={dataset.id}
                 showCloseButton={showCloseButton}
+                getMousePos={this.getMousePos}
             >
             </GelSlice>
 
@@ -232,6 +251,8 @@ class GelViz extends PureComponent {
                          viewBox={`0 0 ${viewWidth} ${viewHeight}`}
                          width="100%"
                          height="100%"
+                         ref={this.svg}
+                         onMouseMove={(e) => this.mouseMove(e)}
                     >
                         <g className="gel-y-axis" ref={this.yAxis} transform={'translate(' + this.margin.left + ',' + this.margin.top + ')'}/>
                         {this.plotGels()}

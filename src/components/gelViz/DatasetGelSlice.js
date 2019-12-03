@@ -7,6 +7,12 @@ import {interpolateHsl} from 'd3-interpolate'
 
 class DatasetGelSlice extends PureComponent {
 
+    onMouseEnter = () => {
+        const {getMousePos} = this.props
+
+        console.log("mouseEntered", getMousePos())
+    }
+
     plotDataset = () =>{
         const {datasetData, sliceHeight, sliceWidth, xPos, yPos, yScale, maxInt, amplify, greyScale} = this.props
 
@@ -45,6 +51,7 @@ class DatasetGelSlice extends PureComponent {
                     height={lowerLimit - upperLimit}
                     transform={'translate(' + xPos + ',' + (yPos + upperLimit) + ')'}
                     style={rectStyle}
+                    onMouseEnter={() => this.onMouseEnter()}
                     >
                     </rect>
 
@@ -70,7 +77,8 @@ DatasetGelSlice.propTypes = {
     maxInt: PropTypes.number.isRequired,
     yScale: PropTypes.func.isRequired,
     amplify: PropTypes.number.isRequired,
-    greyScale: PropTypes.func.isRequired
+    greyScale: PropTypes.func.isRequired,
+    getMousePos: PropTypes.func
 
 };
 

@@ -42,7 +42,6 @@ class MergedGelSlice extends PureComponent {
         </g>
     }
 
-
 }
 
 MergedGelSlice.propTypes = {
