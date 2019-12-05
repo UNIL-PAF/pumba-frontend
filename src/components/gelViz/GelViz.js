@@ -9,6 +9,7 @@ import {axisLeft} from "d3-axis";
 import {select} from "d3-selection";
 import {interpolateHsl} from "d3-interpolate";
 import { sampleColor } from '../common/colorSettings'
+import ExpandCollapsInfo from "./ExpandCollapsInfo";
 
 class GelViz extends PureComponent {
 
@@ -108,28 +109,31 @@ class GelViz extends PureComponent {
         return [mouseX, mouseY]
     }
 
-    plotMergedGel = (thisProteinData, title, slicePos, sampleName) => {
+    plotMergedGel = (thisProteinData, title, slicePos, sampleName, containsSelected) => {
         const {viewHeight, mouseClickSampleCB} = this.props
 
-        return <GelSlice
-            key={'gel-slice-' + title}
-            title={title}
-            subTitle={'Merged'}
-            sliceWidth={this.sliceWidth}
-            sliceHeight={viewHeight - this.margin.top - this.margin.bottom}
-            xPos={slicePos * (this.sliceWidth + this.sliceSpacing) + this.margin.left + 10}
-            yPos={this.margin.top}
-            yScale={this.yScale}
-            maxInt={this.state.maxInt}
-            mergedData={thisProteinData.shortMergedData}
-            amplify={this.amplify}
-            greyScale={this.greyScale}
-            mouseClickCB={mouseClickSampleCB}
-            sampleName={sampleName}
-            onMouseEnterCB={() => {this.onMouseEnterMerged(sampleName)}}
-            onMouseLeaveCB={() => {this.onMouseLeaveMerged()}}
-        >
-        </GelSlice>
+        return <g>
+                <GelSlice
+                key={'gel-slice-' + title}
+                title={title}
+                subTitle={'Merged'}
+                sliceWidth={this.sliceWidth}
+                sliceHeight={viewHeight - this.margin.top - this.margin.bottom}
+                xPos={slicePos * (this.sliceWidth + this.sliceSpacing) + this.margin.left + 10}
+                yPos={this.margin.top}
+                yScale={this.yScale}
+                maxInt={this.state.maxInt}
+                mergedData={thisProteinData.shortMergedData}
+                amplify={this.amplify}
+                greyScale={this.greyScale}
+                mouseClickCB={mouseClickSampleCB}
+                sampleName={sampleName}
+                onMouseEnterCB={() => {this.onMouseEnterMerged(sampleName)}}
+                onMouseLeaveCB={() => {this.onMouseLeaveMerged()}}
+            >
+            </GelSlice>
+            {(this.state.mouseEnteredSample === sampleName) && this.plotExpandInfo(thisProteinData, title, slicePos, sampleName, containsSelected)}
+        </g>
     }
 
     plotOrigGels = (datasets, thisProteinData, slicePos, sampleName) => {
@@ -145,11 +149,9 @@ class GelViz extends PureComponent {
             const selData = _.find(thisProteinData.proteins, (p) => { return p.dataSet.id === dataset.id})
             const datasetData = {massFits: selData.dataSet.massFitResult.massFits, intensities: selData.intensities}
 
-            const showCloseButton = (this.state.mouseEnteredSample === sampleName)
-
             const gelPlot =  <GelSlice
                 key={'gel-slice-' + dataset.name}
-                title={sampleName}
+                title={''}
                 subTitle={dataset.name}
                 sliceWidth={this.sliceWidth}
                 sliceHeight={viewHeight - this.margin.top - this.margin.bottom}
@@ -163,7 +165,6 @@ class GelViz extends PureComponent {
                 mouseClickReplCB={mouseClickReplCB}
                 sampleName={sampleName}
                 replId={dataset.id}
-                showCloseButton={showCloseButton}
                 getMousePos={this.getMousePos}
             >
             </GelSlice>
@@ -188,8 +189,16 @@ class GelViz extends PureComponent {
                 stroke={sampleColor(datasetId)}
                 >
                 </rect>
+    }
 
+    plotExpandInfo = (thisProteinData, title, slicePos, sampleName, containsSelected) => {
+        const {viewHeight} = this.props
 
+        return <ExpandCollapsInfo
+            xPos={slicePos * (this.sliceWidth + this.sliceSpacing) + this.margin.left + 10}
+            yPos={viewHeight - this.margin.bottom + 10}
+            showExpand={! containsSelected}
+        />
     }
 
     plotGels = () => {
@@ -202,18 +211,16 @@ class GelViz extends PureComponent {
 
             // return null if there is no data
             if(! thisProteinData) return null
-
             //
             const nrSelectedDatasets = _.reduce(dataset.datasets, (acc2, d2) => {return (d2.isSelected ? 1 : 0) + acc2}, 0)
 
             const plots =  <g key={'slice-group-' + dataset.name}>
-                {this.plotMergedGel(thisProteinData, dataset.name, slicePos, dataset.name)}
+                {this.plotMergedGel(thisProteinData, dataset.name, slicePos, dataset.name, nrSelectedDatasets > 0)}
                 {nrSelectedDatasets && this.plotOrigGels(dataset.datasets, thisProteinData, slicePos+1, dataset.name)}
                 {nrSelectedDatasets && this.plotSampleRect(slicePos, nrSelectedDatasets, dataset.idx)}
             </g>
 
             slicePos += (1 +  nrSelectedDatasets)
-
             return plots
         })
     }
@@ -232,7 +239,7 @@ class GelViz extends PureComponent {
                 stroke={"red"}
                 strokeWidth={ 1 }
             ></line>
-            <text x={xPos} y={this.theoMolWeightPos}>{this.theoMolWeight}</text>
+            <text className={'gel-theo-molweight-text'} x={xPos} y={this.theoMolWeightPos}>{this.theoMolWeight + ' kDa'}</text>
         </g>
     }
 

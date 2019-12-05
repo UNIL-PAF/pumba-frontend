@@ -35,3 +35,42 @@
 .theo-line-gel {
     pointer-events: none;
 }
+
+.expand-info {
+    fill: grey;
+    font-size: 50%;
+    pointer-events: none;
+    user-select: none;
+}
+
+.gel-title-merged {
+     font-size: 12px;
+     font-weight: bold;
+     pointer-events: none;
+     user-select: none;
+ }
+
+.gel-subtitle-merged {
+    font-size: 10px;
+    pointer-events: none;
+    user-select: none;
+}
+
+.gel-title-sample {
+    font-size: 10px;
+    font-weight: bold;
+    pointer-events: none;
+    user-select: none;
+}
+
+.gel-subtitle-sample {
+    font-size: 10px;
+    pointer-events: none;
+    user-select: none;
+}
+
+.gel-theo-molweight-text{
+    pointer-events: none;
+    user-select: none;
+    font-size: 80%;
+}

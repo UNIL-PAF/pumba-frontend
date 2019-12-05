@@ -84,13 +84,8 @@ class GelSlice extends PureComponent {
         }
     }
 
-    closeButtonCB = () => {
-        const {mouseClickReplCB, sampleName, replId} = this.props
-        mouseClickReplCB(sampleName, replId)
-    }
-
     render() {
-        const {xPos, yPos, sliceWidth, sliceHeight, title, subTitle, mergedData, showCloseButton} = this.props
+        const {xPos, yPos, sliceWidth, sliceHeight, title, subTitle, mergedData} = this.props
 
         const rectStyle = (mergedData ? {cursor: 'pointer'} : {})
 
@@ -108,11 +103,10 @@ class GelSlice extends PureComponent {
                     >
                     </rect>
                     <g transform={'translate(' + (xPos+10) + ',' + (yPos-10) + ') rotate(-45)'}>
-                            <text fontSize={12} fontWeight={'bold'}>{title}</text>
-                            <text y={10} fontSize={10}>{subTitle}</text>
+                            <text className={mergedData ? 'gel-title-merged' : 'gel-title-sample'}>{title}</text>
+                            <text y={10} className={mergedData ? 'gel-subtitle-merged' : 'gel-subtitle-sample'}>{subTitle}</text>
                     </g>
                     {this.plotSlice()}
-                    {showCloseButton && <CloseButton x={xPos+sliceWidth} y={yPos} onCloseCB={this.closeButtonCB}></CloseButton>}
                 </g>
     }
 
@@ -138,7 +132,6 @@ GelSlice.propTypes = {
     mouseClickReplCB: PropTypes.func.isRequired,
     onMouseEnterCB: PropTypes.func,
     onMouseLeaveCB: PropTypes.func,
-    showCloseButton: PropTypes.bool,
     getMousePos: PropTypes.func
 };
 
