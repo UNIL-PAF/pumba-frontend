@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 
 class ExpandCollapsInfo extends PureComponent {
 
-    yTranslate = 360
+    yTranslate = 343
     xTranslate = 10
 
     plotLeftArrow = () => {
@@ -27,8 +27,8 @@ class ExpandCollapsInfo extends PureComponent {
     render() {
         const {xPos, yPos, showExpand} = this.props
 
-        return <g>
-            <text className={"expand-info"} x={xPos} y={yPos + 13}>{showExpand ? 'Expand samples' : 'Collapse samples'}</text>
+        return <g style={{pointerEvents: 'none'}}>
+            <text className={"expand-info"} x={xPos} y={yPos + 2}>{showExpand ? 'Expand samples' : 'Collapse samples'}</text>
             {showExpand ? this.plotRightArrow() : this.plotLeftArrow()}
         </g>
     }
