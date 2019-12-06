@@ -3,7 +3,6 @@ import React, {
 } from 'react'
 import PropTypes from 'prop-types'
 import * as _ from 'lodash';
-import {interpolateHsl} from 'd3-interpolate'
 
 class DatasetGelSlice extends PureComponent {
 

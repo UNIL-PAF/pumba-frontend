@@ -1,5 +1,3 @@
-import {fetchProtein} from "./loadProtein";
-
 export const MOUSE_OVER_SAMPLE = 'MOUSE_OVER_SAMPLE'
 export const MOUSE_OVER_REPL = 'MOUSE_OVER_REPL'
 export const MOUSE_LEAVE_SAMPLE = 'MOUSE_LEAVES_SAMPLE'

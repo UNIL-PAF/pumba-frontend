@@ -91,8 +91,6 @@ class GelViz extends PureComponent {
     }
 
     mouseMove = (e) => {
-        const {setLegendPos, legendIsMoving} = this.props
-
         var point = this.svg.current.createSVGPoint()
         point.x = e.clientX
         point.y = e.clientY;

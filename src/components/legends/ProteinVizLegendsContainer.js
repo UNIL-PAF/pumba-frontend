@@ -5,8 +5,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import ProteinVizLegends from './ProteinVizLegends'
 import {
-    mouseClickRepl, mouseLeaveRepl, mouseLeaveSample, mouseOverRepl,
-    mouseOverSample, removeRepl
+    mouseLeaveRepl, mouseLeaveSample, mouseOverRepl, mouseOverSample
 } from "../../actions/sampleSelection";
 import {reloadProtein, selectDataset, setDatasets} from "../../actions/loadProtein"
 import {setMoveLegend} from "../../actions/legendActions";

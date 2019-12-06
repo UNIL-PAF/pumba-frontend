@@ -4,14 +4,9 @@ import React, {
 import PropTypes from 'prop-types'
 import MergedGelSlice from "./MergedGelSlice"
 import DatasetGelSlice from "./DatasetGelSlice"
-import CloseButton from "../common/CloseButton"
 
 
 class GelSlice extends PureComponent {
-
-    constructor(props) {
-        super(props)
-    }
 
     plotSlice = () => {
         const {mergedData} = this.props

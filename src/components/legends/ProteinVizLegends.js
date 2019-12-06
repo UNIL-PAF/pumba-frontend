@@ -6,7 +6,6 @@ import LegendField from './LegendField'
 import * as _ from 'lodash';
 import { sampleColor } from '../common/colorSettings'
 import MoveButton from "../common/MoveButton";
-import {mouseLeaveRepl} from "../../actions/sampleSelection";
 
 class ProteinVizLegends extends PureComponent {
 

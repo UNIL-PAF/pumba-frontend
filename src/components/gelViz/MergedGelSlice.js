@@ -3,7 +3,6 @@ import React, {
 } from 'react'
 import PropTypes from 'prop-types'
 import * as _ from 'lodash';
-import {interpolateGreys} from 'd3-scale-chromatic'
 
 class MergedGelSlice extends PureComponent {
 
