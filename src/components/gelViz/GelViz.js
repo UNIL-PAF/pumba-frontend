@@ -71,6 +71,11 @@ class GelViz extends PureComponent {
 
         if(this.state.proteinDataTimestamp && (this.state.proteinDataTimestamp !== proteinData.timestamp)){
             this.setState({maxInt: this.getMaxInt()})
+
+            // just take the theoretical weight of the first protein, it should always be the same.
+            this.theoMolWeight = proteinData[0].proteins[0].theoMolWeight
+            this.theoMolWeightPos = this.yScale(Math.log10(proteinData[0].proteins[0].theoMolWeight)) + this.margin.top
+
         }
     }
 
