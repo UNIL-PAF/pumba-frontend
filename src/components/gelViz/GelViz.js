@@ -10,11 +10,12 @@ import {select} from "d3-selection";
 import {interpolateHsl} from "d3-interpolate";
 import { sampleColor } from '../common/colorSettings'
 import ExpandCollapsInfo from "./ExpandCollapsInfo";
+import ProteinTitle from "../common/ProteinTitle"
 
 class GelViz extends PureComponent {
 
     // set the margins
-    margin = {top: 60, right: 10, bottom: 40, left: 40}
+    margin = {top: 80, right: 10, bottom: 40, left: 40}
     sliceWidth = 40
     sliceSpacing = 10
 
@@ -251,7 +252,7 @@ class GelViz extends PureComponent {
     }
 
     render() {
-        const {viewWidth, viewHeight, datasets} = this.props
+        const {viewWidth, viewHeight, datasets, proteinData} = this.props
 
         const nrSlices = _.reduce(datasets, (acc, d) => {
             const selectedDatasets = (d.isActive ? _.reduce(d.datasets, (acc2, d2) => {return (d2.isSelected ? 1 : 0) + acc2}, 0) : 0)
@@ -271,6 +272,7 @@ class GelViz extends PureComponent {
                         <g className="gel-y-axis" ref={this.yAxis} transform={'translate(' + this.margin.left + ',' + this.margin.top + ')'}/>
                         {this.plotGels()}
                         {this.plotTheoMolWeight(totalSlicesWidth)}
+                        <ProteinTitle proteinData={proteinData} x={100} y={20}/>
                     </svg>
                 </div>
     }

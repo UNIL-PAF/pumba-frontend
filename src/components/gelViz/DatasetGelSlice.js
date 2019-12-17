@@ -42,8 +42,6 @@ class DatasetGelSlice extends PureComponent {
                 const upperLimit = getLimitUpper(i)
                 const lowerLimit = getLimitLower(i)
 
-                if((lowerLimit - upperLimit) > 10) console.log(upperLimit, lowerLimit)
-
                 const colVal = (intensity / maxInt) * amplify
                 const corrCol = greyScale(colVal > 1 ? 1 : colVal)
                 const rectStyle = {fill: corrCol, stroke: corrCol, strokeWidth: 0.4}

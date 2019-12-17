@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 class ProteinTitle extends PureComponent {
 
     render() {
-        const { proteinData } = this.props;
+        const { proteinData, x, y } = this.props;
 
         var proteinStr = proteinData[0].mainProteinId
         const geneNames = proteinData[0].proteins[0].geneNames.join(', ')
@@ -18,8 +18,8 @@ class ProteinTitle extends PureComponent {
         return <g>
             <text
                 className={"protein-title unselecteable"}
-                x={80}
-                y={20}
+                x={typeof x !== 'undefined' ? x : 80}
+                y={typeof y !== 'undefined' ? y : 20}
             >
                 {proteinStr}</text>
         </g>
@@ -27,7 +27,9 @@ class ProteinTitle extends PureComponent {
 }
 
 ProteinTitle.propTypes = {
-    proteinData: PropTypes.array.isRequired
+    proteinData: PropTypes.array.isRequired,
+    x: PropTypes.number,
+    y: PropTypes.number
 };
 
 export default ProteinTitle
