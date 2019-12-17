@@ -22,7 +22,7 @@ class MergedGelSlice extends PureComponent {
             const rectStyle = {
                 fill: corrColVal,
                 stroke: corrColVal,
-                strokeWidth: 0.1,
+                strokeWidth: 0.3,
                 pointerEvents: 'none'
             }
 
