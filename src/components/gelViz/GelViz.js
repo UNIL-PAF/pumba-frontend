@@ -145,11 +145,12 @@ class GelViz extends PureComponent {
         let localPos = 0
 
         return _.map(datasets, (dataset, k) => {
-            if(! dataset.isSelected){
+            const selData = _.find(thisProteinData.proteins, (p) => { return p.dataSet.id === dataset.id})
+
+            if(! dataset.isSelected || ! selData){
                 return null
             }
 
-            const selData = _.find(thisProteinData.proteins, (p) => { return p.dataSet.id === dataset.id})
             const datasetData = {massFits: selData.dataSet.massFitResult.massFits, intensities: selData.intensities}
 
             const gelPlot =  <GelSlice
@@ -214,8 +215,11 @@ class GelViz extends PureComponent {
 
             // return null if there is no data
             if(! thisProteinData) return null
-            //
-            const nrSelectedDatasets = _.reduce(dataset.datasets, (acc2, d2) => {return (d2.isSelected ? 1 : 0) + acc2}, 0)
+
+            const nrSelectedDatasets = _.reduce(dataset.datasets, (acc2, d2) => {
+                const selData = _.find(thisProteinData.proteins, (p) => { return p.dataSet.id === d2.id})
+                return ((d2.isSelected && selData) ? 1 : 0) + acc2
+            }, 0)
 
             const plots =  <g key={'slice-group-' + dataset.name}>
                 {this.plotMergedGel(thisProteinData, dataset.name, slicePos, dataset.name, nrSelectedDatasets > 0)}
