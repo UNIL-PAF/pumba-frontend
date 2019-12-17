@@ -19,12 +19,11 @@ class GelSlice extends PureComponent {
     }
 
     plotDatasetData = () => {
-        const {xPos, yPos, sliceWidth, sliceHeight, datasetData, amplify, maxInt, yScale, greyScale, getMousePos} = this.props
+        const {xPos, yPos, sliceWidth, datasetData, amplify, maxInt, yScale, greyScale, getMousePos} = this.props
 
         return <DatasetGelSlice
             datasetData={datasetData}
             sliceWidth={sliceWidth}
-            sliceHeight={sliceHeight}
             xPos={xPos}
             yPos={yPos}
             maxInt={maxInt}

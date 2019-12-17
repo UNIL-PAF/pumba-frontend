@@ -13,7 +13,7 @@ class DatasetGelSlice extends PureComponent {
     }
 
     plotDataset = () =>{
-        const {datasetData, sliceHeight, sliceWidth, xPos, yPos, yScale, maxInt, amplify, greyScale} = this.props
+        const {datasetData, sliceWidth, xPos, yPos, yScale, maxInt, amplify, greyScale} = this.props
 
         const arrLength = datasetData.massFits.length
         const yPositions = _.map(datasetData.massFits, (m) => {return yScale(m)})
@@ -74,7 +74,6 @@ class DatasetGelSlice extends PureComponent {
 DatasetGelSlice.propTypes = {
     datasetData: PropTypes.object.isRequired,
     sliceWidth: PropTypes.number.isRequired,
-    sliceHeight: PropTypes.number.isRequired,
     xPos: PropTypes.number.isRequired,
     yPos: PropTypes.number.isRequired,
     maxInt: PropTypes.number.isRequired,
