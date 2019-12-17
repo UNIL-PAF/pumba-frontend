@@ -14,6 +14,8 @@ class MergedGelSlice extends PureComponent {
         const fltData = _.filter(zippedData, (d) => { return d[1] > 0 })
 
         return _.map(fltData, (d, i) => {
+            const yNow = yScale(d[0])
+            const yLast = (i > 0) ? (yScale(fltData[i-1][0])) : undefined
             const rectY = yPos + yScale(d[0])
             const colVal = (d[1] / maxInt) * amplify
             const corrColVal = greyScale(colVal > 1 ? 1 : colVal)
@@ -27,7 +29,7 @@ class MergedGelSlice extends PureComponent {
             return <rect
                 key={'theo-slice-' + i}
                 width={sliceWidth}
-                height={rectHeight}
+                height={(yLast) ? (yLast - yNow) : rectHeight}
                 transform={'translate(' + xPos + ',' + rectY + ')'}
                 style={rectStyle}
             >
