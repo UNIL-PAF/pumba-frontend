@@ -63,31 +63,33 @@ export function fetchProtein(proteinId, datasetIds, noReset, callOnComplete){
 
                     // if protein is not found
                     if(json.length === 0){
-                        alert("Could not find [" + proteinId + "].")
+                        dispatch(proteinLoadError("Could not find [" + proteinId + "]."))
+                        dispatch(proteinIsLoaded())
+                    }else{
+                        // add a timestamp to the data
+                        json.timestamp = noReset ? getState().loadProtein.proteinData.timestamp : Date.now()
+
+                        // add a short version of the merged data for the gel view
+                        addShortMergedData(json)
+
+                        if(! noReset){
+                            // let's take the FASTA data from the first entry (should always be OK)
+                            const dataBaseName = json[0].proteins[0].dataSet.dataBaseName
+                            dispatch(fetchSequence(json[0].mainProteinId, dataBaseName))
+                            dispatch(gotoViz(true))
+                        }
+                        dispatch(addProteinData(json))
+                        dispatch(proteinIsLoaded())
+
+                        // call the callback if there is a function
+                        if(callOnComplete) callOnComplete()
+
+                        // in case there is a zoom we have to reset the precalculated data
+                        if(noReset && getState().proteinViz.zoomLeft){
+                            dispatch(computeTheoMergedProteins(getState().proteinViz.zoomLeft, getState().proteinViz.zoomRight))
+                        }
                     }
 
-                    // add a timestamp to the data
-                    json.timestamp = noReset ? getState().loadProtein.proteinData.timestamp : Date.now()
-
-                    // add a short version of the merged data for the gel view
-                    addShortMergedData(json)
-
-                    if(! noReset){
-                        // let's take the FASTA data from the first entry (should always be OK)
-                        const dataBaseName = json[0].proteins[0].dataSet.dataBaseName
-                        dispatch(fetchSequence(json[0].mainProteinId, dataBaseName))
-                        dispatch(gotoViz(true))
-                    }
-                    dispatch(addProteinData(json))
-                    dispatch(proteinIsLoaded())
-
-                    // call the callback if there is a function
-                    if(callOnComplete) callOnComplete()
-
-                    // in case there is a zoom we have to reset the precalculated data
-                    if(noReset && getState().proteinViz.zoomLeft){
-                        dispatch(computeTheoMergedProteins(getState().proteinViz.zoomLeft, getState().proteinViz.zoomRight))
-                    }
                 }
             )
             .catch(err => {

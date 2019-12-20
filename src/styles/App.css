@@ -216,6 +216,12 @@ pumba notifications
   width: 200px;
 }
 
+.pumba-notification.error {
+  top: 60px;
+  right: 20px;
+  width: 300px;
+}
+
 
 /****
 close button

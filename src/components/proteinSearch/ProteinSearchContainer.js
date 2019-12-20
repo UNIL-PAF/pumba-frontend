@@ -101,8 +101,8 @@ class ProteinSearchContainer extends React.Component{
             <br/>
             <Row>
                 <Col className="text-center" md={{ size: 6, offset: 3 }}>
-                    <h4>Search by UniProt accession number or gene name</h4>
-                    <h6>Attention: Search is case sensitive</h6>
+                    <h4>Search by UniProt accession number or gene name.</h4>
+                    <h6>Attention: Search is case sensitive.</h6>
                 </Col>
             </Row>
 
@@ -130,7 +130,6 @@ class ProteinSearchContainer extends React.Component{
                             disabled={proteinIsLoading}
                         />
                 </FormGroup>
-                {error && <div>{error}</div>}
             </Form>
         </div>
     }

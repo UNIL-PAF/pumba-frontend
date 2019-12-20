@@ -9,12 +9,15 @@ import LoadingSvgIcon from './common/loadingSvgIcon'
 class PumbaNotifications extends Component {
 
     render(){
-        const {proteinIsLoading} = this.props
+        const {proteinIsLoading, error} = this.props
 
         return (
             <div>
                 {proteinIsLoading && <Alert color="primary" className={"pumba-notification loading"} style={{position: "absolute"}}>
                     <LoadingSvgIcon iconHeight={20} iconWidth={20} hide={false}></LoadingSvgIcon> Loading ...
+                </Alert>}
+                {error && <Alert color="danger" className={"pumba-notification error"} style={{position: "absolute"}}>
+                    {error}
                 </Alert>}
             </div>
         )
@@ -24,11 +27,13 @@ class PumbaNotifications extends Component {
 
 PumbaNotifications.propTypes = {
     proteinIsLoading: PropTypes.bool.isRequired,
+    error: PropTypes.string
 };
 
 const mapStateToProps = (state) => {
     const props = {
         proteinIsLoading : state.loadProtein.proteinIsLoading,
+        error: state.loadProtein.error
     }
     return props
 }
