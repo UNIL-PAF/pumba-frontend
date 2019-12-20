@@ -6,6 +6,7 @@ import ProteinViz from './components/proteinViz/ProteinVizContainer'
 import PeptideVizContainer from "./components/peptideViz/PeptideVizContainer"
 import GelVizContainer from "./components/gelViz/GelVizContainer"
 import PumbaNotifications from "./components/PumbaNotifications"
+import PlotOptions from "./components/options/PlotOptions"
 import { Link } from 'react-router-dom'
 import { Navbar, Nav, NavItem, NavbarBrand, Collapse , NavLink, NavbarToggler} from 'reactstrap'
 import { LinkContainer } from 'react-router-bootstrap';
@@ -13,13 +14,12 @@ import logo from './images/sib_logo_2.png';
 import logo2 from './images/logo_UNIL.png';
 import pumbaConfig from './config'
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
 
 
 class App extends React.Component{
 
     render(){
-        const {proteinIsLoading, history} = this.props
+        const {history} = this.props
 
         return <ConnectedRouter history={history}>
                 <div id={"routes"}>
@@ -54,7 +54,7 @@ class App extends React.Component{
                                     Version {pumbaConfig.version}
                                 </NavItem>
                             </Nav>
-                            <button disabled={proteinIsLoading}>Coucou</button>
+                            <PlotOptions></PlotOptions>
                         </Collapse>
                     </Navbar>
                     <Switch>
@@ -71,20 +71,7 @@ class App extends React.Component{
 }
 
 App.propTypes = {
-    history: PropTypes.object,
-    proteinIsLoading: PropTypes.bool
+    history: PropTypes.object
 }
 
-const mapStateToProps = (state) => {
-    const props = {
-        proteinIsLoading: state.loadProtein.proteinIsLoading
-    }
-    return props
-}
-
-const mapDispatchToProps = (dispatch) => {
-    return {
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(App)
+export default App

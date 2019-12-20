@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 
 class PlotOptions extends PureComponent {
     render() {
-        return <button>Coucou</button>
+        return <button>Options</button>
     }
 }
 
