@@ -20,7 +20,7 @@ class ProteinSearchInput extends Component {
                     <Input
                         type="search"
                         onChange={this.props.onChange}
-                        placeholder={"e.g. P02786"}
+                        placeholder={"e.g. P02786 or TFRC"}
                         disabled={this.props.disabled}
                         onKeyPress={this.keyClicked}
                     >

@@ -61,6 +61,11 @@ export function fetchProtein(proteinId, datasetIds, noReset, callOnComplete){
             })
             .then(json => {
 
+                    // if protein is not found
+                    if(json.length === 0){
+                        alert("Could not find [" + proteinId + "].")
+                    }
+
                     // add a timestamp to the data
                     json.timestamp = noReset ? getState().loadProtein.proteinData.timestamp : Date.now()
 
@@ -70,7 +75,7 @@ export function fetchProtein(proteinId, datasetIds, noReset, callOnComplete){
                     if(! noReset){
                         // let's take the FASTA data from the first entry (should always be OK)
                         const dataBaseName = json[0].proteins[0].dataSet.dataBaseName
-                        dispatch(fetchSequence(proteinId, dataBaseName))
+                        dispatch(fetchSequence(json[0].mainProteinId, dataBaseName))
                         dispatch(gotoViz(true))
                     }
                     dispatch(addProteinData(json))

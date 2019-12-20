@@ -100,8 +100,9 @@ class ProteinSearchContainer extends React.Component{
         return <div>
             <br/>
             <Row>
-                <Col className="text-center" md={{ size: 4, offset: 4 }}>
-                    <h2>Search for protein AC</h2>
+                <Col className="text-center" md={{ size: 6, offset: 3 }}>
+                    <h4>Search by UniProt accession number or gene name</h4>
+                    <h6>Attention: Search is case sensitive</h6>
                 </Col>
             </Row>
 
