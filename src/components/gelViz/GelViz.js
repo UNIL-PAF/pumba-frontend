@@ -19,9 +19,6 @@ class GelViz extends PureComponent {
     sliceWidth = 40
     sliceSpacing = 10
 
-    // TODO put a slider
-    amplify = 5
-
     // grey scale
     greyScale = interpolateHsl("#FAFAFA", "#444444")
 
@@ -114,7 +111,7 @@ class GelViz extends PureComponent {
     }
 
     plotMergedGel = (thisProteinData, title, slicePos, sampleName, containsSelected) => {
-        const {viewHeight, mouseClickSampleCB} = this.props
+        const {viewHeight, mouseClickSampleCB, gelContrast} = this.props
 
         return <g>
                 <GelSlice
@@ -128,7 +125,7 @@ class GelViz extends PureComponent {
                 yScale={this.yScale}
                 maxInt={this.state.maxInt}
                 mergedData={thisProteinData.shortMergedData}
-                amplify={this.amplify}
+                amplify={gelContrast}
                 greyScale={this.greyScale}
                 mouseClickCB={mouseClickSampleCB}
                 sampleName={sampleName}
@@ -141,7 +138,7 @@ class GelViz extends PureComponent {
     }
 
     plotOrigGels = (datasets, thisProteinData, slicePos, sampleName) => {
-        const {viewHeight, mouseClickReplCB} = this.props
+        const {viewHeight, mouseClickReplCB, gelContrast} = this.props
 
         let localPos = 0
 
@@ -165,7 +162,7 @@ class GelViz extends PureComponent {
                 yScale={this.yScale}
                 maxInt={this.state.maxInt}
                 datasetData={datasetData}
-                amplify={this.amplify}
+                amplify={gelContrast}
                 greyScale={this.greyScale}
                 mouseClickReplCB={mouseClickReplCB}
                 sampleName={sampleName}
@@ -285,7 +282,8 @@ GelViz.propTypes = {
     viewWidth: PropTypes.number.isRequired,
     viewHeight: PropTypes.number.isRequired,
     mouseClickSampleCB: PropTypes.func.isRequired,
-    mouseClickReplCB: PropTypes.func.isRequired
+    mouseClickReplCB: PropTypes.func.isRequired,
+    gelContrast: PropTypes.number.isRequired
 };
 
 export default GelViz

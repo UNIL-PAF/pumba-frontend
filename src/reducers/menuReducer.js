@@ -2,12 +2,13 @@ import {
     SET_LEGEND_POS,
     SET_MOVE_LEGEND
 } from '../actions/legendActions'
-import {SHOW_OPTIONS_MENU} from "../actions/menuActions";
+import {SET_GEL_CONTRAST, SHOW_OPTIONS_MENU} from "../actions/menuActions";
 
 const initialState = {
     legendPos: null,
     legendIsMoving: false,
-    selectedOption: undefined
+    selectedOption: undefined,
+    gelContrast: 15
 }
 
 const menuReducer = (state = initialState, action) => {
@@ -21,6 +22,8 @@ const menuReducer = (state = initialState, action) => {
             return { ...state, legendIsMoving: action.isMoving }
         case SHOW_OPTIONS_MENU:
             return { ...state, selectedOption: action.page }
+        case SET_GEL_CONTRAST:
+            return { ...state, gelContrast: action.gelContrast }
         default:
             return state
     }
