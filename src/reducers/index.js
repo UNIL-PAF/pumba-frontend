@@ -3,14 +3,14 @@ import loadProteinReducer from './loadProtein'
 import sampleSelectionReducer from './sampleSelection'
 import proteinVizReducer from "./proteinVizReducer";
 import peptideVizReducer from "./peptideVizReducer"
-import legendReducer from "./legendReducer"
+import menuReducer from "./menuReducer";
 
 const rootReducer = combineReducers({
     loadProtein: loadProteinReducer,
     sampleSelection: sampleSelectionReducer,
     proteinViz: proteinVizReducer,
     peptideViz: peptideVizReducer,
-    legend: legendReducer
+    menu: menuReducer
 })
 
 export default rootReducer

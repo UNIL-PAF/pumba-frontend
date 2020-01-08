@@ -55,7 +55,7 @@ const mapStateToProps = (state) => {
         mouseOverSampleId : state.sampleSelection.mouseOverSampleId,
         mouseOverReplId : state.sampleSelection.mouseOverReplId,
         datasets: state.loadProtein.datasets,
-        legendIsMoving: state.legend.legendIsMoving,
+        legendIsMoving: state.menu.legendIsMoving,
         datasetChanged: state.loadProtein.datasetChanged
     }
     return props

@@ -6,7 +6,7 @@ import ProteinViz from './components/proteinViz/ProteinVizContainer'
 import PeptideVizContainer from "./components/peptideViz/PeptideVizContainer"
 import GelVizContainer from "./components/gelViz/GelVizContainer"
 import PumbaNotifications from "./components/PumbaNotifications"
-import PlotOptions from "./components/options/PlotOptions"
+import PlotOptionsButton from "./components/options/PlotOptionsButton"
 import { Link } from 'react-router-dom'
 import { Navbar, Nav, NavItem, NavbarBrand, Collapse , NavLink, NavbarToggler} from 'reactstrap'
 import { LinkContainer } from 'react-router-bootstrap';
@@ -48,13 +48,15 @@ class App extends React.Component{
                                         <NavLink tag={Link} to="/peptides">Peptides</NavLink>
                                     </LinkContainer>
                                 </NavItem>
+                                <NavItem>
+                                    <PlotOptionsButton></PlotOptionsButton>
+                                </NavItem>
                             </Nav>
                             <Nav className="ml-auto" navbar>
                                 <NavItem>
                                     Version {pumbaConfig.version}
                                 </NavItem>
                             </Nav>
-                            <PlotOptions></PlotOptions>
                         </Collapse>
                     </Navbar>
                     <Switch>

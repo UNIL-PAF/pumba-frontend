@@ -2,13 +2,15 @@ import {
     SET_LEGEND_POS,
     SET_MOVE_LEGEND
 } from '../actions/legendActions'
+import {SHOW_OPTIONS_MENU} from "../actions/menuActions";
 
 const initialState = {
     legendPos: null,
-    legendIsMoving: false
+    legendIsMoving: false,
+    selectedOption: undefined
 }
 
-const legendReducer = (state = initialState, action) => {
+const menuReducer = (state = initialState, action) => {
     switch (action.type) {
         case SET_LEGEND_POS:
             let newEntry = {}
@@ -17,9 +19,11 @@ const legendReducer = (state = initialState, action) => {
             return { ...state, legendPos: newLegendPos}
         case SET_MOVE_LEGEND:
             return { ...state, legendIsMoving: action.isMoving }
+        case SHOW_OPTIONS_MENU:
+            return { ...state, selectedOption: action.page }
         default:
             return state
     }
 }
 
-export default legendReducer
+export default menuReducer
