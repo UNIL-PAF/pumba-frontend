@@ -66,8 +66,8 @@ const mapStateToProps = (state) => {
         popup: state.proteinViz.popup,
         clickedSlices: state.sampleSelection.clickedSlices,
         datasets: state.loadProtein.datasets,
-        legendPos: state.legend.legendPos,
-        legendIsMoving: state.legend.legendIsMoving
+        legendPos: state.menu.legendPos,
+        legendIsMoving: state.menu.legendIsMoving
     }
     return props
 }

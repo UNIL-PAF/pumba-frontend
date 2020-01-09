@@ -9,7 +9,7 @@ import {selectAllDatasets, selectDataset} from "../../actions/loadProtein";
 class GelVizContainer extends PureComponent {
 
     render(){
-        const {proteinData, datasets, datasetChanged, mouseClickSampleCB, mouseClickReplCB} = this.props
+        const {proteinData, datasets, datasetChanged, mouseClickSampleCB, mouseClickReplCB, gelContrast} = this.props
 
         return <div id={"gel-viz"}>
             { proteinData && <GelViz proteinData={proteinData}
@@ -19,6 +19,7 @@ class GelVizContainer extends PureComponent {
                                      viewHeight={400}
                                      mouseClickSampleCB={mouseClickSampleCB}
                                      mouseClickReplCB={mouseClickReplCB}
+                                     gelContrast={gelContrast}
             /> }
         </div>
     }
@@ -29,7 +30,8 @@ GelVizContainer.propTypes = {
     datasets: PropTypes.object.isRequired,
     datasetChanged: PropTypes.number.isRequired,
     mouseClickSampleCB: PropTypes.func.isRequired,
-    mouseClickReplCB: PropTypes.func.isRequired
+    mouseClickReplCB: PropTypes.func.isRequired,
+    gelContrast: PropTypes.number.isRequired
 };
 
 const mapStateToProps = (state) => {
@@ -37,6 +39,7 @@ const mapStateToProps = (state) => {
         proteinData: state.loadProtein.proteinData,
         datasets: state.loadProtein.datasets,
         datasetChanged: state.loadProtein.datasetChanged,
+        gelContrast: state.menu.gelContrast
     }
     return props
 }

@@ -78,8 +78,8 @@ const mapStateToProps = (state) => {
         mouseOverReplId : state.sampleSelection.mouseOverReplId,
         popup: state.peptideViz.popup,
         datasets: state.loadProtein.datasets,
-        legendPos: state.legend.legendPos,
-        legendIsMoving: state.legend.legendIsMoving,
+        legendPos: state.menu.legendPos,
+        legendIsMoving: state.menu.legendIsMoving,
         datasetChanged: state.loadProtein.datasetChanged
     }
     return props

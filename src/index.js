@@ -9,7 +9,9 @@ import './styles/index.css';
 import './styles/App.css';
 import './styles/PeptideView.css';
 import './styles/GelView.css';
+import './styles/OptionsMenu.css';
 import '../node_modules/bootstrap/dist/css/bootstrap.css';
+import 'rc-slider/assets/index.css';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 import rootReducer from './reducers'
