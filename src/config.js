@@ -5,7 +5,7 @@
 
 var config = {};
 
-config.version = '0.3.3'
+config.version = '0.3.4'
 
 config.urlBackend = "http://localhost:9000"
 //config.urlBackend = "https://pumba-dev.vital-it.ch/backend"

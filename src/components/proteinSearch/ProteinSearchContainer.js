@@ -95,7 +95,7 @@ class ProteinSearchContainer extends React.Component{
     }
 
     render(){
-        const {proteinIsLoading, error, datasets, datasetNames} = this.props
+        const {proteinIsLoading, datasets, datasetNames} = this.props
 
         return <div>
             <br/>
