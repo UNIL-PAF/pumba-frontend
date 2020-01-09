@@ -3,6 +3,7 @@ import pumbaConfig from '../config'
 import { resetSampleSelection } from "./sampleSelection"
 import {resetProteinView, computeTheoMergedProteins} from "./proteinVizActions"
 import {resetPeptideView} from "./peptideVizActions";
+import {setGelContrast} from "./menuActions"
 import * as _ from 'lodash';
 
 export const PROTEIN_IS_LOADED = 'PROTEIN_IS_LOADED'
@@ -72,6 +73,7 @@ export function fetchProtein(proteinId, datasetIds, noReset, callOnComplete){
                         const dataBaseName = json[0].proteins[0].dataSet.dataBaseName
                         dispatch(fetchSequence(proteinId, dataBaseName))
                         dispatch(gotoViz(true))
+                        dispatch(setGelContrast(pumbaConfig.maxGelContrast / 2))
                     }
                     dispatch(addProteinData(json))
                     dispatch(proteinIsLoaded())
