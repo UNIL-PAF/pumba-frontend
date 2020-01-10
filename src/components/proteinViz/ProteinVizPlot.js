@@ -196,10 +196,11 @@ class ProteinVizPlot extends Component {
                     const curveIdx = _.findIndex(md.theoMergedProtein.theoMolWeights, (x) => {
                         return x > mouseWeightPos
                     })
-                    const int = md.theoMergedProtein.intensities[curveIdx]
 
-                    if(typeof int !== 'undefined'){
-                        return <circle key={idx} className={"merged-position-circle"} cx={mouseX} cy={yScale(int) + this.margin.top} r={3} fill={sampleColor(idx)}></circle>
+                    const ints = md.theoMergedProtein.intensities
+
+                    if(ints && typeof ints[curveIdx] !== 'undefined'){
+                        return <circle key={idx} className={"merged-position-circle"} cx={mouseX} cy={yScale(ints[curveIdx]) + this.margin.top} r={3} fill={sampleColor(idx)}></circle>
                     }
                 })}
             </g>
