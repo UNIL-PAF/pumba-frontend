@@ -20,13 +20,25 @@ class ProteinVizPlot extends Component {
     constructor(props) {
         super(props)
 
-        const {proteinData} = this.props
-        this.state = this.computeLimits(proteinData)
+        this.state = {...this.resetXScale(), ...this.resetYScale()}
         this.svg = React.createRef()
         this.brushG = React.createRef()
     }
 
-    computeLimits = (proteinData) => {
+    resetYScale = () => {
+        const {maxIntensity, proteinMenuMaxIntensity} = this.props
+
+        const currentMaxIntensity = proteinMenuMaxIntensity ? proteinMenuMaxIntensity : maxIntensity
+
+        return {
+            yScale: scaleLinear().range([this.props.viewHeight - this.margin.top - this.margin.bottom, 0]).domain([0, currentMaxIntensity]),
+            proteinMenuMaxIntensity: proteinMenuMaxIntensity
+        }
+    }
+
+    resetXScale = () => {
+        const {proteinData} = this.props
+
         const minMolWeightDa = Math.pow(10, _.min(_.map(proteinData, function(p){
             return p.theoMergedProtein.theoMolWeights[0]
         })))
@@ -39,21 +51,15 @@ class ProteinVizPlot extends Component {
         this.minMolWeight = Math.log10(minMolWeightDa - 1)
         this.maxMolWeight = Math.log10(maxMolWeightDa + 10)
 
-        const maxInt = _.max(_.map(proteinData, function(pd){
-            return _.max(_.map(pd.proteins, function(p){
-                return _.max(p.intensities)
-            }))
-        }))
-
         // just take the theoretical weight of the first protein, it should always be the same.
         const theoMolWeight = Math.log10(proteinData[0].proteins[0].theoMolWeight)
 
         return {
             xScale: scaleLinear().range([0, this.props.viewWidth - this.margin.left - this.margin.right]).domain([this.minMolWeight, this.maxMolWeight]),
-            yScale: scaleLinear().range([this.props.viewHeight - this.margin.top - this.margin.bottom, 0]).domain([0, maxInt]),
             theoMolWeight: theoMolWeight,
             scaleChanged: 0,
-            proteinDataTimestamp: proteinData.timestamp
+            proteinDataTimestamp: proteinData.timestamp,
+
         }
     }
 
@@ -77,6 +83,14 @@ class ProteinVizPlot extends Component {
         this.props.changeZoomRangeCB(this.minMolWeight, this.maxMolWeight)
     }
 
+    resetYAxis = () => {
+        const yAxis = axisLeft(this.state.yScale)
+            .tickFormat((d) => { return d.toExponential() })
+
+        select(this.yAxis)
+            .call(yAxis)
+    }
+
     componentDidMount(){
         // add the x-axis
         const xAxis = axisBottom(this.state.xScale)
@@ -85,11 +99,7 @@ class ProteinVizPlot extends Component {
 
         select(this.xAxis).call(xAxis)
 
-        const yAxis = axisLeft(this.state.yScale)
-            .tickFormat((d) => { return d.toExponential() })
-
-        select(this.yAxis)
-            .call(yAxis)
+        this.resetYAxis()
 
         const brushSelect = select(this.brushG.current)
         this.setState({brush: brushSelect})
@@ -127,7 +137,7 @@ class ProteinVizPlot extends Component {
     }
 
     componentDidUpdate(){
-        const {zoomLeft, zoomRight, proteinData} = this.props
+        const {zoomLeft, zoomRight, proteinData, proteinMenuMaxIntensity} = this.props
 
         // we only update the axis and stuff if the zoom or data changed
         if(zoomLeft && this.state.zoomLeft !== zoomLeft && this.state.zoomRight !== zoomRight){
@@ -147,8 +157,11 @@ class ProteinVizPlot extends Component {
         }
 
         if(this.state.proteinDataTimestamp && (this.state.proteinDataTimestamp !== proteinData.timestamp)){
-            this.setState(this.computeLimits(proteinData))
-            this.setState({proteinDataTimestamp: proteinData.timestamp})
+            this.setState(this.resetXScale())
+            this.setState({ proteinDataTimestamp: proteinData.timestamp })
+        }else if(proteinMenuMaxIntensity && (proteinMenuMaxIntensity !== this.state.proteinMenuMaxIntensity)){
+            this.setState(this.resetYScale())
+            this.resetYAxis()
         }
 
     }
@@ -242,6 +255,14 @@ class ProteinVizPlot extends Component {
         )
     }
 
+    /**
+     * we need to remove the option menu here since the brush stops the bubbling of the click event
+     */
+    clickBrushRect = () => {
+        const {selectedOption, showOptionsMenu} = this.props
+        if(selectedOption === 'graph') showOptionsMenu(undefined)
+    }
+
     render() {
         const {viewWidth, viewHeight, mouseLeaveSampleCB, popup, proteinData, history, legendPos} = this.props
 
@@ -261,7 +282,10 @@ class ProteinVizPlot extends Component {
                  onMouseEnter={(e) => this.mouseEnter(e)}
             >
 
-                <g className="brush-g" ref={this.brushG} onDoubleClick={this.zoomOut}
+                <g className="brush-g"
+                   ref={this.brushG}
+                   onClick={() => this.clickBrushRect()}
+                   onDoubleClick={this.zoomOut}
                    onMouseEnter={() => mouseLeaveSampleCB()}
                    transform={'translate(' + this.margin.left + ',' + this.margin.top + ')'}/> }
 
@@ -320,6 +344,9 @@ ProteinVizPlot.propTypes = {
     datasets: PropTypes.object.isRequired,
     legendPos: PropTypes.object,
     setLegendPos: PropTypes.func.isRequired,
+    maxIntensity: PropTypes.number.isRequired,
+    proteinMenuMaxIntensity: PropTypes.number,
+    selectedOption: PropTypes.string
 };
 
 export default ProteinVizPlot

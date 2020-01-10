@@ -7,26 +7,27 @@ import ProteinVizPlot from "./ProteinVizPlot";
 import { mouseLeaveSample, clickSlice, unclickSlice} from "../../actions/sampleSelection";
 import {changeZoomAndFilter, removeSlicePopup, showSlicePopup} from "../../actions/proteinVizActions";
 import {setLegendPos} from "../../actions/legendActions";
+import {showOptionsMenu} from "../../actions/menuActions";
 
 class ProteinVizContainer extends Component {
 
     render(){
         const {proteinData, mouseOverSampleId, mouseOverReplId, mouseLeaveSampleCB, zoomLeft, zoomRight,
-            changeZoomRangeCB, theoMergedProteins,
-            showPopupCB, removePopupCB, popup, clickedSlices,
-            clickSliceCB, unclickSliceCB, history, datasets, legendPos, setLegendPos, legendIsMoving} = this.props
+            changeZoomRangeCB, theoMergedProteins, showOptionsMenu,
+            showPopupCB, removePopupCB, popup, clickedSlices, proteinMenuMaxIntensity, selectedOption,
+            clickSliceCB, unclickSliceCB, history, datasets, legendPos, setLegendPos, legendIsMoving, maxIntensity} = this.props
 
         return <div id={"protein-viz"}>
         { proteinData && <ProteinVizPlot proteinData={proteinData} viewWidth={800} viewHeight={400}
-                             mouseOverSampleId={mouseOverSampleId}
-                             mouseOverReplId={mouseOverReplId}
+                             mouseOverSampleId={mouseOverSampleId} selectedOption={selectedOption}
+                             mouseOverReplId={mouseOverReplId} showOptionsMenu={showOptionsMenu}
                              mouseLeaveSampleCB={mouseLeaveSampleCB}
                              changeZoomRangeCB={changeZoomRangeCB} zoomLeft={zoomLeft} zoomRight={zoomRight}
                              theoMergedProteins={theoMergedProteins}
                              showPopupCB={showPopupCB} removePopupCB={removePopupCB} popup={popup}
                              clickedSlices={clickedSlices} clickSliceCB={clickSliceCB} unclickSliceCB={unclickSliceCB}
                              history={history} datasets={datasets} legendPos={legendPos} setLegendPos={setLegendPos}
-                             legendIsMoving={legendIsMoving}
+                             legendIsMoving={legendIsMoving} maxIntensity={maxIntensity} proteinMenuMaxIntensity={proteinMenuMaxIntensity}
         /> }
         </div>
     }
@@ -53,6 +54,9 @@ ProteinVizContainer.propTypes = {
     legendPos: PropTypes.object,
     setLegendPos: PropTypes.func.isRequired,
     legendIsMoving: PropTypes.bool.isRequired,
+    maxIntensity: PropTypes.number.isRequired,
+    proteinMenuMaxIntensity: PropTypes.number,
+    selectedOption: PropTypes.string
 };
 
 const mapStateToProps = (state) => {
@@ -67,7 +71,11 @@ const mapStateToProps = (state) => {
         clickedSlices: state.sampleSelection.clickedSlices,
         datasets: state.loadProtein.datasets,
         legendPos: state.menu.legendPos,
-        legendIsMoving: state.menu.legendIsMoving
+        legendIsMoving: state.menu.legendIsMoving,
+        maxIntensity: state.loadProtein.maxIntensity,
+        proteinMenuMaxIntensity: state.menu.proteinMenuMaxIntensity,
+        selectedOption: state.menu.selectedOption,
+        showOptionsMenu: PropTypes.func.isRequired,
     }
     return props
 }
@@ -80,7 +88,8 @@ const mapDispatchToProps = (dispatch) => {
         removePopupCB: () => { dispatch(removeSlicePopup())},
         clickSliceCB: (slice) => { dispatch(clickSlice(slice))},
         unclickSliceCB: (slice) => { dispatch(unclickSlice(slice))},
-        setLegendPos: (view, x, y) => { dispatch(setLegendPos(view, x, y))}
+        setLegendPos: (view, x, y) => { dispatch(setLegendPos(view, x, y))},
+        showOptionsMenu: (page) => { dispatch(showOptionsMenu(page)) },
     }
 }
 

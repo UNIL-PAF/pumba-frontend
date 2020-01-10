@@ -2,13 +2,14 @@ import {
     SET_LEGEND_POS,
     SET_MOVE_LEGEND
 } from '../actions/legendActions'
-import {SET_GEL_CONTRAST, SHOW_OPTIONS_MENU} from "../actions/menuActions";
+import {SET_GEL_CONTRAST, SET_PROTEIN_MENU_MAX_INTENSITY, SHOW_OPTIONS_MENU} from "../actions/menuActions";
 
 const initialState = {
     legendPos: null,
     legendIsMoving: false,
     selectedOption: undefined,
-    gelContrast: 15
+    gelContrast: 15,
+    maxIntensity: undefined
 }
 
 const menuReducer = (state = initialState, action) => {
@@ -24,6 +25,8 @@ const menuReducer = (state = initialState, action) => {
             return { ...state, selectedOption: action.page }
         case SET_GEL_CONTRAST:
             return { ...state, gelContrast: action.gelContrast }
+        case SET_PROTEIN_MENU_MAX_INTENSITY:
+            return { ...state, proteinMenuMaxIntensity: action.proteinMenuMaxIntensity}
         default:
             return state
     }

@@ -16,6 +16,7 @@ export const SET_DATASETS = 'SET_DATASETS'
 export const SET_SORTED_DATASET_NAMES = 'SET_SORTED_DATASET_NAMES'
 export const SELECT_DATASET = 'SELECT_DATASET'
 export const SELECT_ALL_DATASETS = 'SELECT_ALL_DATASETS'
+export const SET_MAX_INTENSITY = 'SET_MAX_INTENSITY'
 
 export function reloadProtein(activeDatasetIds, callOnComplete){
     return function (dispatch, getState) {
@@ -68,6 +69,14 @@ export function fetchProtein(proteinId, datasetIds, noReset, callOnComplete){
                     }else{
                         // add a timestamp to the data
                         json.timestamp = noReset ? getState().loadProtein.proteinData.timestamp : Date.now()
+
+                        // add the maximum intensity
+                        const maxIntensity = _.max(_.map(json, function(pd){
+                            return _.max(_.map(pd.proteins, function(p){
+                                return _.max(p.intensities)
+                            }))
+                        }))
+                        dispatch(setMaxIntensity(maxIntensity))
 
                         // add a short version of the merged data for the gel view
                         addShortMergedData(json)
@@ -224,4 +233,8 @@ export const selectDataset = (sampleIdx, replIdx) => ({
 
 export const selectAllDatasets = (sampleIdx) => ({
     type: SELECT_ALL_DATASETS, sampleIdx: sampleIdx
+})
+
+export const setMaxIntensity = (maxIntensity) => ({
+    type: SET_MAX_INTENSITY, maxIntensity: maxIntensity
 })

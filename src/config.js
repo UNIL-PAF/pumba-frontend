@@ -12,6 +12,6 @@ config.urlBackend = "http://localhost:9000"
 //config.urlBackend = "https://pumba.vital-it.ch/backend"
 
 // Gel contrast setting
-config.maxGelContrast = 30
+config.maxGelContrast = 100
 
 module.exports = config;

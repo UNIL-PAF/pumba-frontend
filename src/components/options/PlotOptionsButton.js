@@ -6,6 +6,7 @@ import {Button} from 'reactstrap'
 import {showOptionsMenu} from "../../actions/menuActions";
 import GelOptions from "./GelOptions"
 import PropTypes from 'prop-types'
+import ProteinOptions from "./ProteinOptions";
 
 class PlotOptionsButton extends PureComponent {
 
@@ -38,8 +39,13 @@ class PlotOptionsButton extends PureComponent {
 
 
     renderOptionsMenu = (pageName) => {
-        if(pageName === "lanes"){
-            return <GelOptions></GelOptions>
+        switch(pageName) {
+            case "lanes":
+                return <GelOptions></GelOptions>
+            case "graph":
+                return <ProteinOptions/>
+            default:
+                return null
         }
 
     }
@@ -48,7 +54,7 @@ class PlotOptionsButton extends PureComponent {
         const {pathname, selectedOption, showOptionsMenu} = this.props
 
         const pageName = pathname.replace(/\/(\w+)/, '$1')
-        const pagesWithOptions = ['lanes']
+        const pagesWithOptions = ['lanes', 'graph']
         const showOptions = pagesWithOptions.includes(pageName)
         const cursor = showOptions ? 'pointer' : 'default'
         const pageOptionActive = selectedOption === pageName
@@ -69,8 +75,9 @@ class PlotOptionsButton extends PureComponent {
 }
 
 PlotOptionsButton.propTypes = {
-    showOptionsMenuCB: PropTypes.func.isRequired,
-    showOptionsMenu: PropTypes.string,
+    showOptionsMenu: PropTypes.func.isRequired,
+    pathname: PropTypes.string,
+    selectedOption: PropTypes.string
 };
 
 const mapStateToProps = (state) => {
