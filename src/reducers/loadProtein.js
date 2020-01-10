@@ -3,7 +3,6 @@ import {
     GOTO_VIZ, ADD_SEQUENCE_DATA, SET_DATASETS, SET_SORTED_DATASET_NAMES, SELECT_DATASET, SELECT_ALL_DATASETS
 } from '../actions/loadProtein'
 import * as _ from 'lodash';
-import {setMaxIntensity} from "../actions/menuActions";
 
 const initialState = {
     proteinIsLoading: false,

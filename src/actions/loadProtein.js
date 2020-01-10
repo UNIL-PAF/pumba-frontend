@@ -3,7 +3,7 @@ import pumbaConfig from '../config'
 import { resetSampleSelection } from "./sampleSelection"
 import {resetProteinView, computeTheoMergedProteins} from "./proteinVizActions"
 import {resetPeptideView} from "./peptideVizActions";
-import {setGelContrast} from "./menuActions"
+import {setGelContrast, setProteinMenuMaxIntensity} from "./menuActions"
 import * as _ from 'lodash';
 
 export const PROTEIN_IS_LOADED = 'PROTEIN_IS_LOADED'
@@ -77,6 +77,7 @@ export function fetchProtein(proteinId, datasetIds, noReset, callOnComplete){
                             }))
                         }))
                         dispatch(setMaxIntensity(maxIntensity))
+                        dispatch(setProteinMenuMaxIntensity(undefined))
 
                         // add a short version of the merged data for the gel view
                         addShortMergedData(json)
