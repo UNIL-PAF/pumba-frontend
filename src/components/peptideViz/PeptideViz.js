@@ -57,7 +57,7 @@ class PeptideViz extends PureComponent {
     }
 
     // set the margins
-    margin = {top: 5, right: 10, bottom: 40, left: 40};
+    margin = {top: 40, right: 10, bottom: 40, left: 40};
 
 
     componentDidMount(){
@@ -284,7 +284,7 @@ class PeptideViz extends PureComponent {
                    onDoubleClick={this.zoomOut}
                 >
                     { this.plotTheoWeightLine() }
-                    <ProteinTitle proteinData={proteinData}/>
+                    <ProteinTitle proteinData={proteinData} y={-10}/>
                     { this.plotAminoAcidBar() }
                     { this.svg && this.plotPeptides() }
                 </g>
