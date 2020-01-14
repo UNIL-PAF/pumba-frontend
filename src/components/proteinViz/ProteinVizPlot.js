@@ -187,7 +187,7 @@ class ProteinVizPlot extends Component {
                 {_.map(mergedData, (md, i) => {
 
                     // in case a sample is unselected
-                    if(! proteinData[i]) return null
+                    if(! proteinData[i] || ! datasets[proteinData[i].sample].isActive) return null
 
                     const idx = datasets[proteinData[i].sample].idx
 
