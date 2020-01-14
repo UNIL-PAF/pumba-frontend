@@ -29,23 +29,20 @@ class ProteinVizLegends extends PureComponent {
     changeSelection(target, sampleName, replIdx){
         const {reloadProteinCB, setDatasets, datasets} = this.props
 
-        var newDatasets = null
-
         // set the new dataset
         if(target === "sample"){
-            newDatasets = {...datasets, [sampleName]: {
+            setDatasets({...datasets, [sampleName]: {
                     isAvailable: datasets[sampleName].isAvailable,
                     datasets: datasets[sampleName].datasets,
                     idx: datasets[sampleName].idx,
                     isActive: ! datasets[sampleName].isActive,
-                    isChecked: ! datasets[sampleName].isActive
-                }
-            }
+                    isChecked: datasets[sampleName].isChecked
+                }})
         }else{
             let newDatasetsArray = [...(datasets[sampleName].datasets)]
             newDatasetsArray[replIdx].isActive = ! newDatasetsArray[replIdx].isActive
 
-            newDatasets = {...datasets, [sampleName]: {
+            const newDatasets = {...datasets, [sampleName]: {
                     isAvailable: datasets[sampleName].isAvailable,
                     datasets: newDatasetsArray,
                     idx: datasets[sampleName].idx,
@@ -53,22 +50,22 @@ class ProteinVizLegends extends PureComponent {
                     isChecked: datasets[sampleName].isChecked,
                 }
             }
+
+            // reload protein with active datasets
+            const activeDatasets = _.reduce(newDatasets, (res, val) => {
+                if(val.isActive){
+                    const active = _.filter(val.datasets, (d) => { return d.isActive })
+                    res = res.concat(_.map(active, 'id'))
+                }
+                return res
+            }, [])
+
+            console.log(activeDatasets, newDatasets)
+
+            const callOnComplete = () => {setDatasets(newDatasets)}
+            reloadProteinCB(activeDatasets.join(","), callOnComplete)
         }
-
-        // reload protein with active datasets
-        const activeDatasets = _.reduce(newDatasets, (res, val) => {
-            if(val.isActive){
-                const active = _.filter(val.datasets, (d) => { return d.isActive })
-                res = res.concat(_.map(active, 'id'))
-            }
-            return res
-        }, [])
-
-        const callOnComplete = () => {setDatasets(newDatasets)}
-
-        reloadProteinCB(activeDatasets.join(','), callOnComplete)
     }
-
 
     /**
      * plot the symbol for the theo weight line
@@ -239,7 +236,7 @@ class ProteinVizLegends extends PureComponent {
         const legendHeight = 20
         const nrRep = (mouseOverLegend ? _.sum(_.map(datasets, (d) => { return d.isActive && d.datasets.length})) : 0)
         const nrActiveDatasets = _.filter(datasets, (d) => {return d.isAvailable && (d.isActive || mouseOverLegend)}).length
-        const selectedReplNr = (! mouseOverLegend ? _.reduce(datasets, (res, v, k) => {return res + (_.some(datasets[k].datasets, 'isSelected') ? datasets[k].datasets.length : 0)}, 0) : 0)
+        const selectedReplNr = (! mouseOverLegend ? _.reduce(datasets, (res, v, k) => {return res + (datasets[k].isActive ? (_.some(datasets[k].datasets, 'isSelected') ? datasets[k].datasets.length : 0) : 0)}, 0) : 0)
 
         const nrLegends = nrActiveDatasets + nrRep + selectedReplNr
         const xShift = 12

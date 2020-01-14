@@ -178,7 +178,12 @@ class PeptideViz extends PureComponent {
         // we need this variable to get the correct replIdx
         var replIdx = 0;
 
+
         return proteinData.map((sample, i) => {
+
+            // only show active datasets
+            if(! datasets[sample.sample].isActive) return null
+
             return sample.proteins.map((protein, j) => {
                 replIdx = replIdx + 1
 

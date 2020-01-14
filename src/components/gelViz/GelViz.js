@@ -252,8 +252,8 @@ class GelViz extends PureComponent {
         const {viewWidth, viewHeight, datasets, proteinData} = this.props
 
         const nrSlices = _.reduce(datasets, (acc, d) => {
-            const selectedDatasets = (d.isActive ? _.reduce(d.datasets, (acc2, d2) => {return (d2.isSelected ? 1 : 0) + acc2}, 0) : 0)
-            return acc + selectedDatasets + 1
+            const selectedDatasets = (d.isActive ? _.reduce(d.datasets, (acc2, d2) => {return (d2.isSelected ? 1 : 0) + acc2}, 1) : 0)
+            return acc + selectedDatasets
         }, 0)
 
         const totalSlicesWidth = nrSlices * (this.sliceWidth + this.sliceSpacing)

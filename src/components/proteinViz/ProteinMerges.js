@@ -21,6 +21,9 @@ class ProteinMerges extends PureComponent {
         const sampleCol = sampleColor(sampleIdx)
         const highlight = (mouseOverSampleId === sampleName)
 
+        // only show active datasets
+        if(! datasets[proteinInfo.sample].isActive) return null
+
         return <polyline className="merged-plot-line" key={sampleIdx} points={this.theoPosString(proteinMerge.theoMergedProtein)}
                          stroke={sampleCol} fill="transparent" strokeWidth={ highlight ? "2" : "1" }/>
     }
@@ -48,7 +51,7 @@ class ProteinMerges extends PureComponent {
             mouseOverSampleId, mouseOverReplId} = this.props
 
         return _.flatMap(datasets, (v, sample) => {
-            const proteins = _.find(proteinData, (p) => { return p.sample === sample})
+            const proteins = _.find(proteinData, (p) => { return p.sample === sample && v.isActive})
             const color = sampleColor(v.idx)
 
             return _.map(v.datasets, (d) => {
