@@ -68,7 +68,7 @@ class PlotOptionsButton extends PureComponent {
         }
 
         return <div ref={this.node}>
-            <Button color="primary" outline={true} disabled={! showOptions} onClick={() => callback()} style={{cursor: cursor}} active={pageOptionActive}>Options</Button>
+            <Button id={'options-button'} color="primary" outline={true} disabled={! showOptions} onClick={() => callback()} style={{cursor: cursor}} active={pageOptionActive}>Options</Button>
             { pageOptionActive && this.renderOptionsMenu(pageName) }
         </div>
     }

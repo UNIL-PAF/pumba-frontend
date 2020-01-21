@@ -37,6 +37,24 @@
   width: 100%;
 }
 
+
+/**
+ navbar
+ */
+
+.navbar-light .navbar-nav .nav-link {
+  font-size: larger
+}
+
+#options-button {
+  font-size: larger
+}
+
+
+/**
+ plots
+ */
+
 #protein-viz {
   height: calc(100% - 60px);
   width: 100%;
