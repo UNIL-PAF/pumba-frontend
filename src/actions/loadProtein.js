@@ -87,7 +87,7 @@ export function fetchProtein(proteinId, datasetIds, noReset, callOnComplete){
                             const dataBaseName = json[0].proteins[0].dataSet.dataBaseName
                             dispatch(fetchSequence(json[0].mainProteinId, dataBaseName))
                             dispatch(gotoViz(true))
-                            dispatch(setGelContrast(pumbaConfig.maxGelContrast / 2))
+                            dispatch(setGelContrast(pumbaConfig.initialGelContrast))
                         }
                         dispatch(addProteinData(json))
                         dispatch(proteinIsLoaded())

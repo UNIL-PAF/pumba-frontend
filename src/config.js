@@ -7,11 +7,12 @@ var config = {};
 
 config.version = '0.3.7'
 
-//config.urlBackend = "http://localhost:9000"
-config.urlBackend = "https://pumba-dev.vital-it.ch/backend"
+config.urlBackend = "http://localhost:9000"
+//config.urlBackend = "https://pumba-dev.vital-it.ch/backend"
 //config.urlBackend = "https://pumba.vital-it.ch/backend"
 
 // Gel contrast setting
-config.maxGelContrast = 30
+config.maxGelContrast = 60
+config.initialGelContrast = 15
 
 module.exports = config;

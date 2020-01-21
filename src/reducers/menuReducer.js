@@ -3,12 +3,13 @@ import {
     SET_MOVE_LEGEND
 } from '../actions/legendActions'
 import {SET_GEL_CONTRAST, SET_PROTEIN_MENU_MAX_INTENSITY, SHOW_OPTIONS_MENU} from "../actions/menuActions";
+import pumbaConfig from '../config'
 
 const initialState = {
     legendPos: null,
     legendIsMoving: false,
     selectedOption: undefined,
-    gelContrast: 15,
+    gelContrast: pumbaConfig.initialGelContrast,
     maxIntensity: undefined
 }
 
