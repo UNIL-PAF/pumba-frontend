@@ -232,7 +232,7 @@ class GelViz extends PureComponent {
 
     plotTheoMolWeight = (totalSlicesWidth) => {
 
-        const xPos = totalSlicesWidth + this.margin.left + 20
+        const xPos = totalSlicesWidth + this.margin.left + 15
 
         return <g>
             <line
@@ -241,8 +241,6 @@ class GelViz extends PureComponent {
                 y1={this.theoMolWeightPos}
                 x2={xPos}
                 y2={this.theoMolWeightPos}
-                stroke={"red"}
-                strokeWidth={ 1 }
             ></line>
             <text className={'gel-theo-molweight-text'} x={xPos} y={this.theoMolWeightPos}>{this.theoMolWeight + ' kDa'}</text>
         </g>

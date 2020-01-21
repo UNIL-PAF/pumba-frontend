@@ -34,6 +34,9 @@
 
 .theo-line-gel {
     pointer-events: none;
+    stroke: red;
+    stroke-width: 1;
+    stroke-dasharray: 4;
 }
 
 .expand-info {
@@ -72,5 +75,6 @@
 .gel-theo-molweight-text{
     pointer-events: none;
     user-select: none;
-    font-size: 80%;
+    font-size: 70%;
+    fill: red;
 }
