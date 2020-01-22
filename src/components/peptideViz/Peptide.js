@@ -31,6 +31,8 @@ class Peptide extends PureComponent {
     onMouseEnter = (event) => {
         const {getMousePos, pepInfo, showPopupCB, sampleName, replName, sliceMolWeight} = this.props
 
+        console.log(pepInfo)
+
         const mousePos = getMousePos()
         this.setState({'mouseIsOver': true})
 
@@ -42,8 +44,11 @@ class Peptide extends PureComponent {
             "End pos" : pepInfo.endPos,
             //"Pep mol weight": Math.pow(10, pepInfo.theoMass).toFixed(2),
             "Razor pep": pepInfo.isRazor ? "True": "False",
+            "Unique": pepInfo.uniqueByGroup ? "True": "False",
             "Mol weight": Math.pow(10, sliceMolWeight).toFixed(2) + " kDa",
             "Gel slice": pepInfo.sliceNr,
+            "MaxQuant score": pepInfo.score
+
         }
         const popUp = {x: mousePos[0], y: mousePos[1], content: popUpContent}
         showPopupCB(popUp)

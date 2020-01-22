@@ -240,7 +240,7 @@ class PeptideViz extends PureComponent {
         const {x, y, content} = this.props.popup
 
         const seqLen = content.Sequence.length
-        const height = 90
+        const height = 108
         const defWidth = 130
         const width = seqLen > 11 ? (seqLen - 11) * 5 + defWidth : defWidth
 
