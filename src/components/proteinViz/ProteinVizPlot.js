@@ -189,7 +189,7 @@ class ProteinVizPlot extends Component {
                     // in case a sample is unselected
                     if(! proteinData[i] || ! datasets[proteinData[i].sample].isActive) return null
 
-                    const idx = datasets[proteinData[i].sample].idx
+                    const idx = datasets[proteinData[i].sample].colorGroup
 
                     // find the correct intensity
                     const curveIdx = _.findIndex(md.theoMergedProtein.theoMolWeights, (x) => {

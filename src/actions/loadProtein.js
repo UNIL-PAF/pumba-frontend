@@ -152,6 +152,8 @@ export function fetchDatasets(){
                 // parse a list of datasets and add them
                 var idx = 0;
 
+                console.log(json)
+
                 const samples = _.reduce(json, (res, val) => {
                     if(! res[val.sample]){
                         res[val.sample] = {}
@@ -161,7 +163,7 @@ export function fetchDatasets(){
                         res[val.sample].datasets = []
                         //res[val.sample].idx = idx ++;
                     }
-                    res[val.sample].datasets.push({id: val.id, name: val.name, isActive: true})
+                    res[val.sample].datasets.push({id: val.id, name: val.name, isActive: true, colorGroup: val.colorGroup})
                     return res
                 }, {})
 
@@ -176,6 +178,7 @@ export function fetchDatasets(){
                     })
                     s.idx = idx ++;
                     s.name = name
+                    s.colorGroup = s.datasets[0].colorGroup
                     return s;
                 }), 'name')
 

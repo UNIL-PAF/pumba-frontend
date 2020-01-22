@@ -162,7 +162,7 @@ class ProteinVizLegends extends PureComponent {
         if(! datasets[sampleName].isAvailable) return null
 
         const isSampleSelected = _.some(datasets[sampleName].datasets, (x) => {return x.isSelected})
-        const colorIdx = datasets[sampleName].idx
+        const colorIdx = datasets[sampleName].colorGroup
         const isActive = datasets[sampleName].isActive
         const showCheckbox = mouseOverSampleId === sampleName
 

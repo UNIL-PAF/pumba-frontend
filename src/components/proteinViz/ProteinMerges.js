@@ -16,7 +16,7 @@ class ProteinMerges extends PureComponent {
         // in case the sample was deactivated
         if(! proteinInfo) return null
 
-        const sampleIdx = datasets[proteinInfo.sample].idx
+        const sampleIdx = datasets[proteinInfo.sample].colorGroup
         const sampleName = datasets[proteinInfo.sample].name
         const sampleCol = sampleColor(sampleIdx)
         const highlight = (mouseOverSampleId === sampleName)
@@ -52,7 +52,7 @@ class ProteinMerges extends PureComponent {
 
         return _.flatMap(datasets, (v, sample) => {
             const proteins = _.find(proteinData, (p) => { return p.sample === sample && v.isActive})
-            const color = sampleColor(v.idx)
+            const color = sampleColor(v.colorGroup)
 
             return _.map(v.datasets, (d) => {
                 // check if the mouse is over this dataset

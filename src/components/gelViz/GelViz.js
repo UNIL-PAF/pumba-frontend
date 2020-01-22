@@ -222,7 +222,7 @@ class GelViz extends PureComponent {
             const plots =  <g key={'slice-group-' + dataset.name}>
                 {this.plotMergedGel(thisProteinData, dataset.name, slicePos, dataset.name, nrSelectedDatasets > 0)}
                 {nrSelectedDatasets && this.plotOrigGels(dataset.datasets, thisProteinData, slicePos+1, dataset.name)}
-                {nrSelectedDatasets && this.plotSampleRect(slicePos, nrSelectedDatasets, dataset.idx)}
+                {nrSelectedDatasets && this.plotSampleRect(slicePos, nrSelectedDatasets, dataset.colorGroup)}
             </g>
 
             slicePos += (1 +  nrSelectedDatasets)

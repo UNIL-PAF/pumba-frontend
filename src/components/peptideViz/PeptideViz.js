@@ -218,7 +218,7 @@ class PeptideViz extends PureComponent {
                         yScale={this.state.yScale}
                         replIdx={replIdx-1}
                         sampleName={sample.sample}
-                        color={sampleColor(datasets[sample.sample].idx)}
+                        color={sampleColor(datasets[sample.sample].colorGroup)}
                         replName={protein.dataSet.name}
                         svgParent={this.svg}
                         sliceMolWeight={peptide.sliceMolWeight}
