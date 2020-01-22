@@ -15,7 +15,7 @@ class GelOptions extends PureComponent {
     }
 
     setToDefault = () => {
-        this.props.setGelContrast(pumbaConfig.maxGelContrast / 2)
+        this.props.setGelContrast(pumbaConfig.initialGelContrast)
     }
 
     render() {
