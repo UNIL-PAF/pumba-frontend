@@ -29,7 +29,7 @@ class PeptideOptions extends PureComponent {
     }
 
     render() {
-        const {showOnlyRazor, showOnlyUnique, setShowOnlyUnique, setShowOnlyRazor} = this.props
+        const {showOnlyRazor, showOnlyUnique} = this.props
 
         return <div className={"options-menu"}>
             <p style={{minWidth: "160px"}}><span><strong>Peptide graph options</strong></span>&nbsp;&nbsp;
