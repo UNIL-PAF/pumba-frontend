@@ -7,6 +7,7 @@ import {showOptionsMenu} from "../../actions/menuActions";
 import GelOptions from "./GelOptions"
 import PropTypes from 'prop-types'
 import ProteinOptions from "./ProteinOptions";
+import PeptideOptions from "./PeptideOptions";
 
 class PlotOptionsButton extends PureComponent {
 
@@ -41,9 +42,11 @@ class PlotOptionsButton extends PureComponent {
     renderOptionsMenu = (pageName) => {
         switch(pageName) {
             case "lanes":
-                return <GelOptions></GelOptions>
+                return <GelOptions/>
             case "graph":
                 return <ProteinOptions/>
+            case "peptides":
+                return <PeptideOptions/>
             default:
                 return null
         }
@@ -54,7 +57,7 @@ class PlotOptionsButton extends PureComponent {
         const {pathname, selectedOption, showOptionsMenu} = this.props
 
         const pageName = pathname.replace(/\/(\w+)/, '$1')
-        const pagesWithOptions = ['lanes', 'graph']
+        const pagesWithOptions = ['lanes', 'graph', 'peptides']
         const showOptions = pagesWithOptions.includes(pageName)
         const cursor = showOptions ? 'pointer' : 'default'
         const pageOptionActive = selectedOption === pageName

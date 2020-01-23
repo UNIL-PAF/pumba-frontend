@@ -56,7 +56,8 @@ ProteinVizContainer.propTypes = {
     legendIsMoving: PropTypes.bool.isRequired,
     maxIntensity: PropTypes.number.isRequired,
     proteinMenuMaxIntensity: PropTypes.number,
-    selectedOption: PropTypes.string
+    selectedOption: PropTypes.string,
+    showOptionsMenu: PropTypes.func.sRequired,
 };
 
 const mapStateToProps = (state) => {
@@ -75,7 +76,6 @@ const mapStateToProps = (state) => {
         maxIntensity: state.loadProtein.maxIntensity,
         proteinMenuMaxIntensity: state.menu.proteinMenuMaxIntensity,
         selectedOption: state.menu.selectedOption,
-        showOptionsMenu: PropTypes.func.isRequired,
     }
     return props
 }

@@ -346,7 +346,8 @@ ProteinVizPlot.propTypes = {
     setLegendPos: PropTypes.func.isRequired,
     maxIntensity: PropTypes.number.isRequired,
     proteinMenuMaxIntensity: PropTypes.number,
-    selectedOption: PropTypes.string
+    selectedOption: PropTypes.string,
+    showOptionsMenu: PropTypes.func.isRequired
 };
 
 export default ProteinVizPlot

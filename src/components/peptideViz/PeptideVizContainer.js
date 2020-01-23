@@ -8,13 +8,15 @@ import PeptideViz from './PeptideViz'
 import {changePepZoomRange, removePepPopup, showPepPopup} from "../../actions/peptideVizActions";
 import {mouseLeaveSample} from "../../actions/sampleSelection";
 import {setLegendPos} from "../../actions/legendActions";
+import {setShowOnlyRazor, setShowOnlyUnique, showOptionsMenu} from "../../actions/menuActions";
 
 class PeptideVizContainer extends Component {
 
     render(){
         const {proteinData, sequenceData, zoom, changeZoomRangeCB, clickedSlices, mouseOverSampleId,
             mouseOverReplId, mouseLeaveSampleCB, showPopupCB, removePopupCB, popup, datasets, legendPos, setLegendPos,
-            legendIsMoving, datasetChanged} = this.props
+            legendIsMoving, datasetChanged, selectedOption, showOptionsMenu, showOnlyRazor, showOnlyUnique,
+            setShowOnlyRazor, setShowOnlyUnique} = this.props
 
         const samples = _.map(proteinData, (p, i) => {
             const replicates = _.map(p.proteins, (oneProt, i) => {
@@ -43,6 +45,12 @@ class PeptideVizContainer extends Component {
                                          setLegendPos={setLegendPos}
                                          legendIsMoving={legendIsMoving}
                                          datasetChanged={datasetChanged}
+                                         selectedOption={selectedOption}
+                                         showOptionsMenu={showOptionsMenu}
+                                         showOnlyRazor={showOnlyRazor}
+                                         showOnlyUnique={showOnlyUnique}
+                                         setShowOnlyRazor={setShowOnlyRazor}
+                                         setShowOnlyUnique={setShowOnlyUnique}
                             /> }
         </div>
     }
@@ -66,6 +74,12 @@ PeptideVizContainer.propTypes = {
     setLegendPos: PropTypes.func.isRequired,
     legendIsMoving: PropTypes.bool.isRequired,
     datasetChanged: PropTypes.number.isRequired,
+    selectedOption: PropTypes.string,
+    showOptionsMenu: PropTypes.func.isRequired,
+    showOnlyRazor: PropTypes.bool.isRequired,
+    showOnlyUnique: PropTypes.bool.isRequired,
+    setShowOnlyRazor: PropTypes.func.isRequired,
+    setShowOnlyUnique: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => {
@@ -80,7 +94,10 @@ const mapStateToProps = (state) => {
         datasets: state.loadProtein.datasets,
         legendPos: state.menu.legendPos,
         legendIsMoving: state.menu.legendIsMoving,
-        datasetChanged: state.loadProtein.datasetChanged
+        datasetChanged: state.loadProtein.datasetChanged,
+        selectedOption: state.menu.selectedOption,
+        showOnlyRazor: state.menu.showOnlyRazor,
+        showOnlyUnique: state.menu.showOnlyUnique,
     }
     return props
 }
@@ -91,7 +108,10 @@ const mapDispatchToProps = (dispatch) => {
         mouseLeaveSampleCB: () => { dispatch(mouseLeaveSample()) },
         showPopupCB: (popup) => { dispatch(showPepPopup(popup))},
         removePopupCB: () => { dispatch(removePepPopup())},
-        setLegendPos: (view, x, y) => { dispatch(setLegendPos(view, x, y))}
+        setLegendPos: (view, x, y) => { dispatch(setLegendPos(view, x, y))},
+        showOptionsMenu: (page) => { dispatch(showOptionsMenu(page)) },
+        setShowOnlyRazor: (showOnlyRazor) => { dispatch(setShowOnlyRazor(showOnlyRazor))},
+        setShowOnlyUnique: (showOnlyUnique) => { dispatch(setShowOnlyUnique(showOnlyUnique))}
     }
 }
 

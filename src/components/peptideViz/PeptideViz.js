@@ -171,7 +171,7 @@ class PeptideViz extends PureComponent {
 
     plotPeptides = () => {
         const {proteinData, clickedSlices, mouseOverSampleId, mouseOverReplId,
-            showPopupCB, removePopupCB, datasets} = this.props
+            showPopupCB, removePopupCB, datasets, showOnlyRazor, showOnlyUnique} = this.props
 
         const {zoomLeft, zoomRight, zoomTop, pepCounter} = this.state
 
@@ -196,7 +196,11 @@ class PeptideViz extends PureComponent {
                 })
 
                 const fltProt = _.filter(pepWithIdx, (pep) => {
-                    return pep.endPos > zoomLeft && pep.startPos < zoomRight && (! zoomTop || pep.sliceMolWeight >= zoomTop)
+                    return pep.endPos > zoomLeft &&
+                        pep.startPos < zoomRight &&
+                        (! zoomTop || pep.sliceMolWeight >= zoomTop) &&
+                        (! showOnlyRazor || pep.isRazor) &&
+                        (! showOnlyUnique || pep.uniqueByGroup)
                 })
 
                 const sliceFromReplIsClicked = _.some(clickedSlices, (slice) => {
@@ -263,6 +267,14 @@ class PeptideViz extends PureComponent {
         />
     }
 
+    /**
+     * we need to remove the option menu here since the brush stops the bubbling of the click event
+     */
+    clickBrushRect = () => {
+        const {selectedOption, showOptionsMenu} = this.props
+        if(selectedOption === 'peptides') showOptionsMenu(undefined)
+    }
+
     render(){
         const {legendPos, viewWidth, viewHeight, mouseLeaveSampleCB, popup, proteinData} = this.props
 
@@ -281,8 +293,11 @@ class PeptideViz extends PureComponent {
                    transform={'translate(' + this.margin.left + ',' + this.margin.top + ')'}/>
                 <g className="pep-x-axis" ref={r => this.xAxis = r}
                    transform={'translate(' + this.margin.left + ',' + (viewHeight - this.margin.bottom) + ')'}/>
-                <g className="brush-g" ref={this.brushG} onDoubleClick={this.zoomOut}
+                <g className="brush-g"
+                   ref={this.brushG}
+                   onDoubleClick={this.zoomOut}
                    onMouseEnter={() => mouseLeaveSampleCB()}
+                   onClick={() => this.clickBrushRect()}
                    transform={'translate(' + this.margin.left + ',' + this.margin.top + ')'}/>
                 <g className="peptide-viz-g"
                    transform={'translate(' + this.margin.left + ',' + this.margin.top + ')'}
@@ -321,6 +336,10 @@ PeptideViz.propTypes = {
     setLegendPos: PropTypes.func.isRequired,
     legendIsMoving: PropTypes.bool.isRequired,
     datasetChanged: PropTypes.number.isRequired,
+    selectedOption: PropTypes.string,
+    showOptionsMenu: PropTypes.func.isRequired,
+    showOnlyRazor: PropTypes.bool.isRequired,
+    showOnlyUnique: PropTypes.bool.isRequired,
 };
 
 export default (PeptideViz)
