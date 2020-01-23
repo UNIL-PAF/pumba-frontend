@@ -45,8 +45,8 @@ class Peptide extends PureComponent {
             "Unique": pepInfo.uniqueByGroup ? "True": "False",
             "Mol weight": Math.pow(10, sliceMolWeight).toFixed(2) + " kDa",
             "Gel slice": pepInfo.sliceNr,
-            "MaxQuant score": pepInfo.score
-
+            "MaxQuant score": pepInfo.score,
+            "Intensity": pepInfo.intensity.toExponential(1)
         }
         const popUp = {x: mousePos[0], y: mousePos[1], content: popUpContent}
         showPopupCB(popUp)
