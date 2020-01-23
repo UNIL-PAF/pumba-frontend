@@ -18,6 +18,16 @@ class PeptideOptions extends PureComponent {
         setShowOnlyUnique(false)
     }
 
+    clickShowOnlyRazor = (e) => {
+        const {showOnlyRazor, setShowOnlyRazor} = this.props
+        setShowOnlyRazor(! showOnlyRazor)
+    }
+
+    clickShowOnlyUnique = (e) => {
+        const {showOnlyUnique, setShowOnlyUnique} = this.props
+        setShowOnlyUnique(! showOnlyUnique)
+    }
+
     render() {
         const {showOnlyRazor, showOnlyUnique, setShowOnlyUnique, setShowOnlyRazor} = this.props
 
@@ -25,8 +35,12 @@ class PeptideOptions extends PureComponent {
             <p style={{minWidth: "160px"}}><span><strong>Peptide graph options</strong></span>&nbsp;&nbsp;
                 <span><Button color="primary" size={"sm"} onClick={() => this.setToDefault()}>Reset</Button></span>
             </p>
-            <Button onClick={() => setShowOnlyRazor(! showOnlyRazor)}>Show only razor</Button>
-            <Button onClick={() => setShowOnlyUnique(! showOnlyUnique)}>Show only unique</Button>
+            <p><input type={"checkbox"} checked={showOnlyRazor} onChange={this.clickShowOnlyRazor} />
+                <span>Show only razor peptides.</span>
+            </p>
+            <p><input type={"checkbox"} checked={showOnlyUnique} onChange={this.clickShowOnlyUnique} />
+                <span>Show only unique peptides (unique by group).</span>
+            </p>
         </div>
     }
 }

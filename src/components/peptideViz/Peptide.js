@@ -31,8 +31,6 @@ class Peptide extends PureComponent {
     onMouseEnter = (event) => {
         const {getMousePos, pepInfo, showPopupCB, sampleName, replName, sliceMolWeight} = this.props
 
-        console.log(pepInfo)
-
         const mousePos = getMousePos()
         this.setState({'mouseIsOver': true})
 
