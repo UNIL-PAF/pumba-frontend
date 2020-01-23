@@ -36,7 +36,8 @@ class ProteinVizLegends extends PureComponent {
                     datasets: datasets[sampleName].datasets,
                     idx: datasets[sampleName].idx,
                     isActive: ! datasets[sampleName].isActive,
-                    isChecked: datasets[sampleName].isChecked
+                    isChecked: datasets[sampleName].isChecked,
+                    colorGroup: datasets[sampleName].colorGroup
                 }})
         }else{
             let newDatasetsArray = [...(datasets[sampleName].datasets)]
@@ -48,6 +49,7 @@ class ProteinVizLegends extends PureComponent {
                     idx: datasets[sampleName].idx,
                     isActive: datasets[sampleName].isActive,
                     isChecked: datasets[sampleName].isChecked,
+                    colorGroup: datasets[sampleName].colorGroup
                 }
             }
 
@@ -59,8 +61,6 @@ class ProteinVizLegends extends PureComponent {
                 }
                 return res
             }, [])
-
-            console.log(activeDatasets, newDatasets)
 
             const callOnComplete = () => {setDatasets(newDatasets)}
             reloadProteinCB(activeDatasets.join(","), callOnComplete)
