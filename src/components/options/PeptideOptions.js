@@ -6,18 +6,19 @@ import {Button} from 'reactstrap'
 import Slider from 'rc-slider';
 import {setShowOnlyRazor, setShowOnlyUnique, setPeptideMenuMaxIntensity} from "../../actions/menuActions";
 import PropTypes from 'prop-types'
-import pumbaConfig from "../../config";
+import optionsConfig from './OptionsConfig'
 
 class PeptideOptions extends PureComponent {
 
-    movingSlider = (bounds) => {
-        if(bounds) this.props.setPeptideMenuMaxIntensity(bounds)
+    movingSlider = (pos) => {
+        this.props.setPeptideMenuMaxIntensity(pos)
     }
 
     setToDefault = () => {
-        const {setShowOnlyUnique, setShowOnlyRazor} = this.props
+        const {setShowOnlyUnique, setShowOnlyRazor, setPeptideMenuMaxIntensity} = this.props
         setShowOnlyRazor(false)
         setShowOnlyUnique(false)
+        setPeptideMenuMaxIntensity(0)
     }
 
     clickShowOnlyRazor = (e) => {
@@ -33,26 +34,30 @@ class PeptideOptions extends PureComponent {
     render() {
         const {showOnlyRazor, showOnlyUnique, peptideMenuMaxIntensity, peptideMaxIntensity} = this.props
 
+        const realIntValue = Math.exp(Math.log(peptideMaxIntensity) / optionsConfig.pepIntSliderSteps * peptideMenuMaxIntensity)
+
         return <div className={"options-menu"}>
             <p style={{minWidth: "160px"}}><span><strong>Peptide graph options</strong></span>&nbsp;&nbsp;
                 <span><Button color="primary" size={"sm"} onClick={() => this.setToDefault()}>Reset</Button></span>
             </p>
-            <p><input type={"checkbox"} checked={showOnlyRazor} onChange={this.clickShowOnlyRazor} />
-                <span>Show only razor peptides</span>
+            <p className={'options-paragraph'}><input type={"checkbox"} checked={showOnlyRazor} onChange={this.clickShowOnlyRazor} />
+                <span className={"options-checkbox-span"}>Show only razor peptides</span>
             </p>
-            <p><input type={"checkbox"} checked={showOnlyUnique} onChange={this.clickShowOnlyUnique} />
-                <span>Show only unique peptides</span>
+            <p className={'options-paragraph'}><input type={"checkbox"} checked={showOnlyUnique} onChange={this.clickShowOnlyUnique} />
+                <span className={"options-checkbox-span"}>Show only unique peptides</span>
             </p>
-            <p>Intensity threshold {peptideMenuMaxIntensity.toExponential(1)}</p>
-            <Slider
-                min={0.5}
-                max={peptideMaxIntensity}
-                value={peptideMenuMaxIntensity}
-                step={0.5}
-                onChange={(bounds) => this.movingSlider(bounds)}
-                trackStyle={{backgroundColor: '#007bff'}}
-                handleStyle={{borderColor: '#007bff'}}
-            />
+            <p>Intensity threshold {peptideMenuMaxIntensity ? realIntValue.toExponential(1) : ''}
+                <Slider
+                    min={0}
+                    max={optionsConfig.pepIntSliderSteps}
+                    value={peptideMenuMaxIntensity}
+                    step={0.5}
+                    onChange={(bounds) => this.movingSlider(bounds)}
+                    trackStyle={{backgroundColor: '#e9e9e9'}}
+                    handleStyle={{borderColor: '#007bff'}}
+                    railStyle={{backgroundColor: "#007bff"}}
+                />
+            </p>
         </div>
     }
 }

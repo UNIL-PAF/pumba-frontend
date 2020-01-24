@@ -13,6 +13,7 @@ import ProteinVizLegendsContainer from '../legends/ProteinVizLegendsContainer'
 import PopOverSkeleton from "../common/popOverSkeleton"
 import ProteinTitle from "../common/ProteinTitle"
 import { sampleColor } from '../common/colorSettings'
+import optionsConfig from "../options/OptionsConfig";
 
 class PeptideViz extends PureComponent {
 
@@ -170,7 +171,7 @@ class PeptideViz extends PureComponent {
     }
 
     plotPeptides = () => {
-        const {proteinData, clickedSlices, mouseOverSampleId, mouseOverReplId,
+        const {proteinData, clickedSlices, mouseOverSampleId, mouseOverReplId, peptideMaxIntensity,
             showPopupCB, removePopupCB, datasets, showOnlyRazor, showOnlyUnique, peptideMenuMaxIntensity} = this.props
 
         const {zoomLeft, zoomRight, zoomTop, pepCounter} = this.state
@@ -178,6 +179,7 @@ class PeptideViz extends PureComponent {
         // we need this variable to get the correct replIdx
         var replIdx = 0;
 
+        const peptideIntThreshold = peptideMenuMaxIntensity ? (Math.exp(Math.log(peptideMaxIntensity) / optionsConfig.pepIntSliderSteps * peptideMenuMaxIntensity)) : undefined
 
         return proteinData.map((sample, i) => {
 
@@ -201,7 +203,7 @@ class PeptideViz extends PureComponent {
                         (! zoomTop || pep.sliceMolWeight >= zoomTop) &&
                         (! showOnlyRazor || pep.isRazor) &&
                         (! showOnlyUnique || pep.uniqueByGroup) &&
-                        (! peptideMenuMaxIntensity || pep.intensity >= peptideMenuMaxIntensity)
+                        (! peptideIntThreshold || pep.intensity >= peptideIntThreshold)
                 })
 
                 const sliceFromReplIsClicked = _.some(clickedSlices, (slice) => {
@@ -342,6 +344,7 @@ PeptideViz.propTypes = {
     showOnlyRazor: PropTypes.bool.isRequired,
     showOnlyUnique: PropTypes.bool.isRequired,
     peptideMenuMaxIntensity: PropTypes.number.isRequired,
+    peptideMaxIntensity: PropTypes.number
 };
 
 export default (PeptideViz)
