@@ -15,7 +15,7 @@ class ProteinVizContainer extends Component {
         const {proteinData, mouseOverSampleId, mouseOverReplId, mouseLeaveSampleCB, zoomLeft, zoomRight,
             changeZoomRangeCB, theoMergedProteins, showOptionsMenu,
             showPopupCB, removePopupCB, popup, clickedSlices, proteinMenuMaxIntensity, selectedOption,
-            clickSliceCB, unclickSliceCB, history, datasets, legendPos, setLegendPos, legendIsMoving, maxIntensity} = this.props
+            clickSliceCB, unclickSliceCB, history, datasets, legendPos, setLegendPos, legendIsMoving, proteinMaxIntensity} = this.props
 
         return <div id={"protein-viz"}>
         { proteinData && <ProteinVizPlot proteinData={proteinData} viewWidth={800} viewHeight={400}
@@ -27,7 +27,7 @@ class ProteinVizContainer extends Component {
                              showPopupCB={showPopupCB} removePopupCB={removePopupCB} popup={popup}
                              clickedSlices={clickedSlices} clickSliceCB={clickSliceCB} unclickSliceCB={unclickSliceCB}
                              history={history} datasets={datasets} legendPos={legendPos} setLegendPos={setLegendPos}
-                             legendIsMoving={legendIsMoving} maxIntensity={maxIntensity} proteinMenuMaxIntensity={proteinMenuMaxIntensity}
+                             legendIsMoving={legendIsMoving} proteinMaxIntensity={proteinMaxIntensity} proteinMenuMaxIntensity={proteinMenuMaxIntensity}
         /> }
         </div>
     }
@@ -54,7 +54,7 @@ ProteinVizContainer.propTypes = {
     legendPos: PropTypes.object,
     setLegendPos: PropTypes.func.isRequired,
     legendIsMoving: PropTypes.bool.isRequired,
-    maxIntensity: PropTypes.number.isRequired,
+    proteinMaxIntensity: PropTypes.number.isRequired,
     proteinMenuMaxIntensity: PropTypes.number,
     selectedOption: PropTypes.string,
     showOptionsMenu: PropTypes.func.sRequired,
@@ -73,7 +73,7 @@ const mapStateToProps = (state) => {
         datasets: state.loadProtein.datasets,
         legendPos: state.menu.legendPos,
         legendIsMoving: state.menu.legendIsMoving,
-        maxIntensity: state.loadProtein.maxIntensity,
+        proteinMaxIntensity: state.loadProtein.proteinMaxIntensity,
         proteinMenuMaxIntensity: state.menu.proteinMenuMaxIntensity,
         selectedOption: state.menu.selectedOption,
     }

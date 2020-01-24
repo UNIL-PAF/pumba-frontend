@@ -4,7 +4,7 @@ import {
 } from '../actions/legendActions'
 import {
     SET_GEL_CONTRAST, SET_PROTEIN_MENU_MAX_INTENSITY, SET_SHOW_ONLY_RAZOR, SET_SHOW_ONLY_UNIQUE,
-    SHOW_OPTIONS_MENU
+    SHOW_OPTIONS_MENU, SET_PEPTIDE_MENU_MAX_INTENSITY
 } from "../actions/menuActions";
 import pumbaConfig from '../config'
 
@@ -13,9 +13,9 @@ const initialState = {
     legendIsMoving: false,
     selectedOption: undefined,
     gelContrast: pumbaConfig.initialGelContrast,
-    maxIntensity: undefined,
     showOnlyRazor: false,
-    showOnlyUnique: false
+    showOnlyUnique: false,
+    peptideMenuMaxIntensity: 0
 }
 
 const menuReducer = (state = initialState, action) => {
@@ -32,7 +32,9 @@ const menuReducer = (state = initialState, action) => {
         case SET_GEL_CONTRAST:
             return { ...state, gelContrast: action.gelContrast }
         case SET_PROTEIN_MENU_MAX_INTENSITY:
-            return { ...state, proteinMenuMaxIntensity: action.proteinMenuMaxIntensity }
+            return { ...state, proteinMenuMaxIntensity: action.maxIntensity }
+        case SET_PEPTIDE_MENU_MAX_INTENSITY:
+            return { ...state, peptideMenuMaxIntensity: action.maxIntensity }
         case SET_SHOW_ONLY_RAZOR:
             return { ...state, showOnlyRazor: action.showOnlyRazor }
         case SET_SHOW_ONLY_UNIQUE:

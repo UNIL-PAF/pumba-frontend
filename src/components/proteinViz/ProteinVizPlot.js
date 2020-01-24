@@ -26,9 +26,9 @@ class ProteinVizPlot extends Component {
     }
 
     resetYScale = () => {
-        const {maxIntensity, proteinMenuMaxIntensity} = this.props
+        const {proteinMaxIntensity, proteinMenuMaxIntensity} = this.props
 
-        const currentMaxIntensity = proteinMenuMaxIntensity ? proteinMenuMaxIntensity : maxIntensity
+        const currentMaxIntensity = proteinMenuMaxIntensity ? proteinMenuMaxIntensity : proteinMaxIntensity
 
         return {
             yScale: scaleLinear().range([this.props.viewHeight - this.margin.top - this.margin.bottom, 0]).domain([0, currentMaxIntensity]),
@@ -344,7 +344,7 @@ ProteinVizPlot.propTypes = {
     datasets: PropTypes.object.isRequired,
     legendPos: PropTypes.object,
     setLegendPos: PropTypes.func.isRequired,
-    maxIntensity: PropTypes.number.isRequired,
+    proteinMaxIntensity: PropTypes.number.isRequired,
     proteinMenuMaxIntensity: PropTypes.number,
     selectedOption: PropTypes.string,
     showOptionsMenu: PropTypes.func.isRequired

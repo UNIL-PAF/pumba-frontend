@@ -19,10 +19,10 @@ class ProteinOptions extends PureComponent {
     }
 
     render() {
-        const {maxIntensity, proteinMenuMaxIntensity} = this.props
+        const {proteinMaxIntensity, proteinMenuMaxIntensity} = this.props
 
         // get the intensity from the proteinData if non is provided from the options
-        const currentMaxIntensity = proteinMenuMaxIntensity ? proteinMenuMaxIntensity : maxIntensity
+        const currentMaxIntensity = proteinMenuMaxIntensity ? proteinMenuMaxIntensity : proteinMaxIntensity
 
         return <div className={"options-menu"}>
             <p style={{minWidth: "160px"}}><span><strong>Protein graph options</strong></span>&nbsp;&nbsp;
@@ -31,7 +31,7 @@ class ProteinOptions extends PureComponent {
             <p>Max intensity {currentMaxIntensity.toExponential(1)}</p>
             <Slider
                 min={0}
-                max={maxIntensity}
+                max={proteinMaxIntensity}
                 value={currentMaxIntensity}
                 step={1e-5}
                 onChange={(bounds) => this.movingSlider(bounds)}
@@ -44,14 +44,14 @@ class ProteinOptions extends PureComponent {
 
 ProteinOptions.propTypes = {
     proteinMenuMaxIntensity: PropTypes.number,
-    maxIntensity: PropTypes.number,
+    proteinMaxIntensity: PropTypes.number,
     setProteinMenuMaxIntensity: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => {
     const props = {
         proteinMenuMaxIntensity: state.menu.proteinMenuMaxIntensity,
-        maxIntensity: state.loadProtein.maxIntensity,
+        proteinMaxIntensity: state.loadProtein.proteinMaxIntensity,
     }
     return props
 }

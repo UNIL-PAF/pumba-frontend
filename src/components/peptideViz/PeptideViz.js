@@ -171,7 +171,7 @@ class PeptideViz extends PureComponent {
 
     plotPeptides = () => {
         const {proteinData, clickedSlices, mouseOverSampleId, mouseOverReplId,
-            showPopupCB, removePopupCB, datasets, showOnlyRazor, showOnlyUnique} = this.props
+            showPopupCB, removePopupCB, datasets, showOnlyRazor, showOnlyUnique, peptideMenuMaxIntensity} = this.props
 
         const {zoomLeft, zoomRight, zoomTop, pepCounter} = this.state
 
@@ -200,7 +200,8 @@ class PeptideViz extends PureComponent {
                         pep.startPos < zoomRight &&
                         (! zoomTop || pep.sliceMolWeight >= zoomTop) &&
                         (! showOnlyRazor || pep.isRazor) &&
-                        (! showOnlyUnique || pep.uniqueByGroup)
+                        (! showOnlyUnique || pep.uniqueByGroup) &&
+                        (! peptideMenuMaxIntensity || pep.intensity >= peptideMenuMaxIntensity)
                 })
 
                 const sliceFromReplIsClicked = _.some(clickedSlices, (slice) => {
@@ -340,6 +341,7 @@ PeptideViz.propTypes = {
     showOptionsMenu: PropTypes.func.isRequired,
     showOnlyRazor: PropTypes.bool.isRequired,
     showOnlyUnique: PropTypes.bool.isRequired,
+    peptideMenuMaxIntensity: PropTypes.number.isRequired,
 };
 
 export default (PeptideViz)

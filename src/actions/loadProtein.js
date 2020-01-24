@@ -3,7 +3,7 @@ import pumbaConfig from '../config'
 import { resetSampleSelection } from "./sampleSelection"
 import {resetProteinView, computeTheoMergedProteins} from "./proteinVizActions"
 import {resetPeptideView} from "./peptideVizActions";
-import {setGelContrast, setProteinMenuMaxIntensity} from "./menuActions"
+import {setGelContrast, setProteinMenuMaxIntensity, setPeptideMenuMaxIntensity} from "./menuActions"
 import * as _ from 'lodash';
 
 export const PROTEIN_IS_LOADED = 'PROTEIN_IS_LOADED'
@@ -16,7 +16,8 @@ export const SET_DATASETS = 'SET_DATASETS'
 export const SET_SORTED_DATASET_NAMES = 'SET_SORTED_DATASET_NAMES'
 export const SELECT_DATASET = 'SELECT_DATASET'
 export const SELECT_ALL_DATASETS = 'SELECT_ALL_DATASETS'
-export const SET_MAX_INTENSITY = 'SET_MAX_INTENSITY'
+export const SET_PROTEIN_MAX_INTENSITY = 'SET_PROTEIN_MAX_INTENSITY'
+export const SET_PEPTIDE_MAX_INTENSITY = 'SET_PEPTIDE_MAX_INTENSITY'
 
 export function reloadProtein(activeDatasetIds, callOnComplete){
     return function (dispatch, getState) {
@@ -70,14 +71,23 @@ export function fetchProtein(proteinId, datasetIds, noReset, callOnComplete){
                         // add a timestamp to the data
                         json.timestamp = noReset ? getState().loadProtein.proteinData.timestamp : Date.now()
 
-                        // add the maximum intensity
-                        const maxIntensity = _.max(_.map(json, function(pd){
+                        // add the maximum protein intensity
+                        const maxProteinIntensity = _.max(_.map(json, function(pd){
                             return _.max(_.map(pd.proteins, function(p){
                                 return _.max(p.intensities)
                             }))
                         }))
-                        dispatch(setMaxIntensity(maxIntensity))
+                        dispatch(setProteinMaxIntensity(maxProteinIntensity))
                         dispatch(setProteinMenuMaxIntensity(undefined))
+
+                        // add the maximum peptide intensity
+                        const maxPeptideIntensity = _.max(_.map(json, function(pd){
+                            return _.max(_.map(pd.proteins, function(p){
+                                return _.max(_.map(p.peptides, "intensity"))
+                            }))
+                        }))
+                        dispatch(setPeptideMaxIntensity(maxPeptideIntensity))
+                        dispatch(setPeptideMenuMaxIntensity(0))
 
                         // add a short version of the merged data for the gel view
                         addShortMergedData(json)
@@ -236,6 +246,10 @@ export const selectAllDatasets = (sampleIdx) => ({
     type: SELECT_ALL_DATASETS, sampleIdx: sampleIdx
 })
 
-export const setMaxIntensity = (maxIntensity) => ({
-    type: SET_MAX_INTENSITY, maxIntensity: maxIntensity
+export const setProteinMaxIntensity = (maxIntensity) => ({
+    type: SET_PROTEIN_MAX_INTENSITY, maxIntensity: maxIntensity
+})
+
+export const setPeptideMaxIntensity = (maxIntensity) => ({
+    type: SET_PEPTIDE_MAX_INTENSITY, maxIntensity: maxIntensity
 })
