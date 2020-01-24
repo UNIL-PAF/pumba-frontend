@@ -172,14 +172,14 @@ class PeptideViz extends PureComponent {
 
     plotPeptides = () => {
         const {proteinData, clickedSlices, mouseOverSampleId, mouseOverReplId, peptideMaxIntensity,
-            showPopupCB, removePopupCB, datasets, showOnlyRazor, showOnlyUnique, peptideMenuMaxIntensity} = this.props
+            showPopupCB, removePopupCB, datasets, showOnlyRazor, showOnlyUnique, peptideMenuMaxIntensity, peptideMinIntensity} = this.props
 
         const {zoomLeft, zoomRight, zoomTop, pepCounter} = this.state
 
         // we need this variable to get the correct replIdx
         var replIdx = 0;
 
-        const peptideIntThreshold = peptideMenuMaxIntensity ? (Math.exp(Math.log(peptideMaxIntensity) / optionsConfig.pepIntSliderSteps * peptideMenuMaxIntensity)) : undefined
+        const peptideIntThreshold = peptideMenuMaxIntensity ? (optionsConfig.computeRealIntValue(peptideMaxIntensity, peptideMinIntensity, peptideMenuMaxIntensity)) : undefined
 
         return proteinData.map((sample, i) => {
 
@@ -344,7 +344,8 @@ PeptideViz.propTypes = {
     showOnlyRazor: PropTypes.bool.isRequired,
     showOnlyUnique: PropTypes.bool.isRequired,
     peptideMenuMaxIntensity: PropTypes.number.isRequired,
-    peptideMaxIntensity: PropTypes.number
+    peptideMaxIntensity: PropTypes.number,
+    peptideMinIntensity: PropTypes.number
 };
 
 export default (PeptideViz)

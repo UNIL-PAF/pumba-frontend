@@ -32,9 +32,9 @@ class PeptideOptions extends PureComponent {
     }
 
     render() {
-        const {showOnlyRazor, showOnlyUnique, peptideMenuMaxIntensity, peptideMaxIntensity} = this.props
+        const {showOnlyRazor, showOnlyUnique, peptideMenuMaxIntensity, peptideMaxIntensity, peptideMinIntensity} = this.props
 
-        const realIntValue = Math.exp(Math.log(peptideMaxIntensity) / optionsConfig.pepIntSliderSteps * peptideMenuMaxIntensity)
+        const realIntValue = peptideMenuMaxIntensity ? (optionsConfig.computeRealIntValue(peptideMaxIntensity, peptideMinIntensity, peptideMenuMaxIntensity)).toExponential(1) : ''
 
         return <div className={"options-menu"}>
             <p style={{minWidth: "160px"}}><span><strong>Peptide graph options</strong></span>&nbsp;&nbsp;
@@ -46,7 +46,7 @@ class PeptideOptions extends PureComponent {
             <p className={'options-paragraph'}><input type={"checkbox"} checked={showOnlyUnique} onChange={this.clickShowOnlyUnique} />
                 <span className={"options-checkbox-span"}>Show only unique peptides</span>
             </p>
-            <p>Intensity threshold {peptideMenuMaxIntensity ? realIntValue.toExponential(1) : ''}
+            <p>Intensity threshold {realIntValue}
                 <Slider
                     min={0}
                     max={optionsConfig.pepIntSliderSteps}
@@ -70,6 +70,7 @@ PeptideOptions.propTypes = {
     peptideMaxIntensity: PropTypes.number,
     peptideMenuMaxIntensity: PropTypes.number.isRequired,
     setPeptideMenuMaxIntensity: PropTypes.func.isRequired,
+    peptideMinIntensity: PropTypes.number
 };
 
 const mapStateToProps = (state) => {
@@ -78,6 +79,7 @@ const mapStateToProps = (state) => {
         showOnlyUnique: state.menu.showOnlyUnique,
         peptideMaxIntensity: state.loadProtein.peptideMaxIntensity,
         peptideMenuMaxIntensity: state.menu.peptideMenuMaxIntensity,
+        peptideMinIntensity: state.loadProtein.peptideMinIntensity
     }
     return props
 }

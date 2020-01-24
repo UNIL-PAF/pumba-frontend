@@ -1,7 +1,7 @@
 import {
     REQUEST_PROTEIN, PROTEIN_IS_LOADED, ADD_PROTEIN_DATA, PROTEIN_LOAD_ERROR, SET_PROTEIN_MAX_INTENSITY,
     GOTO_VIZ, ADD_SEQUENCE_DATA, SET_DATASETS, SET_SORTED_DATASET_NAMES, SELECT_DATASET, SELECT_ALL_DATASETS,
-    SET_PEPTIDE_MAX_INTENSITY
+    SET_PEPTIDE_MAX_INTENSITY, SET_PEPTIDE_MIN_INTENSITY
 } from '../actions/loadProtein'
 import * as _ from 'lodash';
 
@@ -65,6 +65,8 @@ const loadProteinReducer = (state = initialState, action) => {
             return { ...state, proteinMaxIntensity: action.maxIntensity}
         case SET_PEPTIDE_MAX_INTENSITY:
             return { ...state, peptideMaxIntensity: action.maxIntensity}
+        case SET_PEPTIDE_MIN_INTENSITY:
+            return { ...state, peptideMinIntensity: action.minIntensity}
         default:
             return state
     }

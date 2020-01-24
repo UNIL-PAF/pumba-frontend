@@ -3,7 +3,7 @@ import pumbaConfig from '../config'
 import { resetSampleSelection } from "./sampleSelection"
 import {resetProteinView, computeTheoMergedProteins} from "./proteinVizActions"
 import {resetPeptideView} from "./peptideVizActions";
-import {setGelContrast, setProteinMenuMaxIntensity, setPeptideMenuMaxIntensity} from "./menuActions"
+import {setGelContrast, setProteinMenuMaxIntensity, setPeptideMenuMaxIntensity, setShowOnlyRazor, setShowOnlyUnique} from "./menuActions"
 import * as _ from 'lodash';
 
 export const PROTEIN_IS_LOADED = 'PROTEIN_IS_LOADED'
@@ -18,6 +18,7 @@ export const SELECT_DATASET = 'SELECT_DATASET'
 export const SELECT_ALL_DATASETS = 'SELECT_ALL_DATASETS'
 export const SET_PROTEIN_MAX_INTENSITY = 'SET_PROTEIN_MAX_INTENSITY'
 export const SET_PEPTIDE_MAX_INTENSITY = 'SET_PEPTIDE_MAX_INTENSITY'
+export const SET_PEPTIDE_MIN_INTENSITY = 'SET_PEPTIDE_MIN_INTENSITY'
 
 export function reloadProtein(activeDatasetIds, callOnComplete){
     return function (dispatch, getState) {
@@ -89,6 +90,14 @@ export function fetchProtein(proteinId, datasetIds, noReset, callOnComplete){
                         dispatch(setPeptideMaxIntensity(maxPeptideIntensity))
                         dispatch(setPeptideMenuMaxIntensity(0))
 
+                        // add the minimum peptide intensity
+                        const minPeptideIntensity = _.min(_.map(json, function(pd){
+                            return _.min(_.map(pd.proteins, function(p){
+                                return _.min(_.map(p.peptides, "intensity"))
+                            }))
+                        }))
+                        dispatch(setPeptideMinIntensity(minPeptideIntensity))
+
                         // add a short version of the merged data for the gel view
                         addShortMergedData(json)
 
@@ -98,6 +107,8 @@ export function fetchProtein(proteinId, datasetIds, noReset, callOnComplete){
                             dispatch(fetchSequence(json[0].mainProteinId, dataBaseName))
                             dispatch(gotoViz(true))
                             dispatch(setGelContrast(pumbaConfig.initialGelContrast))
+                            dispatch(setShowOnlyRazor(false))
+                            dispatch(setShowOnlyUnique(false))
                         }
                         dispatch(addProteinData(json))
                         dispatch(proteinIsLoaded())
@@ -252,4 +263,8 @@ export const setProteinMaxIntensity = (maxIntensity) => ({
 
 export const setPeptideMaxIntensity = (maxIntensity) => ({
     type: SET_PEPTIDE_MAX_INTENSITY, maxIntensity: maxIntensity
+})
+
+export const setPeptideMinIntensity = (minIntensity) => ({
+    type: SET_PEPTIDE_MIN_INTENSITY, minIntensity: minIntensity
 })

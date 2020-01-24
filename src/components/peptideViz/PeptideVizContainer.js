@@ -15,7 +15,7 @@ class PeptideVizContainer extends Component {
     render(){
         const {proteinData, sequenceData, zoom, changeZoomRangeCB, clickedSlices, mouseOverSampleId,
             mouseOverReplId, mouseLeaveSampleCB, showPopupCB, removePopupCB, popup, datasets, legendPos, setLegendPos,
-            legendIsMoving, datasetChanged, selectedOption, showOptionsMenu, showOnlyRazor, showOnlyUnique,
+            legendIsMoving, datasetChanged, selectedOption, showOptionsMenu, showOnlyRazor, showOnlyUnique, peptideMinIntensity,
             setShowOnlyRazor, setShowOnlyUnique, peptideMenuMaxIntensity, peptideMaxIntensity} = this.props
 
         const samples = _.map(proteinData, (p, i) => {
@@ -53,6 +53,7 @@ class PeptideVizContainer extends Component {
                                          setShowOnlyUnique={setShowOnlyUnique}
                                          peptideMenuMaxIntensity={peptideMenuMaxIntensity}
                                          peptideMaxIntensity={peptideMaxIntensity}
+                                         peptideMinIntensity={peptideMinIntensity}
                             /> }
         </div>
     }
@@ -83,7 +84,8 @@ PeptideVizContainer.propTypes = {
     setShowOnlyRazor: PropTypes.func.isRequired,
     setShowOnlyUnique: PropTypes.func.isRequired,
     peptideMenuMaxIntensity: PropTypes.number.isRequired,
-    peptideMaxIntensity: PropTypes.number
+    peptideMaxIntensity: PropTypes.number,
+    peptideMinIntensity: PropTypes.number
 };
 
 const mapStateToProps = (state) => {
@@ -103,7 +105,8 @@ const mapStateToProps = (state) => {
         showOnlyRazor: state.menu.showOnlyRazor,
         showOnlyUnique: state.menu.showOnlyUnique,
         peptideMenuMaxIntensity: state.menu.peptideMenuMaxIntensity,
-        peptideMaxIntensity: state.loadProtein.peptideMaxIntensity
+        peptideMaxIntensity: state.loadProtein.peptideMaxIntensity,
+        peptideMinIntensity: state.loadProtein.peptideMinIntensity
     }
     return props
 }
