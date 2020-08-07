@@ -42,14 +42,32 @@
  navbar
  */
 
+.human-organism {
+    background-color: #ebf4ff !important;
+}
+
+.mouse-organism {
+    background-color: #dbf0e0 !important;
+}
+
 .navbar-light .navbar-nav .nav-link {
-  font-size: larger
+  font-size: larger;
+    background-color: #f8f9fa;
 }
 
 #options-button {
-  font-size: larger
+  font-size: larger;
 }
 
+#menu-organism-label {
+  padding-right: 50px;
+  font-size: x-large;
+  font-weight: bold;
+}
+
+#menu-version-label {
+    padding-top: 7px;
+}
 
 /**
  plots

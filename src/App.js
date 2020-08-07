@@ -1,5 +1,6 @@
 import React from 'react'
 import { ConnectedRouter } from 'connected-react-router'
+import { connect } from 'react-redux'
 import { Route, Switch } from 'react-router'
 import ProteinSearchContainer from './components/proteinSearch/ProteinSearchContainer'
 import ProteinViz from './components/proteinViz/ProteinVizContainer'
@@ -19,33 +20,36 @@ import PropTypes from 'prop-types'
 class App extends React.Component{
 
     render(){
-        const {history} = this.props
+        const {history, organism} = this.props
+
+        const organismClass = organism === "human" ? "human-organism" : "mouse-organism"
+        const organismName = organism === "human" ? "Human" : "Mouse"
 
         return <ConnectedRouter history={history}>
                 <div id={"routes"}>
-                    <Navbar color="light" light expand="md">
-                        <NavbarBrand tag={Link} to="/"><img src={logo2} height="30" alt="SIB"/>&nbsp;<img src={logo} height="30" alt="UNIL"/></NavbarBrand>
+                    <Navbar color="light" light expand="md" className={organismClass}>
+                        <NavbarBrand tag={Link} to="/"><img src={logo2} height="30" alt="UNIL"/></NavbarBrand>
                         <NavbarToggler/>
                         <Collapse isOpen={true} navbar>
                             <Nav className="ml-auto" navbar>
                                 <NavItem>
                                     <LinkContainer to="/" exact={true}>
-                                        <NavLink tag={Link} to="/">Search</NavLink>
+                                        <NavLink tag={Link} to="/" className={organismClass}>Search</NavLink>
                                     </LinkContainer>
                                 </NavItem>
                                 <NavItem>
                                     <LinkContainer to="/lanes">
-                                        <NavLink tag={Link} to="/lanes">Lanes</NavLink>
+                                        <NavLink tag={Link} to="/lanes" className={organismClass}>Lanes</NavLink>
                                     </LinkContainer>
                                 </NavItem>
                                 <NavItem>
                                     <LinkContainer to="/graph">
-                                        <NavLink tag={Link} to="/graph">Graph</NavLink>
+                                        <NavLink tag={Link} to="/graph" className={organismClass}>Graph</NavLink>
                                     </LinkContainer>
                                 </NavItem>
                                 <NavItem>
                                     <LinkContainer to="/peptides">
-                                        <NavLink tag={Link} to="/peptides">Peptides</NavLink>
+                                        <NavLink tag={Link} to="/peptides" className={organismClass}>Peptides</NavLink>
                                     </LinkContainer>
                                 </NavItem>
                                 <NavItem>
@@ -53,7 +57,10 @@ class App extends React.Component{
                                 </NavItem>
                             </Nav>
                             <Nav className="ml-auto" navbar>
-                                <NavItem>
+                                <NavItem id="menu-organism-label">
+                                    {organismName}
+                                </NavItem>
+                                <NavItem id="menu-version-label">
                                     Version {pumbaConfig.version}
                                 </NavItem>
                             </Nav>
@@ -73,7 +80,17 @@ class App extends React.Component{
 }
 
 App.propTypes = {
-    history: PropTypes.object
+    history: PropTypes.object,
+    organism: PropTypes.string.isRequired
 }
 
-export default App
+const mapStateToProps = (state) => {
+    const props = {
+        organism: state.menu.organism
+    }
+    return props
+}
+
+export default connect(mapStateToProps, null)(App)
+
+//export default App

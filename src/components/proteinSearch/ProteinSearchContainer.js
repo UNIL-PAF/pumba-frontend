@@ -2,9 +2,10 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import {fetchProtein, gotoViz, fetchDatasets, setDatasets} from '../../actions/loadProtein'
+import {setOrganism} from '../../actions/menuActions'
 import ProteinSearchButton from "./ProteinSearchButton";
 import ProteinSearchInput from "./ProteinSearchInput";
-import {Form, FormGroup, Col, Row, Label, Input} from 'reactstrap'
+import {Form, FormGroup, Col, Row, Label, Input, Button, ButtonGroup} from 'reactstrap'
 import * as _ from 'lodash';
 
 class ProteinSearchContainer extends React.Component{
@@ -95,10 +96,25 @@ class ProteinSearchContainer extends React.Component{
     }
 
     render(){
-        const {proteinIsLoading, datasets, datasetNames} = this.props
+        const {proteinIsLoading, datasets, datasetNames, organism, setOrganism} = this.props
 
         return <div>
             <br/>
+            <Row>
+                <Col className="text-center" md={{ size: 4, offset: 4 }}>
+                    <h4>Organism</h4>
+                </Col>
+            </Row>
+            <Row>
+                <Col className="text-center" md={{ size: 4, offset: 4 }}>
+                    <ButtonGroup>
+                        <Button active={organism === 'human'} color="primary" outline={true} onClick={() => setOrganism('human')}>Human</Button>
+                        <Button active={organism === 'mouse'} color="primary" outline={true} onClick={() => setOrganism('mouse')}>Mouse</Button>
+                    </ButtonGroup>
+                </Col>
+            </Row>
+            <br/>
+
             <Row>
                 <Col className="text-center" md={{ size: 6, offset: 3 }}>
                     <h4>Search by UniProt accession number or gene name.</h4>
@@ -156,7 +172,9 @@ ProteinSearchContainer.propTypes = {
     loadDatasets: PropTypes.func.isRequired,
     setDatasets: PropTypes.func.isRequired,
     datasets: PropTypes.object,
-    datasetNames: PropTypes.array
+    datasetNames: PropTypes.array,
+    organism: PropTypes.string.isRequired,
+    setOrganism: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => {
@@ -166,7 +184,8 @@ const mapStateToProps = (state) => {
         error: state.loadProtein.error,
         gotoViz: state.loadProtein.gotoViz,
         datasets: state.loadProtein.datasets,
-        datasetNames: state.loadProtein.datasetNames
+        datasetNames: state.loadProtein.datasetNames,
+        organism: state.menu.organism
     }
     return props
 }
@@ -176,7 +195,8 @@ const mapDispatchToProps = (dispatch) => {
         onLoadProtein: (proteinId, availableDatasets) => { dispatch(fetchProtein(proteinId, availableDatasets)) },
         gotoProteinViz: (letsGo) => { dispatch(gotoViz(letsGo)) },
         loadDatasets: () => { dispatch(fetchDatasets()) },
-        setDatasets: (datasets) => { dispatch(setDatasets(datasets)) }
+        setDatasets: (datasets) => { dispatch(setDatasets(datasets)) },
+        setOrganism: (organism) => { dispatch(setOrganism(organism))}
     }
 }
 

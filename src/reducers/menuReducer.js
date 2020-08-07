@@ -4,7 +4,7 @@ import {
 } from '../actions/legendActions'
 import {
     SET_GEL_CONTRAST, SET_PROTEIN_MENU_MAX_INTENSITY, SET_SHOW_ONLY_RAZOR, SET_SHOW_ONLY_UNIQUE,
-    SHOW_OPTIONS_MENU, SET_PEPTIDE_MENU_MAX_INTENSITY
+    SHOW_OPTIONS_MENU, SET_PEPTIDE_MENU_MAX_INTENSITY, SET_ORGANISM
 } from "../actions/menuActions";
 import pumbaConfig from '../config'
 
@@ -15,7 +15,8 @@ const initialState = {
     gelContrast: pumbaConfig.initialGelContrast,
     showOnlyRazor: false,
     showOnlyUnique: false,
-    peptideMenuMaxIntensity: 0
+    peptideMenuMaxIntensity: 0,
+    organism: 'mouse'
 }
 
 const menuReducer = (state = initialState, action) => {
@@ -39,6 +40,8 @@ const menuReducer = (state = initialState, action) => {
             return { ...state, showOnlyRazor: action.showOnlyRazor }
         case SET_SHOW_ONLY_UNIQUE:
             return { ...state, showOnlyUnique: action.showOnlyUnique }
+        case SET_ORGANISM:
+            return { ...state, organism: action.organism }
         default:
             return state
     }

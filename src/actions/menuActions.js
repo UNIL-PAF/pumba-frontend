@@ -6,6 +6,7 @@ export const SET_PROTEIN_MENU_MAX_INTENSITY = 'SET_PROTEIN_MENU_MAX_INTENSITY'
 export const SET_PEPTIDE_MENU_MAX_INTENSITY = 'SET_PEPTIDE_MENU_MAX_INTENSITY'
 export const SET_SHOW_ONLY_RAZOR = 'SET_SHOW_ONLY_RAZOR'
 export const SET_SHOW_ONLY_UNIQUE = 'SET_SHOW_ONLY_UNIQUE'
+export const SET_ORGANISM = 'SET_ORGANISM'
 
 export const setLegendPos = (view, x, y) => ({
     type: SET_LEGEND_POS, view: view, x: x, y: y
@@ -37,4 +38,8 @@ export const setShowOnlyRazor = (showOnlyRazor) => ({
 
 export const setShowOnlyUnique = (showOnlyUnique) => ({
     type: SET_SHOW_ONLY_UNIQUE, showOnlyUnique: showOnlyUnique
+})
+
+export const setOrganism = (organism) => ({
+    type: SET_ORGANISM, organism: organism
 })
