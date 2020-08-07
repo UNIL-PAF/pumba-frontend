@@ -57,7 +57,7 @@ ProteinVizContainer.propTypes = {
     proteinMaxIntensity: PropTypes.number.isRequired,
     proteinMenuMaxIntensity: PropTypes.number,
     selectedOption: PropTypes.string,
-    showOptionsMenu: PropTypes.func.sRequired,
+    showOptionsMenu: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => {

@@ -26,7 +26,7 @@ class GelVizContainer extends PureComponent {
 }
 
 GelVizContainer.propTypes = {
-    proteinData: PropTypes.array.isRequired,
+    proteinData: PropTypes.array,
     datasets: PropTypes.object.isRequired,
     datasetChanged: PropTypes.number.isRequired,
     mouseClickSampleCB: PropTypes.func.isRequired,

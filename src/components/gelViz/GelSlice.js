@@ -123,7 +123,7 @@ GelSlice.propTypes = {
     mouseClickCB: PropTypes.func,
     sampleName: PropTypes.string,
     replId: PropTypes.string,
-    mouseClickReplCB: PropTypes.func.isRequired,
+    mouseClickReplCB: PropTypes.func,
     onMouseEnterCB: PropTypes.func,
     onMouseLeaveCB: PropTypes.func,
     getMousePos: PropTypes.func
