@@ -11,7 +11,6 @@ import PlotOptionsButton from "./components/options/PlotOptionsButton"
 import { Link } from 'react-router-dom'
 import { Navbar, Nav, NavItem, NavbarBrand, Collapse , NavLink, NavbarToggler} from 'reactstrap'
 import { LinkContainer } from 'react-router-bootstrap';
-import logo from './images/sib_logo_2.png';
 import logo2 from './images/logo_UNIL.png';
 import pumbaConfig from './config'
 import PropTypes from 'prop-types'
