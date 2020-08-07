@@ -162,8 +162,14 @@ export function fetchSequence(proteinId, dataBaseName){
     }
 }
 
-export function fetchDatasets(){
+export function fetchDatasets(organism){
     return function (dispatch){
+
+        // reset settings from the views
+        dispatch(resetProteinView())
+        dispatch(resetPeptideView())
+        dispatch(resetSampleSelection())
+
         return fetch(pumbaConfig.urlBackend + "/dataset")
             .then( response => {
                 if (!response.ok) { throw response }
@@ -174,14 +180,17 @@ export function fetchDatasets(){
                 var idx = 0;
 
                 const samples = _.reduce(json, (res, val) => {
-                    if(! res[val.sample]){
-                        res[val.sample] = {}
-                        res[val.sample].isChecked = true
-                        res[val.sample].isActive = true
-                        res[val.sample].isAvailable = true
-                        res[val.sample].datasets = []
+                    if(val.organism === organism){
+                        if(! res[val.sample]){
+                            res[val.sample] = {}
+                            res[val.sample].isChecked = true
+                            res[val.sample].isActive = true
+                            res[val.sample].isAvailable = true
+                            res[val.sample].organism = val.organism
+                            res[val.sample].datasets = []
+                        }
+                        res[val.sample].datasets.push({id: val.id, name: val.name, isActive: true, colorGroup: val.colorGroup})
                     }
-                    res[val.sample].datasets.push({id: val.id, name: val.name, isActive: true, colorGroup: val.colorGroup})
                     return res
                 }, {})
 
@@ -200,8 +209,8 @@ export function fetchDatasets(){
                     return s;
                 }), 'name')
 
-                dispatch(setDatasets(samplesWithIdx))
                 dispatch(setSortedDatasetNames(sortedNames))
+                dispatch(setDatasets(samplesWithIdx))
             })
             .catch(err => {
                 // we have to catch error messages differently for if backend is on or off.

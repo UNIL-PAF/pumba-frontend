@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import {fetchProtein, gotoViz, fetchDatasets, setDatasets} from '../../actions/loadProtein'
+import {fetchProtein, gotoViz, fetchDatasets, setDatasets, addProteinData} from '../../actions/loadProtein'
 import {setOrganism} from '../../actions/menuActions'
 import ProteinSearchButton from "./ProteinSearchButton";
 import ProteinSearchInput from "./ProteinSearchInput";
@@ -17,13 +17,13 @@ class ProteinSearchContainer extends React.Component{
     }
 
     componentDidMount() {
-        const {datasets, loadDatasets} = this.props
+        const {datasets, loadDatasets, organism} = this.props
 
         // Autoloading for testing
         // this.props.onLoadProtein("P02786")
 
         // load the list of datasets
-        if(! datasets) loadDatasets()
+        if(! datasets) loadDatasets(organism)
 
     }
 
@@ -96,7 +96,15 @@ class ProteinSearchContainer extends React.Component{
     }
 
     render(){
-        const {proteinIsLoading, datasets, datasetNames, organism, setOrganism} = this.props
+        const {proteinIsLoading, datasets, datasetNames, organism, setOrganism, loadDatasets, resetProteinData} = this.props
+
+        const changeOrganism = (organism) => {
+            setOrganism(organism)
+            loadDatasets(organism)
+            resetProteinData()
+        }
+
+        const datasetsLoaded = (datasets && Object.values(datasets)[0].organism === organism)
 
         return <div>
             <br/>
@@ -108,8 +116,8 @@ class ProteinSearchContainer extends React.Component{
             <Row>
                 <Col className="text-center" md={{ size: 4, offset: 4 }}>
                     <ButtonGroup>
-                        <Button active={organism === 'human'} color="primary" outline={true} onClick={() => setOrganism('human')}>Human</Button>
-                        <Button active={organism === 'mouse'} color="primary" outline={true} onClick={() => setOrganism('mouse')}>Mouse</Button>
+                        <Button active={organism === 'human'} color="primary" outline={true} onClick={() => changeOrganism('human')}>Human</Button>
+                        <Button active={organism === 'mouse'} color="primary" outline={true} onClick={() => changeOrganism('mouse')}>Mouse</Button>
                     </ButtonGroup>
                 </Col>
             </Row>
@@ -139,7 +147,7 @@ class ProteinSearchContainer extends React.Component{
                 </Row>
                 <Row>
                     <Col className="text-center" md={{ size: 4, offset: 4 }}>
-                        {datasets && _.map(datasetNames, (name) => {
+                        {datasetsLoaded && _.map(datasetNames, (name) => {
                             return this.oneSample(name, datasets[name].isChecked)
                         })}
                     </Col>
@@ -174,7 +182,8 @@ ProteinSearchContainer.propTypes = {
     datasets: PropTypes.object,
     datasetNames: PropTypes.array,
     organism: PropTypes.string.isRequired,
-    setOrganism: PropTypes.func.isRequired
+    setOrganism: PropTypes.func.isRequired,
+    resetProteinData: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => {
@@ -194,9 +203,10 @@ const mapDispatchToProps = (dispatch) => {
     return {
         onLoadProtein: (proteinId, availableDatasets) => { dispatch(fetchProtein(proteinId, availableDatasets)) },
         gotoProteinViz: (letsGo) => { dispatch(gotoViz(letsGo)) },
-        loadDatasets: () => { dispatch(fetchDatasets()) },
+        loadDatasets: (organism) => { dispatch(fetchDatasets(organism)) },
         setDatasets: (datasets) => { dispatch(setDatasets(datasets)) },
-        setOrganism: (organism) => { dispatch(setOrganism(organism))}
+        setOrganism: (organism) => { dispatch(setOrganism(organism))},
+        resetProteinData: () => { dispatch(addProteinData(null))}
     }
 }
 

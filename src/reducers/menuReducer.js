@@ -16,7 +16,7 @@ const initialState = {
     showOnlyRazor: false,
     showOnlyUnique: false,
     peptideMenuMaxIntensity: 0,
-    organism: 'mouse'
+    organism: 'human'
 }
 
 const menuReducer = (state = initialState, action) => {
