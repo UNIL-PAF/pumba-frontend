@@ -28,7 +28,7 @@ class ProteinOptions extends PureComponent {
             <p style={{minWidth: "160px"}}><span><strong>Protein graph options</strong></span>&nbsp;&nbsp;
                 <span><Button color="primary" size={"sm"} onClick={() => this.setToDefault()}>Reset</Button></span>
             </p>
-            <p>Max intensity {currentMaxIntensity.toExponential(1)}
+            <div>Max intensity {currentMaxIntensity.toExponential(1)}
                 <Slider
                     min={0}
                     max={proteinMaxIntensity}
@@ -38,7 +38,7 @@ class ProteinOptions extends PureComponent {
                     trackStyle={{backgroundColor: '#007bff'}}
                     handleStyle={{borderColor: '#007bff'}}
                 />
-            </p>
+            </div>
         </div>
     }
 }
