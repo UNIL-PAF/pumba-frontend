@@ -37,7 +37,8 @@ class ProteinVizLegends extends PureComponent {
                     idx: datasets[sampleName].idx,
                     isActive: ! datasets[sampleName].isActive,
                     isChecked: datasets[sampleName].isChecked,
-                    colorGroup: datasets[sampleName].colorGroup
+                    colorGroup: datasets[sampleName].colorGroup,
+                    organism: datasets[sampleName].organism
                 }})
         }else{
             let newDatasetsArray = [...(datasets[sampleName].datasets)]
@@ -49,7 +50,8 @@ class ProteinVizLegends extends PureComponent {
                     idx: datasets[sampleName].idx,
                     isActive: datasets[sampleName].isActive,
                     isChecked: datasets[sampleName].isChecked,
-                    colorGroup: datasets[sampleName].colorGroup
+                    colorGroup: datasets[sampleName].colorGroup,
+                    organism: datasets[sampleName].organism
                 }
             }
 

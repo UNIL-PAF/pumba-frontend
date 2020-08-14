@@ -66,6 +66,7 @@ class ProteinSearchContainer extends React.Component{
                 idx: datasets[event.target.id].idx,
                 isAvailable: datasets[event.target.id].isAvailable,
                 isActive: datasets[event.target.id].isActive,
+                organism: datasets[event.target.id].organism,
             }
         }
         setDatasets(newDataset)
@@ -103,7 +104,6 @@ class ProteinSearchContainer extends React.Component{
             loadDatasets(organism)
             resetProteinData()
         }
-
         const datasetsLoaded = (datasets && Object.values(datasets)[0].organism === organism)
 
         return <div>
