@@ -9,7 +9,7 @@ class DatasetGelSlice extends PureComponent {
     onMouseEnter = () => {
         const {getMousePos} = this.props
 
-        console.log("mouseEntered", getMousePos())
+        //console.log("mouseEntered", getMousePos())
     }
 
     plotDataset = () =>{
