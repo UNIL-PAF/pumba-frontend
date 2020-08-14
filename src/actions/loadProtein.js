@@ -258,12 +258,12 @@ export const setSortedDatasetNames = (datasetNames) => ({
     type: SET_SORTED_DATASET_NAMES, datasetNames: datasetNames
 })
 
-export const selectDataset = (sampleIdx, replIdx) => ({
-    type: SELECT_DATASET, sampleIdx: sampleIdx, replIdx: replIdx
+export const selectDataset = (sampleIdx, replIdx, plotType) => ({
+    type: SELECT_DATASET, sampleIdx: sampleIdx, replIdx: replIdx, plotType: plotType
 })
 
-export const selectAllDatasets = (sampleIdx) => ({
-    type: SELECT_ALL_DATASETS, sampleIdx: sampleIdx
+export const selectAllDatasets = (sampleIdx, plotType) => ({
+    type: SELECT_ALL_DATASETS, sampleIdx: sampleIdx, plotType: plotType
 })
 
 export const setProteinMaxIntensity = (maxIntensity) => ({

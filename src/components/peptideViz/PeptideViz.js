@@ -212,7 +212,7 @@ class PeptideViz extends PureComponent {
 
                 return fltProt.map((peptide, k) => {
                     // check if given replicate is activated on proteinViz
-                    const replIsClicked = _.some(datasets[sample.sample].datasets, (d) => { return d.id === protein.dataSet.id && d.isSelected})
+                    const replIsClicked = _.some(datasets[sample.sample].datasets, (d) => { return d.id === protein.dataSet.id && d.isSelected && d.isSelected.pep})
 
                     const sliceIsClicked = _.some(clickedSlices, (slice) => {
                         return sliceFromReplIsClicked & (slice.idx+1) === peptide.sliceNr
@@ -311,7 +311,8 @@ class PeptideViz extends PureComponent {
                     { this.plotAminoAcidBar() }
                     { this.svg && this.plotPeptides() }
                 </g>
-                <ProteinVizLegendsContainer x={localLegendPos.x} y={localLegendPos.y} width={150} theoMolWeight={this.state.theoMolWeight}>
+                <ProteinVizLegendsContainer x={localLegendPos.x} y={localLegendPos.y} width={150}
+                                            theoMolWeight={this.state.theoMolWeight} plotType={"pep"}>
                 </ProteinVizLegendsContainer>
                 {popup && this.plotPopup()}
             </svg>

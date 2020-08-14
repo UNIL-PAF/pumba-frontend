@@ -11,10 +11,14 @@ const initialState = {
     datasetChanged: 0
 }
 
-const selectDataset = (state, sampleIdx, replIdx) => {
+const selectDataset = (state, sampleIdx, replIdx, plotType) => {
     const newState = {...state}
     const newDatasets = _.map(newState.datasets[sampleIdx].datasets, (d) => {
-        if(d.id === replIdx) d.isSelected = !d.isSelected
+        if(d.id === replIdx){
+            let isSelected = (d.isSelected) ? d.isSelected : {}
+            isSelected[plotType] = isSelected[plotType] ? false : true
+            d.isSelected = isSelected
+        }
         return d
     })
     newState.datasets[sampleIdx].datasets = newDatasets
@@ -22,13 +26,18 @@ const selectDataset = (state, sampleIdx, replIdx) => {
     return newState
 }
 
-const selectAllDatasets= (state, sampleIdx) => {
+const selectAllDatasets= (state, sampleIdx, plotType) => {
     const newState = {...state}
     // if any of the datasets is already selected, we unselect all of them
-    const anySelected = _.some(newState.datasets[sampleIdx].datasets, 'isSelected')
+    const anySelected = _.some(newState.datasets[sampleIdx].datasets, (d) => {
+        return d.isSelected && d.isSelected[plotType]
+    })
 
     const newDatasets = _.map(newState.datasets[sampleIdx].datasets, (d) => {
-        d.isSelected = (anySelected ? false : true)
+        let isSelected = (d.isSelected) ? d.isSelected : {}
+        isSelected[plotType] = (anySelected ? false : true)
+
+        d.isSelected = isSelected
         return d
     })
 
@@ -58,9 +67,9 @@ const loadProteinReducer = (state = initialState, action) => {
         case SET_SORTED_DATASET_NAMES:
             return { ...state, datasetNames: action.datasetNames}
         case SELECT_DATASET:
-            return selectDataset(state, action.sampleIdx, action.replIdx)
+            return selectDataset(state, action.sampleIdx, action.replIdx, action.plotType)
         case SELECT_ALL_DATASETS:
-            return selectAllDatasets(state, action.sampleIdx)
+            return selectAllDatasets(state, action.sampleIdx, action.plotType)
         case SET_PROTEIN_MAX_INTENSITY:
             return { ...state, proteinMaxIntensity: action.maxIntensity}
         case SET_PEPTIDE_MAX_INTENSITY:

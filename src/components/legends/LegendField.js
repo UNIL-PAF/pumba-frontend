@@ -9,15 +9,16 @@ const defaultFontSize = "50%"
 class LegendField extends PureComponent {
 
     clickOnLegend = () => {
-        const {clickeablePointer, sampleName, mouseClickReplCB, replId} = this.props
+        const {clickeablePointer, sampleName, mouseClickReplCB, replId, plotType} = this.props
 
         if(clickeablePointer){
-            mouseClickReplCB(sampleName, replId)
+            mouseClickReplCB(sampleName, replId, plotType)
         }
     }
 
     closeLegend = (sampleIdx, replIdx) => {
-        this.props.removeSelectedReplCB(sampleIdx, replIdx)
+        const {plotType} = this.props
+        this.props.removeSelectedReplCB(sampleIdx, replIdx, plotType)
     }
 
     render() {
@@ -78,7 +79,8 @@ LegendField.propTypes = {
     showCheckbox: PropTypes.bool,
     mouseOverLegend: PropTypes.bool,
     isActive: PropTypes.bool,
-    textColor: PropTypes.string
+    textColor: PropTypes.string,
+    plotType: PropTypes.string.isRequired,
 };
 
 export default (LegendField);

@@ -46,8 +46,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        mouseClickSampleCB: (sampleIdx) => { dispatch(selectAllDatasets(sampleIdx)) },
-        mouseClickReplCB: (sampleIdx, replIdx) => { dispatch(selectDataset(sampleIdx, replIdx)) }
+        mouseClickSampleCB: (sampleIdx) => { dispatch(selectAllDatasets(sampleIdx, "gel")) },
+        mouseClickReplCB: (sampleIdx, replIdx) => { dispatch(selectDataset(sampleIdx, replIdx, "gel")) }
     }
 }
 

@@ -15,7 +15,7 @@ class ProteinVizLegendsContainer extends Component {
     render(){
         const {x, y, width, theoMolWeight, mouseOverSampleId, mouseOverSampleCB,
             mouseOverReplId, mouseOverReplCB, mouseLeaveReplCB, mouseLeaveSampleCB, mouseClickReplCB,
-            datasets, reloadProteinCB, setDatasets, legendIsMoving, setMoveLegend, datasetChanged} = this.props
+            datasets, reloadProteinCB, setDatasets, legendIsMoving, setMoveLegend, datasetChanged, plotType} = this.props
 
         return <ProteinVizLegends x={x} y={y} width={width} theoMolWeight={theoMolWeight}
                                  mouseOverSampleId={mouseOverSampleId} mouseOverSampleCB={mouseOverSampleCB}
@@ -24,6 +24,7 @@ class ProteinVizLegendsContainer extends Component {
                                  mouseClickReplCB={mouseClickReplCB}
                                  datasets={datasets} reloadProteinCB={reloadProteinCB} setDatasets={setDatasets}
                                  legendIsMoving={legendIsMoving} setMoveLegend={setMoveLegend} datasetChanged={datasetChanged}
+                                 plotType={plotType}
                 >
                 </ProteinVizLegends>
     }
@@ -48,6 +49,7 @@ ProteinVizLegendsContainer.propTypes = {
     legendIsMoving: PropTypes.bool.isRequired,
     setMoveLegend: PropTypes.func.isRequired,
     datasetChanged: PropTypes.number.isRequired,
+    plotType: PropTypes.string.isRequired
 };
 
 const mapStateToProps = (state) => {
@@ -67,9 +69,9 @@ const mapDispatchToProps = (dispatch) => {
         mouseOverReplCB: replIdx => { dispatch(mouseOverRepl(replIdx)) },
         mouseLeaveSampleCB: () => { dispatch(mouseLeaveSample()) },
         mouseLeaveReplCB: () => { dispatch(mouseLeaveRepl()) },
-        mouseClickReplCB: (sampleIdx, replIdx) => { dispatch(selectDataset(sampleIdx, replIdx)) },
+        mouseClickReplCB: (sampleIdx, replIdx, plotType) => { dispatch(selectDataset(sampleIdx, replIdx, plotType)) },
         reloadProteinCB: (activeDatasetIds, callOnComplete) => { dispatch(reloadProtein(activeDatasetIds, callOnComplete))},
-        setDatasets: (datasets) => { dispatch(setDatasets(datasets)) },
+        setDatasets: (datasets, plotType) => { dispatch(setDatasets(datasets, plotType)) },
         setMoveLegend: (isMoving) => { dispatch(setMoveLegend(isMoving))},
     }
 }

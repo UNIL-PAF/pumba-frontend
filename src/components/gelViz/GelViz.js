@@ -216,7 +216,7 @@ class GelViz extends PureComponent {
 
             const nrSelectedDatasets = _.reduce(dataset.datasets, (acc2, d2) => {
                 const selData = _.find(thisProteinData.proteins, (p) => { return p.dataSet.id === d2.id})
-                return ((d2.isSelected && selData) ? 1 : 0) + acc2
+                return ((d2.isSelected && d2.isSelected["gel"] && selData) ? 1 : 0) + acc2
             }, 0)
 
             const plots =  <g key={'slice-group-' + dataset.name}>
@@ -250,7 +250,7 @@ class GelViz extends PureComponent {
         const {viewWidth, viewHeight, datasets, proteinData} = this.props
 
         const nrSlices = _.reduce(datasets, (acc, d) => {
-            const selectedDatasets = (d.isActive ? _.reduce(d.datasets, (acc2, d2) => {return (d2.isSelected ? 1 : 0) + acc2}, 1) : 0)
+            const selectedDatasets = (d.isActive ? _.reduce(d.datasets, (acc2, d2) => {return (d2.isSelected && d2.isSelected.gel ? 1 : 0) + acc2}, 1) : 0)
             return acc + selectedDatasets
         }, 0)
 

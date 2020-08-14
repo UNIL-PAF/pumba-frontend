@@ -60,7 +60,7 @@ class ProteinMerges extends PureComponent {
 
                 // only plot the bars if the dataset is selected
                 // if we unactivate a sample with a selected replicate it will have no protein
-                if(!mouseOverDataset && (!d.isSelected || !proteins)) return null
+                if(!mouseOverDataset && ( !(d.isSelected && d.isSelected.prot)  || !proteins)) return null
 
                 const oneProtein = _.find(proteins.proteins, (p) => { return p.dataSet.id === d.id})
 

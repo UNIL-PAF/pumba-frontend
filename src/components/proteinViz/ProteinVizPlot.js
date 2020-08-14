@@ -311,7 +311,7 @@ class ProteinVizPlot extends Component {
                                 </ProteinMergesContainer>}
 
                     <ProteinVizLegendsContainer x={localLegendPos.x} y={localLegendPos.y} width={150}
-                                     theoMolWeight={this.state.theoMolWeight} parentSvg={this.svg}
+                                     theoMolWeight={this.state.theoMolWeight} parentSvg={this.svg} plotType={"prot"}
                     >
                     </ProteinVizLegendsContainer>
 
