@@ -79,7 +79,6 @@ export function fetchProtein(proteinId, datasetIds, noReset, callOnComplete){
                             }))
                         }))
                         dispatch(setProteinMaxIntensity(maxProteinIntensity))
-                        dispatch(setProteinMenuMaxIntensity(undefined))
 
                         // add the maximum peptide intensity
                         const maxPeptideIntensity = _.max(_.map(json, function(pd){
@@ -88,7 +87,6 @@ export function fetchProtein(proteinId, datasetIds, noReset, callOnComplete){
                             }))
                         }))
                         dispatch(setPeptideMaxIntensity(maxPeptideIntensity))
-                        dispatch(setPeptideMenuMaxIntensity(0))
 
                         // add the minimum peptide intensity
                         const minPeptideIntensity = _.min(_.map(json, function(pd){
@@ -109,6 +107,8 @@ export function fetchProtein(proteinId, datasetIds, noReset, callOnComplete){
                             dispatch(setGelContrast(pumbaConfig.initialGelContrast))
                             dispatch(setShowOnlyRazor(false))
                             dispatch(setShowOnlyUnique(false))
+                            dispatch(setProteinMenuMaxIntensity(undefined))
+                            dispatch(setPeptideMenuMaxIntensity(0))
                         }
                         dispatch(addProteinData(json))
                         dispatch(proteinIsLoaded())
