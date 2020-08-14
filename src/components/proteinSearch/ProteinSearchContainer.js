@@ -104,7 +104,8 @@ class ProteinSearchContainer extends React.Component{
             loadDatasets(organism)
             resetProteinData()
         }
-        const datasetsLoaded = (datasets && Object.values(datasets)[0].organism === organism)
+        const datasetsLoaded = (datasets && datasetNames && datasets[datasetNames[0]])
+        console.log(datasets, organism, datasetNames)
 
         return <div>
             <br/>
