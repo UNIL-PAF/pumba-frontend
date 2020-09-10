@@ -46,7 +46,7 @@ class PeptideOptions extends PureComponent {
             <p className={'options-paragraph'}><input type={"checkbox"} checked={showOnlyUnique} onChange={this.clickShowOnlyUnique} />
                 <span className={"options-checkbox-span"}>Show only unique peptides</span>
             </p>
-            <p>Intensity threshold {realIntValue}
+            <div>Intensity threshold {realIntValue}
                 <Slider
                     min={0}
                     max={optionsConfig.pepIntSliderSteps}
@@ -57,7 +57,7 @@ class PeptideOptions extends PureComponent {
                     handleStyle={{borderColor: '#007bff'}}
                     railStyle={{backgroundColor: "#007bff"}}
                 />
-            </p>
+            </div>
         </div>
     }
 }

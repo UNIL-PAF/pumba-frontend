@@ -186,6 +186,7 @@ class ProteinVizLegends extends PureComponent {
                     changeSelection={() => this.changeSelection("sample", sampleName)}
                     showCheckbox={showCheckbox}
                     isActive={isActive}
+                    plotType={plotType}
                 >
                 </LegendField>
                 { ((this.state.mouseOverLegend || isSampleSelected) && isActive && _.map(sample.datasets, (repl) => this.plotReplicate(repl, x, y, height, sampleIdx, colorIdx, showCheckbox, sampleName))) }
@@ -197,7 +198,7 @@ class ProteinVizLegends extends PureComponent {
     }
 
     plotTheoMolWeight = (x, y, legendHeight) => {
-        const {width, mouseLeaveSampleCB, theoMolWeight} = this.props
+        const {width, mouseLeaveSampleCB, theoMolWeight, plotType} = this.props
 
         return  <LegendField
             x={x} y={y} width={width} height={legendHeight}
@@ -205,6 +206,7 @@ class ProteinVizLegends extends PureComponent {
             text={"Theo Mol Weight (" + Math.pow(10, theoMolWeight).toFixed(2) + " kDa)"}
             legend={this.theoMolSymbol}
             isUnactiveable={false}
+            plotType={plotType}
         >
         </LegendField>
     }

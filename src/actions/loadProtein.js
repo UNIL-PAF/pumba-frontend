@@ -58,7 +58,7 @@ export function fetchProtein(proteinId, datasetIds, noReset, callOnComplete){
             dispatch(resetSampleSelection())
         }
 
-        return fetch(pumbaConfig.urlBackend + "/merge-protein/" + proteinId + '?dataSetsString=' + datasetIds)
+        return fetch(pumbaConfig.urlBackend + "/merge-protein/" + proteinId + '/organism/human?dataSetsString=' + datasetIds)
             .then( response => {
                 if (!response.ok) { throw response }
                 return response.json()
@@ -70,10 +70,10 @@ export function fetchProtein(proteinId, datasetIds, noReset, callOnComplete){
                         dispatch(proteinIsLoaded())
                     }else{
                         // add a timestamp to the data
-                        json.timestamp = noReset ? getState().loadProtein.proteinData.timestamp : Date.now()
+                        json.proteinMerges.timestamp = noReset ? getState().loadProtein.proteinData.timestamp : Date.now()
 
                         // add the maximum protein intensity
-                        const maxProteinIntensity = _.max(_.map(json, function(pd){
+                        const maxProteinIntensity = _.max(_.map(json.proteinMerges, function(pd){
                             return _.max(_.map(pd.proteins, function(p){
                                 return _.max(p.intensities)
                             }))
@@ -81,7 +81,7 @@ export function fetchProtein(proteinId, datasetIds, noReset, callOnComplete){
                         dispatch(setProteinMaxIntensity(maxProteinIntensity))
 
                         // add the maximum peptide intensity
-                        const maxPeptideIntensity = _.max(_.map(json, function(pd){
+                        const maxPeptideIntensity = _.max(_.map(json.proteinMerges, function(pd){
                             return _.max(_.map(pd.proteins, function(p){
                                 return _.max(_.map(p.peptides, "intensity"))
                             }))
@@ -89,20 +89,23 @@ export function fetchProtein(proteinId, datasetIds, noReset, callOnComplete){
                         dispatch(setPeptideMaxIntensity(maxPeptideIntensity))
 
                         // add the minimum peptide intensity
-                        const minPeptideIntensity = _.min(_.map(json, function(pd){
+                        const minPeptideIntensity = _.min(_.map(json.proteinMerges, function(pd){
                             return _.min(_.map(pd.proteins, function(p){
                                 return _.min(_.map(p.peptides, "intensity"))
                             }))
                         }))
                         dispatch(setPeptideMinIntensity(minPeptideIntensity))
 
+                        console.log(json)
+
                         // add a short version of the merged data for the gel view
-                        addShortMergedData(json)
+                        addShortMergedData(json.proteinMerges)
 
                         if(! noReset){
                             // let's take the FASTA data from the first entry (should always be OK)
-                            const dataBaseName = json[0].proteins[0].dataSet.dataBaseName
-                            dispatch(fetchSequence(json[0].mainProteinId, dataBaseName))
+                            const dataBaseName = json.proteinMerges[0].proteins[0].dataSet.dataBaseName
+                            //dispatch(fetchSequence(json[0].mainProteinId, dataBaseName))
+                            dispatch(addSequenceData(json.mainSequence))
                             dispatch(gotoViz(true))
                             dispatch(setGelContrast(pumbaConfig.initialGelContrast))
                             dispatch(setShowOnlyRazor(false))
@@ -110,7 +113,7 @@ export function fetchProtein(proteinId, datasetIds, noReset, callOnComplete){
                             dispatch(setProteinMenuMaxIntensity(undefined))
                             dispatch(setPeptideMenuMaxIntensity(0))
                         }
-                        dispatch(addProteinData(json))
+                        dispatch(addProteinData(json.proteinMerges))
                         dispatch(proteinIsLoaded())
 
                         // call the callback if there is a function
