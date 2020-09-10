@@ -104,7 +104,6 @@ export function fetchProtein(proteinId, datasetIds, noReset, callOnComplete){
                         if(! noReset){
                             // let's take the FASTA data from the first entry (should always be OK)
                             const dataBaseName = json.proteinMerges[0].proteins[0].dataSet.dataBaseName
-                            //dispatch(fetchSequence(json[0].mainProteinId, dataBaseName))
                             dispatch(addSequenceData(json.mainSequence))
                             dispatch(gotoViz(true))
                             dispatch(setGelContrast(pumbaConfig.initialGelContrast))
@@ -141,29 +140,6 @@ export function fetchProtein(proteinId, datasetIds, noReset, callOnComplete){
     }
 }
 
-export function fetchSequence(proteinId, dataBaseName){
-    return function (dispatch){
-        return fetch(pumbaConfig.urlBackend + "/sequence/" + proteinId + "/database/" + dataBaseName)
-            .then( response => {
-                if (!response.ok) { throw response }
-                return response.json()
-            })
-            .then(json => {
-                    dispatch(addSequenceData(json))
-                }
-            )
-            .catch(err => {
-                // we have to catch error messages differently for if backend is on or off.
-                if(err.message){
-                    dispatch(proteinLoadError(err.message))
-                }else{
-                    err.text().then(message => {
-                        dispatch(proteinLoadError(err.statusText + ": " + message))
-                    })
-                }
-            })
-    }
-}
 
 export function fetchDatasets(organism){
     return function (dispatch){
