@@ -103,7 +103,6 @@ export function fetchProtein(proteinId, datasetIds, noReset, callOnComplete){
 
                         if(! noReset){
                             // let's take the FASTA data from the first entry (should always be OK)
-                            const dataBaseName = json.proteinMerges[0].proteins[0].dataSet.dataBaseName
                             dispatch(addSequenceData(json.mainSequence))
                             dispatch(gotoViz(true))
                             dispatch(setGelContrast(pumbaConfig.initialGelContrast))

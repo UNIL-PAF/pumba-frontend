@@ -7,7 +7,7 @@ import * as _ from 'lodash';
 class DatasetGelSlice extends PureComponent {
 
     onMouseEnter = () => {
-        const {getMousePos} = this.props
+        //const {getMousePos} = this.props
 
         //console.log("mouseEntered", getMousePos())
     }
