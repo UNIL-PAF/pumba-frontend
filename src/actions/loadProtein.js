@@ -19,6 +19,7 @@ export const SELECT_ALL_DATASETS = 'SELECT_ALL_DATASETS'
 export const SET_PROTEIN_MAX_INTENSITY = 'SET_PROTEIN_MAX_INTENSITY'
 export const SET_PEPTIDE_MAX_INTENSITY = 'SET_PEPTIDE_MAX_INTENSITY'
 export const SET_PEPTIDE_MIN_INTENSITY = 'SET_PEPTIDE_MIN_INTENSITY'
+export const ADD_ISOFORMS = 'ADD_ISOFORMS'
 
 export function reloadProtein(activeDatasetIds, callOnComplete){
     return function (dispatch, getState) {
@@ -110,6 +111,7 @@ export function fetchProtein(proteinId, datasetIds, noReset, callOnComplete){
                             dispatch(setShowOnlyUnique(false))
                             dispatch(setProteinMenuMaxIntensity(undefined))
                             dispatch(setPeptideMenuMaxIntensity(0))
+                            dispatch(addIsoforms(json.sequences))
                         }
                         dispatch(addProteinData(json.proteinMerges))
                         dispatch(proteinIsLoaded())
@@ -254,4 +256,8 @@ export const setPeptideMaxIntensity = (maxIntensity) => ({
 
 export const setPeptideMinIntensity = (minIntensity) => ({
     type: SET_PEPTIDE_MIN_INTENSITY, minIntensity: minIntensity
+})
+
+export const addIsoforms = (isoforms) => ({
+    type: ADD_ISOFORMS, isoforms: isoforms
 })

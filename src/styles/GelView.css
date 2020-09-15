@@ -39,6 +39,13 @@
     stroke-dasharray: 4;
 }
 
+.isoform-line-gel {
+    pointer-events: none;
+    stroke: green;
+    stroke-width: 1;
+    stroke-dasharray: 4;
+}
+
 .expand-info {
     fill: grey;
     font-size: 50%;
@@ -77,4 +84,11 @@
     user-select: none;
     font-size: 70%;
     fill: red;
+}
+
+.isoform-text{
+    pointer-events: none;
+    user-select: none;
+    font-size: 70%;
+    fill: green;
 }

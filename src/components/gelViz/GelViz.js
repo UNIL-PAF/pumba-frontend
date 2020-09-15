@@ -48,6 +48,8 @@ class GelViz extends PureComponent {
         this.theoMolWeight = proteinData[0].proteins[0].theoMolWeight
         this.theoMolWeightPos = this.yScale(Math.log10(proteinData[0].proteins[0].theoMolWeight)) + this.margin.top
 
+        this.isoformInfo = this.computeIsoformInfo()
+
         this.state = {
             proteinDataTimestamp: proteinData.timestamp,
             maxInt: this.getMaxInt()
@@ -74,7 +76,21 @@ class GelViz extends PureComponent {
             this.theoMolWeight = proteinData[0].proteins[0].theoMolWeight
             this.theoMolWeightPos = this.yScale(Math.log10(proteinData[0].proteins[0].theoMolWeight)) + this.margin.top
 
+            this.isoformInfo = this.computeIsoformInfo()
         }
+    }
+
+    computeIsoformInfo = () => {
+        const {isoforms} = this.props
+
+        return _.map(isoforms, (iso) => {
+            const molWeight = iso.molWeight / 1000
+            return {
+                molWeight: molWeight,
+                yPos: this.yScale(Math.log10(molWeight)) + this.margin.top,
+                name: 'Isoform ' + iso.proteinId + '-' + iso.isoformId
+            }
+        })
     }
 
     getMaxInt = () => {
@@ -230,9 +246,7 @@ class GelViz extends PureComponent {
         })
     }
 
-    plotTheoMolWeight = (totalSlicesWidth) => {
-
-        const xPos = totalSlicesWidth + this.margin.left + 15
+    plotTheoMolWeight = (xPos) => {
 
         return <g>
             <line
@@ -246,6 +260,27 @@ class GelViz extends PureComponent {
         </g>
     }
 
+    plotIsoforms = (xPos) => {
+
+        return <g>
+            {
+                _.map(this.isoformInfo, (iso, i) => {
+                    return <g key={"isoform-" + i}>
+                        <line
+                            className={"isoform-line-gel"}
+                            x1={this.margin.left}
+                            y1={iso.yPos}
+                            x2={xPos}
+                            y2={iso.yPos}
+                        ></line>
+                        <text className={'isoform-text'} x={xPos}
+                              y={iso.yPos}>{iso.name}</text>
+                    </g>
+                })
+            }
+        </g>
+    }
+
     render() {
         const {viewWidth, viewHeight, datasets, proteinData} = this.props
 
@@ -255,6 +290,8 @@ class GelViz extends PureComponent {
         }, 0)
 
         const totalSlicesWidth = nrSlices * (this.sliceWidth + this.sliceSpacing)
+        const theoMolWeightPosX = totalSlicesWidth + this.margin.left + 15
+
 
         return  <div id={"gel-plot"}>
                     <svg className="gel-svg"
@@ -266,7 +303,8 @@ class GelViz extends PureComponent {
                     >
                         <g className="gel-y-axis" ref={this.yAxis} transform={'translate(' + this.margin.left + ',' + this.margin.top + ')'}/>
                         {this.plotGels()}
-                        {this.plotTheoMolWeight(totalSlicesWidth)}
+                        {this.plotTheoMolWeight(theoMolWeightPosX)}
+                        {this.plotIsoforms(theoMolWeightPosX)}
                         <ProteinTitle proteinData={proteinData} x={100} y={20}/>
                     </svg>
                 </div>
@@ -281,7 +319,8 @@ GelViz.propTypes = {
     viewHeight: PropTypes.number.isRequired,
     mouseClickSampleCB: PropTypes.func.isRequired,
     mouseClickReplCB: PropTypes.func.isRequired,
-    gelContrast: PropTypes.number.isRequired
+    gelContrast: PropTypes.number.isRequired,
+    isoforms: PropTypes.array
 };
 
 export default GelViz
