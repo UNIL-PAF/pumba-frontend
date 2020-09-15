@@ -44,11 +44,7 @@ class GelViz extends PureComponent {
 
         this.yScale = scaleLinear().range([viewHeight - this.margin.top - this.margin.bottom, 0]).domain([minMolWeight, maxMolWeight])
 
-        // just take the theoretical weight of the first protein, it should always be the same.
-        this.theoMolWeight = proteinData[0].proteins[0].theoMolWeight
-        this.theoMolWeightPos = this.yScale(Math.log10(proteinData[0].proteins[0].theoMolWeight)) + this.margin.top
-
-        this.isoformInfo = this.computeIsoformInfo()
+        this.computeMolWeights()
 
         this.state = {
             proteinDataTimestamp: proteinData.timestamp,
@@ -71,26 +67,57 @@ class GelViz extends PureComponent {
 
         if(this.state.proteinDataTimestamp && (this.state.proteinDataTimestamp !== proteinData.timestamp)){
             this.setState({maxInt: this.getMaxInt()})
-
-            // just take the theoretical weight of the first protein, it should always be the same.
-            this.theoMolWeight = proteinData[0].proteins[0].theoMolWeight
-            this.theoMolWeightPos = this.yScale(Math.log10(proteinData[0].proteins[0].theoMolWeight)) + this.margin.top
-
-            this.isoformInfo = this.computeIsoformInfo()
+            this.computeMolWeights()
         }
     }
 
-    computeIsoformInfo = () => {
-        const {isoforms} = this.props
+    computeMolWeights = () => {
+        const {isoforms, proteinData} = this.props
 
-        return _.map(isoforms, (iso) => {
-            const molWeight = iso.molWeight / 1000
-            return {
-                molWeight: molWeight,
-                yPos: this.yScale(Math.log10(molWeight)) + this.margin.top,
-                name: 'Isoform ' + iso.proteinId + '-' + iso.isoformId
-            }
-        })
+        // just take the theoretical weight of the first protein, it should always be the same.
+        this.theoMolWeight = proteinData[0].proteins[0].theoMolWeight
+        this.theoMolWeightPos = this.yScale(Math.log10(proteinData[0].proteins[0].theoMolWeight)) + this.margin.top
+
+        const sortedIsoforms = _.sortBy(isoforms, 'molWeight')
+        const corrMolWeight = proteinData[0].proteins[0].theoMolWeight * 1000
+        const splitPos = _.findIndex(sortedIsoforms, (s) => { return s.molWeight >= corrMolWeight  })
+
+        const upperPart = (splitPos > -1) ? sortedIsoforms.slice(splitPos) : []
+        let lowerPart = (splitPos > 0) ? (sortedIsoforms.slice(0, splitPos - 1 )).reverse() : []
+        if(splitPos === -1){ lowerPart = sortedIsoforms.reverse() }
+
+        const computeLabelPos = (isoformPart, isLowerPart) => {
+            let lastPos = this.theoMolWeightPos
+            let posCorr = 0
+
+            return _.map(isoformPart, (iso) => {
+                const molWeight = iso.molWeight / 1000
+                const yPos = this.yScale(Math.log10(molWeight)) + this.margin.top
+
+                let labelPos = yPos
+
+                if(isLowerPart ? yPos - lastPos < 10 :  lastPos - yPos < 10){
+                    posCorr += 10
+                    labelPos = yPos + (isLowerPart ? 1 : -1) * posCorr
+                }
+
+                lastPos = labelPos
+
+                return {
+                    molWeight: molWeight,
+                    yPos: yPos,
+                    labelPos: labelPos,
+                    name: 'Isoform ' + iso.proteinId + '-' + iso.isoformId
+                }
+            })
+        }
+
+
+        this.isoformInfo = computeLabelPos(lowerPart, true).concat(computeLabelPos(upperPart, false))
+
+
+
+
     }
 
     getMaxInt = () => {
@@ -256,7 +283,7 @@ class GelViz extends PureComponent {
                 x2={xPos}
                 y2={this.theoMolWeightPos}
             ></line>
-            <text className={'gel-theo-molweight-text'} x={xPos} y={this.theoMolWeightPos}>{this.theoMolWeight + ' kDa'}</text>
+            <text className={'gel-theo-molweight-text'} x={xPos + 4} y={this.theoMolWeightPos + 3}>{this.theoMolWeight + ' kDa'}</text>
         </g>
     }
 
@@ -270,11 +297,18 @@ class GelViz extends PureComponent {
                             className={"isoform-line-gel"}
                             x1={this.margin.left}
                             y1={iso.yPos}
-                            x2={xPos}
+                            x2={xPos - 10}
                             y2={iso.yPos}
                         ></line>
-                        <text className={'isoform-text'} x={xPos}
-                              y={iso.yPos}>{iso.name}</text>
+                        <line
+                            className={"isoform-label-line-gel"}
+                            x1={xPos - 10}
+                            y1={iso.yPos}
+                            x2={xPos}
+                            y2={iso.labelPos}
+                        ></line>
+                        <text className={'isoform-text'} x={xPos + 4}
+                              y={iso.labelPos + 3}>{iso.name}</text>
                     </g>
                 })
             }
@@ -303,8 +337,8 @@ class GelViz extends PureComponent {
                     >
                         <g className="gel-y-axis" ref={this.yAxis} transform={'translate(' + this.margin.left + ',' + this.margin.top + ')'}/>
                         {this.plotGels()}
-                        {this.plotTheoMolWeight(theoMolWeightPosX)}
                         {this.plotIsoforms(theoMolWeightPosX)}
+                        {this.plotTheoMolWeight(theoMolWeightPosX)}
                         <ProteinTitle proteinData={proteinData} x={100} y={20}/>
                     </svg>
                 </div>

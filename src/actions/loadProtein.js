@@ -97,8 +97,6 @@ export function fetchProtein(proteinId, datasetIds, noReset, callOnComplete){
                         }))
                         dispatch(setPeptideMinIntensity(minPeptideIntensity))
 
-                        console.log(json)
-
                         // add a short version of the merged data for the gel view
                         addShortMergedData(json.proteinMerges)
 
