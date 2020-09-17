@@ -104,10 +104,9 @@ class GelViz extends PureComponent {
                 lastPos = labelPos
 
                 return {
-                    molWeight: molWeight,
                     yPos: yPos,
                     labelPos: labelPos,
-                    name: 'Isoform ' + iso.proteinId + '-' + iso.isoformId
+                    name: iso.proteinId + '-' + iso.isoformId + ' (' + molWeight.toFixed(2) + ' kDa)'
                 }
             })
         }
