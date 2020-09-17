@@ -166,7 +166,7 @@ class PeptideViz extends PureComponent {
             zoomRight={zoomRight}
             sequence={sequenceData.sequence}
             xScale={this.state.xScale}
-            yPos={viewHeight - this.margin.bottom + 18}
+            yPos={viewHeight - this.margin.bottom - 18}
         />
     }
 
