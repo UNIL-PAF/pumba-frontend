@@ -166,7 +166,7 @@ class PeptideViz extends PureComponent {
             zoomRight={zoomRight}
             sequence={sequenceData.sequence}
             xScale={this.state.xScale}
-            yPos={viewHeight - this.margin.bottom - 18}
+            yPos={viewHeight - this.margin.bottom - 16}
         />
     }
 
@@ -265,7 +265,7 @@ class PeptideViz extends PureComponent {
             className="theo-weight-line"
             x1={0}
             y1={y}
-            x2={this.props.viewWidth - this.margin.right}
+            x2={this.props.viewWidth - this.margin.right - 40}
             y2={y}
         />
     }
