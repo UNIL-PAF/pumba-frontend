@@ -36,7 +36,7 @@ class LegendField extends PureComponent {
             isActive: isActive
         }
 
-        const yMiddle = y+13
+        const yMiddle = y+9
 
         return <g style={ (clickeablePointer) ? {cursor: 'pointer'} : {} }
                   onMouseOver={() => { if(onMouseOver) onMouseOver(sampleName, replId) } }
@@ -45,15 +45,25 @@ class LegendField extends PureComponent {
                 className="merged-legend-field"
                 x={x+3}
                 y={y+1}
-                width={width-3}
+                width={width-10}
                 height={height-3}
                 fill={"white"}
                 stroke={(isSelected) ? "silver" : undefined}
                 rx={5}
                 ry={5}
             />
-            {isUnactiveable && showCheckbox && <SvgCheckbox x={x + 6} y={y + 2} changeSelection={changeSelection} isActive={isActive}></SvgCheckbox>}
-            <text x={x+width*0.25} y={yMiddle} fontFamily="sans-serif" fontSize={defaultFontSize} fill={textColor || "black"}>{text}</text>
+            {isUnactiveable && showCheckbox &&
+            <SvgCheckbox
+                x={x + 6} y={y-2}
+                changeSelection={changeSelection}
+                isActive={isActive}>
+            </SvgCheckbox>}
+            <text
+                x={x+width*0.25} y={yMiddle}
+                fontFamily="sans-serif"
+                fontSize={defaultFontSize}
+                fill={textColor || "black"}>{text}
+            </text>
             { legend(x+10, y+height-2, height+4, legendSettings) }
         </g>
 

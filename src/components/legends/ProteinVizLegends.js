@@ -137,7 +137,7 @@ class ProteinVizLegends extends PureComponent {
             replId={repl.id}
             colorIdx={colorIdx}
             isSelected={isSelected && isSelected[plotType]}
-            x={x+5} y={y+(this.legendIdx)*height} width={width} height={height}
+            x={x+9} y={y+(this.legendIdx)*height} width={width} height={height}
             text={repl.name} legend={this.replSymbol}
             textColor={repl.isActive ? "black" : "silver"}
             isUnactiveable={true}
@@ -238,7 +238,7 @@ class ProteinVizLegends extends PureComponent {
         // transform the sample into a sorted array
         const samples = _.sortBy(_.values(_.mapValues(datasets, (value, key) => { value.name = key; return value; })), ['idx'])
 
-        const legendHeight = 20
+        const legendHeight = 14
         const nrRep = (mouseOverLegend ? _.sum(_.map(datasets, (d) => { return d.isActive && d.datasets.length})) : 0)
         const nrActiveDatasets = _.filter(datasets, (d) => {return d.isAvailable && (d.isActive || mouseOverLegend)}).length
         const selectedReplNr = (! mouseOverLegend ? _.reduce(datasets, (res, v, k) => {
@@ -257,7 +257,7 @@ class ProteinVizLegends extends PureComponent {
                 rx={5}
                 ry={5}
                 width={width + 20}
-                height={nrLegends * legendHeight + 40}
+                height={nrLegends * legendHeight + 30}
                 fill={"white"}
                 stroke={"grey"}
                 strokeWidth={1}
