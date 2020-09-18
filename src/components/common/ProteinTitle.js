@@ -5,21 +5,25 @@ import PropTypes from 'prop-types';
 
 class ProteinTitle extends PureComponent {
 
+    openInNewTab() {
+        const {sequenceData} = this.props;
+
+        const url = "https://www.uniprot.org/uniprot/" + sequenceData.proteinId
+        const win = window.open(url, '_blank');
+        win.focus();
+    }
+
     render() {
-        const { proteinData, x, y } = this.props;
+        const { x, y, sequenceData } = this.props;
 
-        var proteinStr = proteinData[0].mainProteinId
-        const geneNames = proteinData[0].proteins[0].geneNames.join(', ')
-
-        if(geneNames){
-            proteinStr += " (" + geneNames + ")"
-        }
+        const proteinStr = sequenceData.proteinId + " - " + sequenceData.geneName + " - " + sequenceData.proteinName
 
         return <g>
             <text
                 className={"protein-title unselecteable"}
                 x={typeof x !== 'undefined' ? x : 80}
                 y={typeof y !== 'undefined' ? y : 20}
+                onClick={() => this.openInNewTab()}
             >
                 {proteinStr}</text>
         </g>
@@ -27,7 +31,7 @@ class ProteinTitle extends PureComponent {
 }
 
 ProteinTitle.propTypes = {
-    proteinData: PropTypes.array.isRequired,
+    sequenceData: PropTypes.object.isRequired,
     x: PropTypes.number,
     y: PropTypes.number
 };

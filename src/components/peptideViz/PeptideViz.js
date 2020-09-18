@@ -279,7 +279,7 @@ class PeptideViz extends PureComponent {
     }
 
     render(){
-        const {legendPos, viewWidth, viewHeight, mouseLeaveSampleCB, popup, proteinData} = this.props
+        const {legendPos, viewWidth, viewHeight, mouseLeaveSampleCB, popup, sequenceData} = this.props
 
         // set the initial legend position
         const localLegendPos = (legendPos && legendPos.peptide) ? legendPos.peptide : {x: viewWidth-185, y: 20}
@@ -307,7 +307,7 @@ class PeptideViz extends PureComponent {
                    onDoubleClick={this.zoomOut}
                 >
                     { this.plotTheoWeightLine() }
-                    <ProteinTitle proteinData={proteinData} y={-10}/>
+                    <ProteinTitle sequenceData={sequenceData} y={-10}/>
                     { this.plotAminoAcidBar() }
                     { this.svg && this.plotPeptides() }
                 </g>

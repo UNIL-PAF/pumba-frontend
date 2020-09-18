@@ -15,7 +15,8 @@ class ProteinVizContainer extends Component {
         const {proteinData, mouseOverSampleId, mouseOverReplId, mouseLeaveSampleCB, zoomLeft, zoomRight,
             changeZoomRangeCB, theoMergedProteins, showOptionsMenu,
             showPopupCB, removePopupCB, popup, clickedSlices, proteinMenuMaxIntensity, selectedOption,
-            clickSliceCB, unclickSliceCB, history, datasets, legendPos, setLegendPos, legendIsMoving, proteinMaxIntensity} = this.props
+            clickSliceCB, unclickSliceCB, history, datasets, legendPos, setLegendPos, legendIsMoving, proteinMaxIntensity,
+            sequenceData} = this.props
 
         return <div id={"protein-viz"}>
         { proteinData && <ProteinVizPlot proteinData={proteinData} viewWidth={1000} viewHeight={400}
@@ -28,6 +29,7 @@ class ProteinVizContainer extends Component {
                              clickedSlices={clickedSlices} clickSliceCB={clickSliceCB} unclickSliceCB={unclickSliceCB}
                              history={history} datasets={datasets} legendPos={legendPos} setLegendPos={setLegendPos}
                              legendIsMoving={legendIsMoving} proteinMaxIntensity={proteinMaxIntensity} proteinMenuMaxIntensity={proteinMenuMaxIntensity}
+                                         sequenceData={sequenceData}
         /> }
         </div>
     }
@@ -58,6 +60,7 @@ ProteinVizContainer.propTypes = {
     proteinMenuMaxIntensity: PropTypes.number,
     selectedOption: PropTypes.string,
     showOptionsMenu: PropTypes.func.isRequired,
+    sequenceData: PropTypes.object
 };
 
 const mapStateToProps = (state) => {
@@ -76,6 +79,7 @@ const mapStateToProps = (state) => {
         proteinMaxIntensity: state.loadProtein.proteinMaxIntensity,
         proteinMenuMaxIntensity: state.menu.proteinMenuMaxIntensity,
         selectedOption: state.menu.selectedOption,
+        sequenceData: state.loadProtein.sequenceData,
     }
     return props
 }

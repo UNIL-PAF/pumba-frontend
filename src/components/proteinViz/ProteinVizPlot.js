@@ -264,7 +264,7 @@ class ProteinVizPlot extends Component {
     }
 
     render() {
-        const {viewWidth, viewHeight, mouseLeaveSampleCB, popup, proteinData, history, legendPos} = this.props
+        const {viewWidth, viewHeight, mouseLeaveSampleCB, popup, sequenceData, history, legendPos} = this.props
 
         // set the initial legend position
         const localLegendPos = (legendPos && legendPos.protein) ? legendPos.protein : {x: viewWidth-200, y: 20}
@@ -293,7 +293,7 @@ class ProteinVizPlot extends Component {
 
                     {this.plotTheoMolWeightLine()}
 
-                    <ProteinTitle proteinData={proteinData}/>
+                    <ProteinTitle sequenceData={sequenceData}/>
 
                     {this.plotMousePositionCircles(mouseWeightPos)}
 
@@ -347,7 +347,8 @@ ProteinVizPlot.propTypes = {
     proteinMaxIntensity: PropTypes.number.isRequired,
     proteinMenuMaxIntensity: PropTypes.number,
     selectedOption: PropTypes.string,
-    showOptionsMenu: PropTypes.func.isRequired
+    showOptionsMenu: PropTypes.func.isRequired,
+    sequenceData: PropTypes.object
 };
 
 export default ProteinVizPlot

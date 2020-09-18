@@ -235,8 +235,14 @@ popover
 protein title
  */
 .protein-title {
-  font-size: 90%
+  font-size: 90%;
+  cursor: pointer;
 }
+
+.protein-title:hover {
+  text-decoration: underline;
+}
+
 
 
 /****

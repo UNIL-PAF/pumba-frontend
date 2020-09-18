@@ -16,7 +16,8 @@ class GelVizContainer extends PureComponent {
             mouseClickSampleCB,
             mouseClickReplCB,
             gelContrast,
-            isoforms
+            isoforms,
+            sequenceData
         } = this.props
 
         return <div id={"gel-viz"}>
@@ -29,6 +30,7 @@ class GelVizContainer extends PureComponent {
                                      mouseClickReplCB={mouseClickReplCB}
                                      gelContrast={gelContrast}
                                      isoforms={isoforms}
+                                     sequenceData={sequenceData}
             /> }
         </div>
     }
@@ -41,11 +43,13 @@ GelVizContainer.propTypes = {
     mouseClickSampleCB: PropTypes.func.isRequired,
     mouseClickReplCB: PropTypes.func.isRequired,
     gelContrast: PropTypes.number.isRequired,
-    isoforms: PropTypes.array
+    isoforms: PropTypes.array,
+    sequenceData: PropTypes.object
 };
 
 const mapStateToProps = (state) => {
     const props = {
+        sequenceData: state.loadProtein.sequenceData,
         proteinData: state.loadProtein.proteinData,
         datasets: state.loadProtein.datasets,
         datasetChanged: state.loadProtein.datasetChanged,
