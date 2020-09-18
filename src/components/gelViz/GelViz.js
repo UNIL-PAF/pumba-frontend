@@ -15,7 +15,7 @@ import ProteinTitle from "../common/ProteinTitle"
 class GelViz extends PureComponent {
 
     // set the margins
-    margin = {top: 80, right: 10, bottom: 40, left: 40}
+    margin = {top: 80, right: 10, bottom: 40, left: 60}
     sliceWidth = 40
     sliceSpacing = 10
 

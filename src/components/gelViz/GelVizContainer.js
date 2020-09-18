@@ -23,7 +23,7 @@ class GelVizContainer extends PureComponent {
             { proteinData && <GelViz proteinData={proteinData}
                                      datasets={datasets}
                                      datasetChanged={datasetChanged}
-                                     viewWidth={800}
+                                     viewWidth={1000}
                                      viewHeight={400}
                                      mouseClickSampleCB={mouseClickSampleCB}
                                      mouseClickReplCB={mouseClickReplCB}
