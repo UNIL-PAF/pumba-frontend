@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import LegendField from './LegendField'
 import * as _ from 'lodash';
 import { sampleColor } from '../common/colorSettings'
-import MoveButton from "../common/MoveButton";
 
 class ProteinVizLegends extends PureComponent {
 
@@ -232,7 +231,7 @@ class ProteinVizLegends extends PureComponent {
     }
 
     render() {
-        const { x, y, width, datasets, legendIsMoving, plotType} = this.props;
+        const { x, y, width, datasets, plotType} = this.props;
         const {mouseOverLegend} = this.state
 
         // transform the sample into a sorted array

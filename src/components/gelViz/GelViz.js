@@ -315,7 +315,7 @@ class GelViz extends PureComponent {
     }
 
     render() {
-        const {viewWidth, viewHeight, datasets, proteinData, sequenceData} = this.props
+        const {viewWidth, viewHeight, datasets, sequenceData} = this.props
 
         const nrSlices = _.reduce(datasets, (acc, d) => {
             const selectedDatasets = (d.isActive ? _.reduce(d.datasets, (acc2, d2) => {return (d2.isSelected && d2.isSelected.gel ? 1 : 0) + acc2}, 1) : 0)
