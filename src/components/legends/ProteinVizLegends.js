@@ -263,7 +263,7 @@ class ProteinVizLegends extends PureComponent {
                 strokeWidth={1}
             />
 
-            {mouseOverLegend && <MoveButton x={x + 2} y={y + 2} onMouseDown={this.startMoving} onMouseUp={this.stopMoving} legendIsMoving={legendIsMoving}></MoveButton>}
+            {/*mouseOverLegend && <MoveButton x={x + 2} y={y + 2} onMouseDown={this.startMoving} onMouseUp={this.stopMoving} legendIsMoving={legendIsMoving}></MoveButton>*/}
 
             { this.plotTheoMolWeight(x + xShift, y+yShift, legendHeight) }
 

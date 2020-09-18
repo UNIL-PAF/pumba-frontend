@@ -18,7 +18,7 @@ class ProteinVizContainer extends Component {
             clickSliceCB, unclickSliceCB, history, datasets, legendPos, setLegendPos, legendIsMoving, proteinMaxIntensity} = this.props
 
         return <div id={"protein-viz"}>
-        { proteinData && <ProteinVizPlot proteinData={proteinData} viewWidth={800} viewHeight={400}
+        { proteinData && <ProteinVizPlot proteinData={proteinData} viewWidth={1000} viewHeight={400}
                              mouseOverSampleId={mouseOverSampleId} selectedOption={selectedOption}
                              mouseOverReplId={mouseOverReplId} showOptionsMenu={showOptionsMenu}
                              mouseLeaveSampleCB={mouseLeaveSampleCB}

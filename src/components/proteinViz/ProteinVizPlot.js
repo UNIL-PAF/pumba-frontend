@@ -167,7 +167,7 @@ class ProteinVizPlot extends Component {
     }
 
     // set the margins
-    margin = {top: 10, right: 40, bottom: 30, left: 20};
+    margin = {top: 10, right: 190, bottom: 30, left: 20};
 
     plotTheoMolWeightLine = () => {
         const {theoMolWeight, xScale, zoomLeft, zoomRight} = this.state

@@ -58,7 +58,7 @@ class PeptideViz extends PureComponent {
     }
 
     // set the margins
-    margin = {top: 40, right: 10, bottom: 40, left: 40};
+    margin = {top: 40, right: 200, bottom: 40, left: 50};
 
 
     componentDidMount(){
@@ -265,8 +265,8 @@ class PeptideViz extends PureComponent {
             className="theo-weight-line"
             x1={0}
             y1={y}
-            x2={this.props.viewWidth}
-            y2={ y }
+            x2={this.props.viewWidth - this.margin.right}
+            y2={y}
         />
     }
 
@@ -282,7 +282,7 @@ class PeptideViz extends PureComponent {
         const {legendPos, viewWidth, viewHeight, mouseLeaveSampleCB, popup, proteinData} = this.props
 
         // set the initial legend position
-        const localLegendPos = (legendPos && legendPos.peptide) ? legendPos.peptide : {x: viewWidth-100, y: 20}
+        const localLegendPos = (legendPos && legendPos.peptide) ? legendPos.peptide : {x: viewWidth-185, y: 20}
 
         return <div id={"peptide-plot"}>
             <svg className="peptide-svg"
