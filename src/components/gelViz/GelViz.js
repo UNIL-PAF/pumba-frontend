@@ -11,6 +11,7 @@ import {interpolateHsl} from "d3-interpolate";
 import { sampleColor } from '../common/colorSettings'
 import ExpandCollapsInfo from "./ExpandCollapsInfo";
 import ProteinTitle from "../common/ProteinTitle"
+import ExportSvgButton from "../common/ExportSvgButton"
 
 class GelViz extends PureComponent {
 
@@ -327,6 +328,7 @@ class GelViz extends PureComponent {
 
 
         return  <div id={"gel-plot"}>
+                    <ExportSvgButton svg={this.svg}></ExportSvgButton>
                     <svg className="gel-svg"
                          viewBox={`0 0 ${viewWidth} ${viewHeight}`}
                          width="100%"

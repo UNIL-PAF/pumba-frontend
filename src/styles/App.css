@@ -237,6 +237,7 @@ protein title
 .protein-title {
   font-size: 90%;
   cursor: pointer;
+  font-family: sans-serif;
 }
 
 .protein-title:hover {
