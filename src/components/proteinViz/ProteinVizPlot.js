@@ -129,12 +129,18 @@ class ProteinVizPlot extends Component {
             setLegendPos("protein", x - 8, y - 5)
         }
 
-        this.setState({mouseX: x, mouseY: y})
+        this.setState({mouseX: x, mouseY: y, mouseHere: true})
     }
 
     mouseEnter = () => {
-
+        this.setState({mouseHere: true})
     }
+
+    mouseLeave = () => {
+        this.setState({mouseHere: false})
+    }
+
+
 
     componentDidUpdate(){
         const {zoomLeft, zoomRight, proteinData, proteinMenuMaxIntensity} = this.props
@@ -280,6 +286,7 @@ class ProteinVizPlot extends Component {
                  ref={this.svg}
                  onMouseMove={(e) => this.mouseMove(e)}
                  onMouseEnter={(e) => this.mouseEnter(e)}
+                 onMouseLeave={(e) => this.mouseLeave(e)}
             >
 
                 <g className="brush-g"
@@ -303,15 +310,22 @@ class ProteinVizPlot extends Component {
                     <g className="x-axis" ref={r => this.xAxis = r}
                        transform={'translate(' + this.margin.left + ',' + (viewHeight - this.margin.bottom) + ')'}/>
 
-                    {this.plotMousePositionLine(mouseWeightPos)}
+                    {this.state.mouseHere && ! this.state.hideMouse && this.plotMousePositionLine(mouseWeightPos)}
 
                     {this.svg &&  <ProteinMergesContainer xScale={this.state.xScale} yScale={this.state.yScale} history={history}
                                                  margin={this.margin} svgParent={this.svg} scaleChanged={this.state.scaleChanged}
                                                 getMousePos={this.getMousePos}>
                                 </ProteinMergesContainer>}
 
-                    <ProteinVizLegendsContainer x={localLegendPos.x} y={localLegendPos.y} width={150}
-                                     theoMolWeight={this.state.theoMolWeight} parentSvg={this.svg} plotType={"prot"}
+                    <ProteinVizLegendsContainer
+                        x={localLegendPos.x}
+                        y={localLegendPos.y}
+                        width={150}
+                        theoMolWeight={this.state.theoMolWeight}
+                        parentSvg={this.svg}
+                        plotType={"prot"}
+                        onMouseEnter={()=>{this.setState({'hideMouse':true})}}
+                        onMouseLeave={()=>{this.setState({'hideMouse':false})}}
                     >
                     </ProteinVizLegendsContainer>
 

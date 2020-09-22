@@ -15,7 +15,8 @@ class ProteinVizLegendsContainer extends Component {
     render(){
         const {x, y, width, theoMolWeight, mouseOverSampleId, mouseOverSampleCB,
             mouseOverReplId, mouseOverReplCB, mouseLeaveReplCB, mouseLeaveSampleCB, mouseClickReplCB,
-            datasets, reloadProteinCB, setDatasets, legendIsMoving, setMoveLegend, datasetChanged, plotType} = this.props
+            datasets, reloadProteinCB, setDatasets, legendIsMoving, setMoveLegend, datasetChanged, plotType,
+            onMouseEnter, onMouseLeave} = this.props
 
         return <ProteinVizLegends x={x} y={y} width={width} theoMolWeight={theoMolWeight}
                                  mouseOverSampleId={mouseOverSampleId} mouseOverSampleCB={mouseOverSampleCB}
@@ -24,7 +25,7 @@ class ProteinVizLegendsContainer extends Component {
                                  mouseClickReplCB={mouseClickReplCB}
                                  datasets={datasets} reloadProteinCB={reloadProteinCB} setDatasets={setDatasets}
                                  legendIsMoving={legendIsMoving} setMoveLegend={setMoveLegend} datasetChanged={datasetChanged}
-                                 plotType={plotType}
+                                 plotType={plotType} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}
                 >
                 </ProteinVizLegends>
     }
@@ -49,7 +50,9 @@ ProteinVizLegendsContainer.propTypes = {
     legendIsMoving: PropTypes.bool.isRequired,
     setMoveLegend: PropTypes.func.isRequired,
     datasetChanged: PropTypes.number.isRequired,
-    plotType: PropTypes.string.isRequired
+    plotType: PropTypes.string.isRequired,
+    onMouseEnter: PropTypes.func,
+    onMouseLeave: PropTypes.func
 };
 
 const mapStateToProps = (state) => {

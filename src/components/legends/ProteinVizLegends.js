@@ -212,12 +212,14 @@ class ProteinVizLegends extends PureComponent {
 
     onMouseEnter = () => {
         this.setState({mouseOverLegend: true})
+        this.props.onMouseEnter()
     }
 
     onMouseLeave = () => {
         this.setState({mouseOverLegend: false})
         this.props.mouseLeaveReplCB()
         this.props.mouseLeaveSampleCB()
+        this.props.onMouseLeave()
     }
 
     startMoving = (e) => {
@@ -231,7 +233,7 @@ class ProteinVizLegends extends PureComponent {
     }
 
     render() {
-        const { x, y, width, datasets, plotType} = this.props;
+        const { x, y, width, datasets, plotType, onMouseEnter, onMouseLeave} = this.props;
         const {mouseOverLegend} = this.state
 
         // transform the sample into a sorted array
@@ -248,7 +250,7 @@ class ProteinVizLegends extends PureComponent {
         const xShift = 12
         const yShift = 10
 
-        return <g onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+        return <g onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} >
             <rect
                 className="merged-legends-box"
                 x={x}
@@ -291,7 +293,9 @@ ProteinVizLegends.propTypes = {
     legendIsMoving: PropTypes.bool.isRequired,
     setMoveLegend: PropTypes.func.isRequired,
     datasetChanged: PropTypes.number.isRequired,
-    plotType: PropTypes.string.isRequired
+    plotType: PropTypes.string.isRequired,
+    onMouseEnter: PropTypes.func,
+    onMouseLeave: PropTypes.func
 };
 
 export default (ProteinVizLegends);
