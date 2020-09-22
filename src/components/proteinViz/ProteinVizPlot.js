@@ -300,7 +300,8 @@ class ProteinVizPlot extends Component {
 
                     {this.plotTheoMolWeightLine()}
 
-                    <ProteinTitle sequenceData={sequenceData}/>
+                    <ProteinTitle sequenceData={sequenceData} onMouseEnter={()=>{this.setState({'hideMouse':true})}}
+                                  onMouseLeave={()=>{this.setState({'hideMouse':false})}}/>
 
                     {this.plotMousePositionCircles(mouseWeightPos)}
 

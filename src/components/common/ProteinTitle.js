@@ -14,11 +14,11 @@ class ProteinTitle extends PureComponent {
     }
 
     render() {
-        const { x, y, sequenceData } = this.props;
+        const { x, y, sequenceData, onMouseEnter, onMouseLeave } = this.props;
 
         const proteinStr = sequenceData.proteinId + " - " + sequenceData.geneName + " - " + sequenceData.proteinName
 
-        return <g>
+        return <g onMouseEnter={()=>onMouseEnter()} onMouseLeave={() => onMouseLeave()}>
             <text
                 className={"protein-title unselecteable"}
                 x={typeof x !== 'undefined' ? x : 80}
@@ -33,7 +33,9 @@ class ProteinTitle extends PureComponent {
 ProteinTitle.propTypes = {
     sequenceData: PropTypes.object.isRequired,
     x: PropTypes.number,
-    y: PropTypes.number
+    y: PropTypes.number,
+    onMouseEnter: PropTypes.func,
+    onMouseLeave: PropTypes.func
 };
 
 export default ProteinTitle
