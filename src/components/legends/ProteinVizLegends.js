@@ -211,15 +211,19 @@ class ProteinVizLegends extends PureComponent {
     }
 
     onMouseEnter = () => {
+        const {onMouseEnter} = this.props
+
         this.setState({mouseOverLegend: true})
-        this.props.onMouseEnter()
+        if(onMouseEnter) onMouseEnter()
     }
 
     onMouseLeave = () => {
+        const {onMouseLeave} = this.props
+
         this.setState({mouseOverLegend: false})
         this.props.mouseLeaveReplCB()
         this.props.mouseLeaveSampleCB()
-        this.props.onMouseLeave()
+        if(onMouseLeave) onMouseLeave()
     }
 
     startMoving = (e) => {
@@ -233,7 +237,7 @@ class ProteinVizLegends extends PureComponent {
     }
 
     render() {
-        const { x, y, width, datasets, plotType, onMouseEnter, onMouseLeave} = this.props;
+        const { x, y, width, datasets, plotType} = this.props;
         const {mouseOverLegend} = this.state
 
         // transform the sample into a sorted array

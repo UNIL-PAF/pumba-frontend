@@ -13,12 +13,22 @@ class ProteinTitle extends PureComponent {
         win.focus();
     }
 
+    onMouseEnter(){
+        const {onMouseEnter} = this.props
+        if(onMouseEnter) onMouseEnter()
+    }
+
+    onMouseLeave(){
+        const {onMouseLeave} = this.props
+        if(onMouseLeave) onMouseLeave()
+    }
+
     render() {
-        const { x, y, sequenceData, onMouseEnter, onMouseLeave } = this.props;
+        const { x, y, sequenceData} = this.props;
 
         const proteinStr = sequenceData.proteinId + " - " + sequenceData.geneName + " - " + sequenceData.proteinName
 
-        return <g onMouseEnter={()=>onMouseEnter()} onMouseLeave={() => onMouseLeave()}>
+        return <g onMouseEnter={()=>this.onMouseEnter()} onMouseLeave={()=>this.onMouseLeave()}>
             <text
                 className={"protein-title unselecteable"}
                 x={typeof x !== 'undefined' ? x : 80}
