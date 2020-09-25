@@ -14,6 +14,7 @@ import PopOverSkeleton from "../common/popOverSkeleton"
 import ProteinTitle from "../common/ProteinTitle"
 import { sampleColor } from '../common/colorSettings'
 import optionsConfig from "../options/OptionsConfig";
+import ExportSvgButton from "../common/ExportSvgButton"
 
 class PeptideViz extends PureComponent {
 
@@ -285,6 +286,7 @@ class PeptideViz extends PureComponent {
         const localLegendPos = (legendPos && legendPos.peptide) ? legendPos.peptide : {x: viewWidth-185, y: 20}
 
         return <div id={"peptide-plot"}>
+            <ExportSvgButton svg={this.svg} fileName={sequenceData.proteinId + "-peptides"}></ExportSvgButton>
             <svg className="peptide-svg"
                  viewBox={`0 0 ${viewWidth} ${viewHeight}`}
                  width="100%"

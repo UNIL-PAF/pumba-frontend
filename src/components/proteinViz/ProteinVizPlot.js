@@ -13,6 +13,7 @@ import ProteinVizLegendsContainer from '../legends/ProteinVizLegendsContainer'
 import ProteinMergesContainer from "./ProteinMergesContainer"
 import PopOverSkeleton from "../common/popOverSkeleton"
 import ProteinTitle from "../common/ProteinTitle"
+import ExportSvgButton from "../common/ExportSvgButton"
 
 
 class ProteinVizPlot extends Component {
@@ -279,6 +280,7 @@ class ProteinVizPlot extends Component {
         const mouseWeightPos = this.state.xScale.invert(this.state.mouseX - this.margin.left)
 
         return <div id={"protein-plot"}>
+            <ExportSvgButton svg={this.svg} fileName={sequenceData.proteinId + "-graph"}></ExportSvgButton>
             <svg className="protein-svg"
                  viewBox={`0 0 ${viewWidth} ${viewHeight}`}
                  width="100%"

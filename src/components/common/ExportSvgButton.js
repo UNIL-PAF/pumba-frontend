@@ -129,7 +129,7 @@ class ExportSvgButton extends PureComponent {
                 Export graph
             </DropdownToggle>
             <DropdownMenu>
-                <DropdownItem onClick={() => this.exportPNG(1)}>PNG</DropdownItem>
+                <DropdownItem onClick={() => this.exportPNG(2)}>PNG</DropdownItem>
                 <DropdownItem onClick={() => this.exportPNG(10)}>PNG high res</DropdownItem>
                 <DropdownItem onClick={() => this.exportSVG()}>SVG</DropdownItem>
             </DropdownMenu>
