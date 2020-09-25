@@ -25,7 +25,7 @@ class ProteinMerges extends PureComponent {
         if(! datasets[proteinInfo.sample].isActive) return null
 
         return <polyline className="merged-plot-line" key={sampleIdx} points={this.theoPosString(proteinMerge.theoMergedProtein)}
-                         stroke={sampleCol} fill="transparent" strokeWidth={ highlight ? "2" : "1" }/>
+                         stroke={sampleCol} fill="transparent" fillOpacity={0.0} strokeWidth={ highlight ? "2" : "1" }/>
     }
 
     /**
