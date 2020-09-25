@@ -61,6 +61,7 @@
 }
 
 .gel-title-merged {
+     font-family: sans-serif;
      font-size: 12px;
      font-weight: bold;
      pointer-events: none;
@@ -68,12 +69,14 @@
  }
 
 .gel-subtitle-merged {
+    font-family: sans-serif;
     font-size: 10px;
     pointer-events: none;
     user-select: none;
 }
 
 .gel-title-sample {
+    font-family: sans-serif;
     font-size: 10px;
     font-weight: bold;
     pointer-events: none;
@@ -81,12 +84,14 @@
 }
 
 .gel-subtitle-sample {
+    font-family: sans-serif;
     font-size: 10px;
     pointer-events: none;
     user-select: none;
 }
 
 .gel-theo-molweight-text{
+    font-family: sans-serif;
     pointer-events: none;
     user-select: none;
     font-size: 70%;
@@ -94,6 +99,7 @@
 }
 
 .isoform-text{
+    font-family: sans-serif;
     pointer-events: none;
     user-select: none;
     font-size: 70%;

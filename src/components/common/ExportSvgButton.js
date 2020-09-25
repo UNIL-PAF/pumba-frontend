@@ -1,6 +1,5 @@
 import React, {
-    PureComponent,
-    useState
+    PureComponent
 } from 'react';
 import * as _ from 'lodash';
 import {ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem} from 'reactstrap'
@@ -81,11 +80,8 @@ class ExportSvgButton extends PureComponent {
                 element.insertBefore( styleElement, refNode );
             };
 
-
             svgNode.setAttribute('xlink', 'http://www.w3.org/1999/xlink');
             var cssStyleText = getCSSStyles( svgNode );
-
-            console.log(cssStyleText)
 
             appendCSS( cssStyleText, svgNode );
 
@@ -102,9 +98,8 @@ class ExportSvgButton extends PureComponent {
     }
 
     exportSVG(){
-        const {svg} = this.props
+        const {svg, fileName} = this.props
 
-        const fileName = "dummy"
         const svgString = this.svgToString(svg.current, 1000, 1000)
         const blob = new Blob([ svgString ], {type: 'image/svg+xml;charset=utf-8'});
         saveAs(blob, fileName + '.svg');
@@ -115,26 +110,27 @@ class ExportSvgButton extends PureComponent {
         this.setState({isOpen: !isOpen})
     }
 
-    exportPNG(){
-        const {svg} = this.props
+    exportPNG(scale){
+        const {svg, fileName} = this.props
 
         const imageOptions = {
-            scale: 5,
+            scale: scale,
             encoderOptions: 1
         }
 
-        saveSvgAsPng(svg.current, "diagram.png", imageOptions)
+        saveSvgAsPng(svg.current, fileName + ".png", imageOptions)
     }
 
     render() {
         const {isOpen} = this.state
 
         return <ButtonDropdown size="sm" isOpen={isOpen} toggle={this.toggleDropdown}>
-            <DropdownToggle caret>
-                Export
+            <DropdownToggle outline={true} caret>
+                Export graph
             </DropdownToggle>
             <DropdownMenu>
-                <DropdownItem onClick={() => this.exportPNG()}>PNG</DropdownItem>
+                <DropdownItem onClick={() => this.exportPNG(1)}>PNG</DropdownItem>
+                <DropdownItem onClick={() => this.exportPNG(10)}>PNG high res</DropdownItem>
                 <DropdownItem onClick={() => this.exportSVG()}>SVG</DropdownItem>
             </DropdownMenu>
         </ButtonDropdown>
@@ -142,7 +138,8 @@ class ExportSvgButton extends PureComponent {
 }
 
 ExportSvgButton.propTypes = {
-    svg: PropTypes.object.isRequired
+    svg: PropTypes.object.isRequired,
+    fileName: PropTypes.string.isRequired
 };
 
 export default ExportSvgButton
