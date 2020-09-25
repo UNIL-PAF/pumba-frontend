@@ -328,9 +328,10 @@ class GelViz extends PureComponent {
 
 
         return  <div id={"gel-plot"}>
-                    <ExportSvgButton svg={this.svg} fileName={sequenceData.proteinId + "-lanes"}></ExportSvgButton>
+            <ExportSvgButton svg={this.svg} fileName={sequenceData.proteinId + "-lanes"}></ExportSvgButton>
                     <svg className="gel-svg"
                          viewBox={`0 0 ${viewWidth} ${viewHeight}`}
+                         preserveAspectRatio="xMinYMin"
                          width="100%"
                          height="100%"
                          ref={this.svg}

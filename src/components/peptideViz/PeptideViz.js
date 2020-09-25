@@ -289,6 +289,7 @@ class PeptideViz extends PureComponent {
             <ExportSvgButton svg={this.svg} fileName={sequenceData.proteinId + "-peptides"}></ExportSvgButton>
             <svg className="peptide-svg"
                  viewBox={`0 0 ${viewWidth} ${viewHeight}`}
+                 preserveAspectRatio="xMinYMin"
                  width="100%"
                  height="100%"
                  ref={this.svg}

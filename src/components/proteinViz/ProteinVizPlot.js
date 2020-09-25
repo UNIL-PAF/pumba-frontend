@@ -283,6 +283,7 @@ class ProteinVizPlot extends Component {
             <ExportSvgButton svg={this.svg} fileName={sequenceData.proteinId + "-graph"}></ExportSvgButton>
             <svg className="protein-svg"
                  viewBox={`0 0 ${viewWidth} ${viewHeight}`}
+                 preserveAspectRatio="xMinYMin"
                  width="100%"
                  height="100%"
                  ref={this.svg}
