@@ -66,7 +66,7 @@ export function fetchProtein(proteinId, datasetIds, noReset, callOnComplete){
             })
             .then(json => {
                     // if protein is not found
-                    if(json.length === 0){
+                    if(json.proteinMerges.length === 0){
                         dispatch(proteinLoadError("Could not find [" + proteinId + "]."))
                         dispatch(proteinIsLoaded())
                     }else{
