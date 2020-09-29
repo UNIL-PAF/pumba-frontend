@@ -2,9 +2,9 @@ import React, {
     PureComponent
 } from 'react'
 import PropTypes from 'prop-types'
+import * as _ from 'lodash';
 import MergedGelSlice from "./MergedGelSlice"
 import DatasetGelSlice from "./DatasetGelSlice"
-
 
 class GelSlice extends PureComponent {
 
@@ -19,10 +19,13 @@ class GelSlice extends PureComponent {
     }
 
     plotDatasetData = () => {
-        const {xPos, yPos, sliceWidth, datasetData, amplify, maxInt, yScale, greyScale, getMousePos} = this.props
+        const {xPos, yPos, sliceWidth, datasetData, amplify, maxInt, yScale, greyScale, getMousePos, replId} = this.props
+
+        const selData = _.find(datasetData, (p) => { return p.dataSet.id === replId})
+        const newDatasetData = {massFits: selData.dataSet.massFitResult.massFits, intensities: selData.intensities}
 
         return <DatasetGelSlice
-            datasetData={datasetData}
+            datasetData={newDatasetData}
             sliceWidth={sliceWidth}
             xPos={xPos}
             yPos={yPos}
@@ -61,11 +64,11 @@ class GelSlice extends PureComponent {
     }
 
     onMouseEnter = () => {
-        const {onMouseEnterCB} = this.props
+        const {onMouseEnterCB, sampleName} = this.props
 
         // call the callback if it's there
         if(onMouseEnterCB){
-            onMouseEnterCB()
+            onMouseEnterCB(sampleName)
         }
     }
 

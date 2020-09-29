@@ -130,10 +130,12 @@ class GelViz extends PureComponent {
 
     onMouseEnterMerged = (sampleId) => {
         this.setState({mouseEnteredSample: sampleId})
+        this.mouseEnter()
     }
 
     onMouseLeaveMerged = () => {
         this.setState({mouseEnteredSample: undefined})
+        this.mouseLeave()
     }
 
     mouseMove = (e) => {
@@ -151,6 +153,14 @@ class GelViz extends PureComponent {
     getMousePos = () => {
         const {mouseX, mouseY} = this.state
         return [mouseX, mouseY]
+    }
+
+    mouseEnter = () => {
+        this.setState({mouseHere: true})
+    }
+
+    mouseLeave = () => {
+        this.setState({mouseHere: false})
     }
 
     plotMergedGel = (thisProteinData, title, slicePos, sampleName, containsSelected) => {
@@ -172,8 +182,8 @@ class GelViz extends PureComponent {
                 greyScale={this.greyScale}
                 mouseClickCB={mouseClickSampleCB}
                 sampleName={sampleName}
-                onMouseEnterCB={() => {this.onMouseEnterMerged(sampleName)}}
-                onMouseLeaveCB={() => {this.onMouseLeaveMerged()}}
+                onMouseEnterCB={this.onMouseEnterMerged}
+                onMouseLeaveCB={this.onMouseLeaveMerged}
             >
             </GelSlice>
             {(this.state.mouseEnteredSample === sampleName) && this.plotExpandInfo(thisProteinData, title, slicePos, sampleName, containsSelected)}
@@ -186,13 +196,9 @@ class GelViz extends PureComponent {
         let localPos = 0
 
         return _.map(datasets, (dataset, k) => {
-            const selData = _.find(thisProteinData.proteins, (p) => { return p.dataSet.id === dataset.id})
-
-            if(! dataset.isSelected || ! selData){
+            if(! dataset.isSelected){
                 return null
             }
-
-            const datasetData = {massFits: selData.dataSet.massFitResult.massFits, intensities: selData.intensities}
 
             const gelPlot =  <GelSlice
                 key={'gel-slice-' + dataset.name}
@@ -204,13 +210,14 @@ class GelViz extends PureComponent {
                 yPos={this.margin.top}
                 yScale={this.yScale}
                 maxInt={this.state.maxInt}
-                datasetData={datasetData}
+                datasetData={thisProteinData.proteins}
                 amplify={gelContrast}
                 greyScale={this.greyScale}
                 mouseClickReplCB={mouseClickReplCB}
                 sampleName={sampleName}
                 replId={dataset.id}
-                getMousePos={this.getMousePos}
+                onMouseEnterCB={this.mouseEnter}
+                onMouseLeaveCB={this.mouseLeave}
             >
             </GelSlice>
 
@@ -315,8 +322,46 @@ class GelViz extends PureComponent {
         </g>
     }
 
+    plotMousePositionLine = (mouseWeightPos, totalSlicesWidth) => {
+        const {mouseY} = this.state
+        const rectWidth = 49
+        const rectHeight = 20
+
+        if (mouseY) {
+            return <g>
+                <line
+                    className={"gel-mouse-pos-line"}
+                    x1={this.margin.left}
+                    y1={mouseY + this.margin.top}
+                    x2={totalSlicesWidth + this.margin.left}
+                    y2={mouseY + this.margin.top}
+                ></line>
+                <rect
+                    x={11}
+                    y={mouseY + this.margin.top - (rectHeight/2)}
+                    width={rectWidth}
+                    height={rectHeight}
+                    fill={"white"}
+                    stroke={"grey"}
+                    strokeWidth={1}
+                    rx={3}
+                    ry={3}
+                ></rect>
+                <text
+                    className={"unselecteable"}
+                    x={20}
+                    y={mouseY + this.margin.top + 2}
+                    fontSize={"50%"}
+                    fontFamily={"sans-serif"}
+                >{Math.round(Math.pow(10, mouseWeightPos)) + " kDa"}</text>
+            </g>
+        }
+
+    }
+
     render() {
         const {viewWidth, viewHeight, datasets, sequenceData, showIsoforms} = this.props
+        const {mouseY, mouseHere} = this.state
 
         const nrSlices = _.reduce(datasets, (acc, d) => {
             const selectedDatasets = (d.isActive ? _.reduce(d.datasets, (acc2, d2) => {return (d2.isSelected && d2.isSelected.gel ? 1 : 0) + acc2}, 1) : 0)
@@ -326,6 +371,8 @@ class GelViz extends PureComponent {
         const totalSlicesWidth = nrSlices * (this.sliceWidth + this.sliceSpacing)
         const theoMolWeightPosX = totalSlicesWidth + this.margin.left + 15
 
+        // the mol weight at the mouse position
+        const mouseWeightPos = this.yScale.invert(mouseY)
 
         return  <div id={"gel-plot"}>
             <ExportSvgButton svg={this.svg} fileName={sequenceData.proteinId + "-lanes"}></ExportSvgButton>
@@ -341,6 +388,7 @@ class GelViz extends PureComponent {
                         {this.plotGels()}
                         {showIsoforms && this.plotIsoforms(theoMolWeightPosX)}
                         {this.plotTheoMolWeight(theoMolWeightPosX)}
+                        {mouseHere && this.plotMousePositionLine(mouseWeightPos, totalSlicesWidth)}
                         <ProteinTitle sequenceData={sequenceData}x={100} y={20}/>
                     </svg>
                 </div>

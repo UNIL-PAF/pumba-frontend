@@ -105,3 +105,10 @@
     font-size: 70%;
     fill: green;
 }
+
+.gel-mouse-pos-line {
+    stroke-dasharray: 0.5;
+    stroke-width: 2;
+    stroke: lightblue;
+    pointer-events: none;
+}
