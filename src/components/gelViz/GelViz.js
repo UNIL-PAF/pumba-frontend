@@ -316,7 +316,7 @@ class GelViz extends PureComponent {
     }
 
     render() {
-        const {viewWidth, viewHeight, datasets, sequenceData} = this.props
+        const {viewWidth, viewHeight, datasets, sequenceData, showIsoforms} = this.props
 
         const nrSlices = _.reduce(datasets, (acc, d) => {
             const selectedDatasets = (d.isActive ? _.reduce(d.datasets, (acc2, d2) => {return (d2.isSelected && d2.isSelected.gel ? 1 : 0) + acc2}, 1) : 0)
@@ -339,7 +339,7 @@ class GelViz extends PureComponent {
                     >
                         <g className="gel-y-axis" ref={this.yAxis} transform={'translate(' + this.margin.left + ',' + this.margin.top + ')'}/>
                         {this.plotGels()}
-                        {this.plotIsoforms(theoMolWeightPosX)}
+                        {showIsoforms && this.plotIsoforms(theoMolWeightPosX)}
                         {this.plotTheoMolWeight(theoMolWeightPosX)}
                         <ProteinTitle sequenceData={sequenceData}x={100} y={20}/>
                     </svg>
@@ -357,7 +357,8 @@ GelViz.propTypes = {
     mouseClickReplCB: PropTypes.func.isRequired,
     gelContrast: PropTypes.number.isRequired,
     isoforms: PropTypes.array,
-    sequenceData: PropTypes.object
+    sequenceData: PropTypes.object,
+    showIsoforms: PropTypes.bool.isRequired
 };
 
 export default GelViz

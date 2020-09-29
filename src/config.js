@@ -7,8 +7,8 @@ var config = {};
 
 config.version = '0.6.4'
 
-//config.urlBackend = "http://localhost:9000"
-config.urlBackend = "https://pumba-dev.vital-it.ch/backend"
+config.urlBackend = "http://localhost:9000"
+//config.urlBackend = "https://pumba-dev.vital-it.ch/backend"
 //config.urlBackend = "https://pumba.vital-it.ch/backend"
 
 // Gel contrast setting

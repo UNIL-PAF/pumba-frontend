@@ -4,7 +4,7 @@ import React, {
 import { connect } from 'react-redux'
 import Slider from 'rc-slider';
 import {Button} from 'reactstrap'
-import {setGelContrast} from "../../actions/menuActions";
+import {setGelContrast, setShowIsoforms} from "../../actions/menuActions";
 import pumbaConfig from '../../config'
 import PropTypes from 'prop-types'
 
@@ -18,8 +18,14 @@ class GelOptions extends PureComponent {
         this.props.setGelContrast(pumbaConfig.initialGelContrast)
     }
 
+    clickShowIsoforms = (e) => {
+        const {showIsoforms, setShowIsoforms} = this.props
+        setShowIsoforms(! showIsoforms)
+    }
+
+
     render() {
-        const {gelContrast} = this.props
+        const {gelContrast, showIsoforms} = this.props
 
         const contrastPercent = Math.round(100 / pumbaConfig.maxGelContrast * gelContrast)
 
@@ -38,18 +44,24 @@ class GelOptions extends PureComponent {
                     handleStyle={{borderColor: '#007bff'}}
                 />
             </p>
+            <p className={'options-paragraph'}><input type={"checkbox"} checked={showIsoforms} onChange={this.clickShowIsoforms} />
+                <span className={"options-checkbox-span"}>Show theoretical MW of potential isoforms</span>
+            </p>
         </div>
     }
 }
 
 GelOptions.propTypes = {
     gelContrast: PropTypes.number.isRequired,
-    setGelContrast: PropTypes.func.isRequired
+    showIsoforms: PropTypes.bool.isRequired,
+    setGelContrast: PropTypes.func.isRequired,
+    setShowIsoforms: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => {
     const props = {
-        gelContrast: state.menu.gelContrast
+        gelContrast: state.menu.gelContrast,
+        showIsoforms: state.menu.showIsoforms
     }
     return props
 }
@@ -57,6 +69,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         setGelContrast: gelContrast => { dispatch(setGelContrast(gelContrast)) },
+        setShowIsoforms: showIsoforms => { dispatch(setShowIsoforms(showIsoforms))}
     }
 }
 

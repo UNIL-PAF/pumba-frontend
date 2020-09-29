@@ -4,7 +4,7 @@ import {
 } from '../actions/legendActions'
 import {
     SET_GEL_CONTRAST, SET_PROTEIN_MENU_MAX_INTENSITY, SET_SHOW_ONLY_RAZOR, SET_SHOW_ONLY_UNIQUE,
-    SHOW_OPTIONS_MENU, SET_PEPTIDE_MENU_MAX_INTENSITY, SET_ORGANISM
+    SHOW_OPTIONS_MENU, SET_PEPTIDE_MENU_MAX_INTENSITY, SET_ORGANISM, SET_SHOW_ISOFORMS
 } from "../actions/menuActions";
 import pumbaConfig from '../config'
 
@@ -16,7 +16,8 @@ const initialState = {
     showOnlyRazor: false,
     showOnlyUnique: false,
     peptideMenuMaxIntensity: 0,
-    organism: 'human'
+    organism: 'human',
+    showIsoforms: false
 }
 
 const menuReducer = (state = initialState, action) => {
@@ -42,6 +43,8 @@ const menuReducer = (state = initialState, action) => {
             return { ...state, showOnlyUnique: action.showOnlyUnique }
         case SET_ORGANISM:
             return { ...state, organism: action.organism }
+        case SET_SHOW_ISOFORMS:
+            return { ...state, showIsoforms: action.showIsoforms}
         default:
             return state
     }
