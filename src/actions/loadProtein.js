@@ -59,7 +59,9 @@ export function fetchProtein(proteinId, datasetIds, noReset, callOnComplete){
             dispatch(resetSampleSelection())
         }
 
-        return fetch(pumbaConfig.urlBackend + "/merge-protein/" + proteinId + '/organism/human?dataSetsString=' + datasetIds)
+        const organism = getState().menu.organism
+
+        return fetch(pumbaConfig.urlBackend + "/merge-protein/" + proteinId + '/organism/' + organism + '?dataSetsString=' + datasetIds)
             .then( response => {
                 if (!response.ok) { throw response }
                 return response.json()
