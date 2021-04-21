@@ -73,14 +73,14 @@ class GelViz extends PureComponent {
     }
 
     computeMolWeights = () => {
-        const {isoforms, proteinData} = this.props
+        const { isoforms, sequenceData } = this.props;
 
         // just take the theoretical weight of the first protein, it should always be the same.
-        this.theoMolWeight = proteinData[0].proteins[0].theoMolWeight
-        this.theoMolWeightPos = this.yScale(Math.log10(proteinData[0].proteins[0].theoMolWeight)) + this.margin.top
+        this.theoMolWeight = sequenceData.molWeight / 1000
+        this.theoMolWeightPos = this.yScale(Math.log10(this.theoMolWeight)) + this.margin.top;
 
         const sortedIsoforms = _.sortBy(isoforms, 'molWeight')
-        const corrMolWeight = proteinData[0].proteins[0].theoMolWeight * 1000
+        const corrMolWeight = this.theoMolWeight * 1000;
         const splitPos = _.findIndex(sortedIsoforms, (s) => { return s.molWeight >= corrMolWeight  })
 
         const upperPart = (splitPos > -1) ? sortedIsoforms.slice(splitPos) : []
@@ -290,7 +290,7 @@ class GelViz extends PureComponent {
                 x2={xPos}
                 y2={this.theoMolWeightPos}
             ></line>
-            <text className={'gel-theo-molweight-text'} x={xPos + 4} y={this.theoMolWeightPos + 3}>{this.theoMolWeight + ' kDa'}</text>
+            <text className={'gel-theo-molweight-text'} x={xPos + 4} y={this.theoMolWeightPos + 3}>{this.theoMolWeight.toFixed(2) + ' kDa'}</text>
         </g>
     }
 

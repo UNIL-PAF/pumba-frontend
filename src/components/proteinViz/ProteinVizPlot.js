@@ -38,7 +38,7 @@ class ProteinVizPlot extends Component {
     }
 
     resetXScale = () => {
-        const {proteinData} = this.props
+        const { proteinData, sequenceData } = this.props;
 
         const minMolWeightDa = Math.pow(10, _.min(_.map(proteinData, function(p){
             return p.theoMergedProtein.theoMolWeights[0]
@@ -52,8 +52,7 @@ class ProteinVizPlot extends Component {
         this.minMolWeight = Math.log10(minMolWeightDa - 1)
         this.maxMolWeight = Math.log10(maxMolWeightDa + 10)
 
-        // just take the theoretical weight of the first protein, it should always be the same.
-        const theoMolWeight = Math.log10(proteinData[0].proteins[0].theoMolWeight)
+        const theoMolWeight = Math.log10(sequenceData.molWeight / 1000);
 
         return {
             xScale: scaleLinear().range([0, this.props.viewWidth - this.margin.left - this.margin.right]).domain([this.minMolWeight, this.maxMolWeight]),

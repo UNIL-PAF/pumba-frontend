@@ -39,8 +39,7 @@ class PeptideViz extends PureComponent {
         this.maxMolWeight = Math.log10(maxMolWeightDa + 10)
         this.yRange = this.maxMolWeight - this.minMolWeight
 
-        // just take the theoretical weight of the first protein, it should always be the same.
-        const theoMolWeight = Math.log10(proteinData[0].proteins[0].theoMolWeight)
+        const theoMolWeight = Math.log10(sequenceData.molWeight / 1000);
 
         const zoomLeft = (zoom === undefined) ? 1 : zoom.left;
         const zoomRight = (zoom === undefined) ? sequenceData.length : zoom.right;
