@@ -1,14 +1,15 @@
 import {
     REQUEST_PROTEIN, PROTEIN_IS_LOADED, ADD_PROTEIN_DATA, PROTEIN_LOAD_ERROR, SET_PROTEIN_MAX_INTENSITY,
     GOTO_VIZ, ADD_SEQUENCE_DATA, SET_DATASETS, SET_SORTED_DATASET_NAMES, SELECT_DATASET, SELECT_ALL_DATASETS,
-    SET_PEPTIDE_MAX_INTENSITY, SET_PEPTIDE_MIN_INTENSITY, ADD_ISOFORMS
+    SET_PEPTIDE_MAX_INTENSITY, SET_PEPTIDE_MIN_INTENSITY, ADD_ISOFORMS, SET_SUGGESTIONS
 } from '../actions/loadProtein'
 import * as _ from 'lodash';
 
 const initialState = {
     proteinIsLoading: false,
     proteinData: null,
-    datasetChanged: 0
+    datasetChanged: 0,
+    suggestions: []
 }
 
 const selectDataset = (state, sampleIdx, replIdx, plotType) => {
@@ -78,6 +79,8 @@ const loadProteinReducer = (state = initialState, action) => {
             return { ...state, peptideMinIntensity: action.minIntensity}
         case ADD_ISOFORMS:
             return { ...state, isoforms: action.isoforms}
+        case SET_SUGGESTIONS:
+            return { ...state, suggestions: action.suggestions}    
         default:
             return state
     }

@@ -21,6 +21,7 @@
     "mem": "^4.0.0",
     "rc-slider": "^8.7.1",
     "react": "^16.5.2",
+    "react-autosuggest": "^10.1.0",
     "react-dom": "^16.5.2",
     "react-hot-loader": "^4.3.11",
     "react-redux": "^5.0.7",

@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import {fetchProtein, gotoViz, fetchDatasets, setDatasets, addProteinData} from '../../actions/loadProtein'
+import {fetchProtein, gotoViz, fetchDatasets, setDatasets, addProteinData, fetchSuggestions} from '../../actions/loadProtein'
 import {setOrganism} from '../../actions/menuActions'
 import ProteinSearchButton from "./ProteinSearchButton";
 import ProteinSearchInput from "./ProteinSearchInput";
@@ -72,7 +72,7 @@ class ProteinSearchContainer extends React.Component{
         setDatasets(newDataset)
     }
 
-    loadProtein() {
+    loadProtein(proteinId) {
         const {onLoadProtein, datasets} = this.props
 
         const availableDatasets = _.reduce(datasets, (res, val) => {
@@ -92,12 +92,22 @@ class ProteinSearchContainer extends React.Component{
             })
 
         setDatasets(newDatasets)
-
-        onLoadProtein(this.state.searchString, availableDatasets.join(','))
+        const finalSearchTerm = proteinId ? proteinId : this.state.searchString
+        onLoadProtein(finalSearchTerm, availableDatasets.join(","));
     }
 
     render(){
-        const {proteinIsLoading, datasets, datasetNames, organism, setOrganism, loadDatasets, resetProteinData} = this.props
+        const {
+          proteinIsLoading,
+          datasets,
+          datasetNames,
+          organism,
+          setOrganism,
+          loadDatasets,
+          resetProteinData,
+          suggestions,
+          fetchSuggestions
+        } = this.props;
 
         const changeOrganism = (organism) => {
             setOrganism(organism)
@@ -106,61 +116,85 @@ class ProteinSearchContainer extends React.Component{
         }
         const datasetsLoaded = (datasets && datasetNames && datasets[datasetNames[0]])
 
-        return <div>
-            <br/>
+        return (
+          <div>
+            <br />
             <Row>
-                <Col className="text-center" md={{ size: 4, offset: 4 }}>
-                    <h4>Organism</h4>
-                </Col>
+              <Col className="text-center" md={{ size: 4, offset: 4 }}>
+                <h4>Organism</h4>
+              </Col>
             </Row>
             <Row>
-                <Col className="text-center" md={{ size: 4, offset: 4 }}>
-                    <ButtonGroup>
-                        <Button active={organism === 'human'} color="primary" outline={true} onClick={() => changeOrganism('human')}>Human</Button>
-                        <Button active={organism === 'mouse'} color="primary" outline={true} onClick={() => changeOrganism('mouse')}>Mouse</Button>
-                    </ButtonGroup>
-                </Col>
+              <Col className="text-center" md={{ size: 4, offset: 4 }}>
+                <ButtonGroup>
+                  <Button
+                    active={organism === "human"}
+                    color="primary"
+                    outline={true}
+                    onClick={() => changeOrganism("human")}
+                  >
+                    Human
+                  </Button>
+                  <Button
+                    active={organism === "mouse"}
+                    color="primary"
+                    outline={true}
+                    onClick={() => changeOrganism("mouse")}
+                  >
+                    Mouse
+                  </Button>
+                </ButtonGroup>
+              </Col>
             </Row>
-            <br/>
+            <br />
 
             <Row>
-                <Col className="text-center" md={{ size: 6, offset: 3 }}>
-                    <h4>Search by UniProt accession number or gene name.</h4>
-                    <h6>Attention: Search is case sensitive.</h6>
-                </Col>
+              <Col className="text-center" md={{ size: 6, offset: 3 }}>
+                <h4>Search by UniProt accession number or gene name.</h4>
+                <h6>Attention: Search is case sensitive.</h6>
+              </Col>
             </Row>
 
-            <br/>
+            <br />
 
             <Form>
-                <FormGroup>
-                    <ProteinSearchInput
-                        onChange={this.onChangeInput}
-                        disabled={proteinIsLoading}
-                        onEnterClicked={this.loadProtein}
-                    />
-                </FormGroup>
-                <Row>
-                    <Col className="text-center" md={{ size: 4, offset: 4 }}>
-                        <h4>Cell lines</h4>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col className="text-center" md={{ size: 4, offset: 4 }}>
-                        {datasetsLoaded && _.map(datasetNames, (name) => {
-                            return this.oneSample(name, datasets[name].isChecked)
-                        })}
-                    </Col>
-                </Row>
-                <br/>
-                <FormGroup>
-                        <ProteinSearchButton
-                            onClick={this.loadProtein}
-                            disabled={proteinIsLoading}
-                        />
-                </FormGroup>
+                            <Row>
+              <Col className="text-center" md={{ size: 6, offset: 2 }}>
+              <FormGroup>
+                <ProteinSearchInput
+                  onChange={this.onChangeInput}
+                  disabled={proteinIsLoading}
+                  onEnterClicked={this.loadProtein}
+                  organism={organism}
+                  suggestions={suggestions}
+                  fetchSuggestions={fetchSuggestions}
+                />
+              </FormGroup>
+                        </Col>
+            </Row>
+              <Row>
+                <Col className="text-center" md={{ size: 4, offset: 4 }}>
+                  <h4>Cell lines</h4>
+                </Col>
+              </Row>
+              <Row>
+                <Col className="text-center" md={{ size: 4, offset: 4 }}>
+                  {datasetsLoaded &&
+                    _.map(datasetNames, (name) => {
+                      return this.oneSample(name, datasets[name].isChecked);
+                    })}
+                </Col>
+              </Row>
+              <br />
+              <FormGroup>
+                <ProteinSearchButton
+                  onClick={this.loadProtein}
+                  disabled={proteinIsLoading}
+                />
+              </FormGroup>
             </Form>
-        </div>
+          </div>
+        );
     }
 
     onChangeInput = (e) => {
@@ -170,20 +204,21 @@ class ProteinSearchContainer extends React.Component{
 }
 
 ProteinSearchContainer.propTypes = {
-    proteinIsLoading: PropTypes.bool.isRequired,
-    proteinData: PropTypes.array,
-    error: PropTypes.string,
-    gotoViz: PropTypes.bool,
-    onLoadProtein: PropTypes.func.isRequired,
-    gotoProteinViz: PropTypes.func.isRequired,
-    history: PropTypes.object.isRequired,
-    loadDatasets: PropTypes.func.isRequired,
-    setDatasets: PropTypes.func.isRequired,
-    datasets: PropTypes.object,
-    datasetNames: PropTypes.array,
-    organism: PropTypes.string.isRequired,
-    setOrganism: PropTypes.func.isRequired,
-    resetProteinData: PropTypes.func.isRequired,
+  proteinIsLoading: PropTypes.bool.isRequired,
+  proteinData: PropTypes.array,
+  error: PropTypes.string,
+  gotoViz: PropTypes.bool,
+  onLoadProtein: PropTypes.func.isRequired,
+  gotoProteinViz: PropTypes.func.isRequired,
+  history: PropTypes.object.isRequired,
+  loadDatasets: PropTypes.func.isRequired,
+  setDatasets: PropTypes.func.isRequired,
+  datasets: PropTypes.object,
+  datasetNames: PropTypes.array,
+  organism: PropTypes.string.isRequired,
+  setOrganism: PropTypes.func.isRequired,
+  resetProteinData: PropTypes.func.isRequired,
+  suggestions: PropTypes.array
 };
 
 const mapStateToProps = (state) => {
@@ -194,20 +229,36 @@ const mapStateToProps = (state) => {
         gotoViz: state.loadProtein.gotoViz,
         datasets: state.loadProtein.datasets,
         datasetNames: state.loadProtein.datasetNames,
-        organism: state.menu.organism
+        organism: state.menu.organism,
+        suggestions: state.loadProtein.suggestions
     }
     return props
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onLoadProtein: (proteinId, availableDatasets) => { dispatch(fetchProtein(proteinId, availableDatasets)) },
-        gotoProteinViz: (letsGo) => { dispatch(gotoViz(letsGo)) },
-        loadDatasets: (organism) => { dispatch(fetchDatasets(organism)) },
-        setDatasets: (datasets) => { dispatch(setDatasets(datasets)) },
-        setOrganism: (organism) => { dispatch(setOrganism(organism))},
-        resetProteinData: () => { dispatch(addProteinData(null))}
-    }
+      onLoadProtein: (proteinId, availableDatasets) => {
+        dispatch(fetchProtein(proteinId, availableDatasets));
+      },
+      gotoProteinViz: (letsGo) => {
+        dispatch(gotoViz(letsGo));
+      },
+      loadDatasets: (organism) => {
+        dispatch(fetchDatasets(organism));
+      },
+      setDatasets: (datasets) => {
+        dispatch(setDatasets(datasets));
+      },
+      setOrganism: (organism) => {
+        dispatch(setOrganism(organism));
+      },
+      resetProteinData: () => {
+        dispatch(addProteinData(null));
+      },
+      fetchSuggestions: (term, organism) => {
+        dispatch(fetchSuggestions(term, organism));
+      },
+    };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProteinSearchContainer)
