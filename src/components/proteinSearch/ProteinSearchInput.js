@@ -8,22 +8,18 @@ class ProteinSearchInput extends Component {
     super(props);
 
     this.state = {
-      value: "",
-      // suggestions: [],
+      value: ""
     };
   }
 
   keyClicked = (e) => {
     if (e.key === "Enter") {
-      this.props.onEnterClicked();
-      e.preventDefault();
+        if(this.props.suggestions.length === 0){
+            this.props.onEnterClicked();
+            e.preventDefault();
+            e.stopPropagation();
+        }
     }
-  };
-
-  setSuggestions = (value) => {
-    this.setState({
-      suggestions: value,
-    });
   };
 
   getSuggestions = (value) => {
@@ -41,9 +37,7 @@ class ProteinSearchInput extends Component {
 
   // Autosuggest will call this function every time you need to clear suggestions.
   onSuggestionsClearRequested = () => {
-    this.setState({
-      suggestions: [],
-    });
+      this.getSuggestions();
   };
 
   onSuggestionSelect = (e, { suggestion, suggestionValue, index, method }) => {
@@ -89,6 +83,7 @@ class ProteinSearchInput extends Component {
       placeholder: organism === "human" ? "e.g. TFRC" : "",
       value,
       onChange: this.onChange,
+      onKeyDown: this.keyClicked,
     };
 
     return (
@@ -103,7 +98,6 @@ class ProteinSearchInput extends Component {
               getSuggestionValue={this.getSuggestionValue}
               renderSuggestion={this.renderSuggestion}
               onSuggestionSelected={this.onSuggestionSelect}
-              //renderInputComponent={this.renderInputComponent}
             />
           </Col>
         </Row>

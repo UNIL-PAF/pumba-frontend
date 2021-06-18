@@ -39,8 +39,8 @@ class ProteinSearchContainer extends React.Component{
 
     keyClicked = (e) => {
         if(e.key === "Enter"){
-            this.loadProtein()
             e.preventDefault();
+            this.loadProtein()
         }
     }
 
@@ -93,7 +93,8 @@ class ProteinSearchContainer extends React.Component{
 
         setDatasets(newDatasets)
         const finalSearchTerm = proteinId ? proteinId : this.state.searchString
-        onLoadProtein(finalSearchTerm, availableDatasets.join(","));
+
+        onLoadProtein(finalSearchTerm.trim(), availableDatasets.join(","));
     }
 
     render(){
@@ -158,8 +159,6 @@ class ProteinSearchContainer extends React.Component{
             <br />
 
             <Form>
-                            <Row>
-              <Col className="text-center" md={{ size: 6, offset: 2 }}>
               <FormGroup>
                 <ProteinSearchInput
                   onChange={this.onChangeInput}
@@ -170,8 +169,6 @@ class ProteinSearchContainer extends React.Component{
                   fetchSuggestions={fetchSuggestions}
                 />
               </FormGroup>
-                        </Col>
-            </Row>
               <Row>
                 <Col className="text-center" md={{ size: 4, offset: 4 }}>
                   <h4>Cell lines</h4>
