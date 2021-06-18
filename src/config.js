@@ -5,11 +5,10 @@
 
 var config = {};
 
-config.version = '0.6.5'
+config.version = '0.8.0'
 
-config.urlBackend = "http://localhost:9000"
-//config.urlBackend = "https://pumba.dcsr.unil.ch/backend"
-//config.urlBackend = "https://pumba.vital-it.ch/backend"
+//config.urlBackend = "http://localhost:9000"
+config.urlBackend = "https://pumba.dcsr.unil.ch/backend"
 
 // Gel contrast setting
 config.maxGelContrast = 60
