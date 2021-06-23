@@ -41,6 +41,20 @@ class ProteinSearchInput extends Component {
   };
 
   onSuggestionSelect = (e, { suggestion, suggestionValue, index, method }) => {
+
+    const {value} = this.state
+    const lowValue = value.toLowerCase()
+
+    if(suggestion.proteinId.toLowerCase().includes(lowValue)){
+      this.setState({
+        value: suggestion.proteinId
+      });
+    }else{
+      this.setState({
+        value: suggestion.geneName
+      });
+    }
+
     this.props.onEnterClicked(suggestion.proteinId);
   };
 
@@ -80,7 +94,7 @@ class ProteinSearchInput extends Component {
     const { value } = this.state;
 
     const inputProps = {
-      placeholder: organism === "human" ? "e.g. TFRC" : "",
+      placeholder: organism === "human" ? "e.g. MAPK1" : "",
       value,
       onChange: this.onChange,
       onKeyDown: this.keyClicked,
