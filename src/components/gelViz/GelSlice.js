@@ -112,7 +112,7 @@ class GelSlice extends PureComponent {
 
 GelSlice.propTypes = {
     mergedData: PropTypes.object,
-    datasetData: PropTypes.object,
+    datasetData: PropTypes.array,
     sliceWidth: PropTypes.number.isRequired,
     sliceHeight: PropTypes.number.isRequired,
     xPos: PropTypes.number.isRequired,
