@@ -63,6 +63,20 @@ function addShortMergedData(json) {
   });
 }
 
+function inactivateMissingDatasets(origDatasets, proteinMerges){
+  const availableSamples = _.map(proteinMerges, "sample")
+
+  const newDatasets = _.mapValues(origDatasets, (v) => {
+    if(! availableSamples.includes(v.name)){
+      v.isAvailable = false
+      v.isActive = false
+    }
+    return v
+  });
+
+  return newDatasets
+}
+
 export function fetchProtein(proteinId, datasetIds, noReset, callOnComplete) {
   return function (dispatch, getState) {
     dispatch(requestProtein(proteinId));
@@ -154,6 +168,8 @@ export function fetchProtein(proteinId, datasetIds, noReset, callOnComplete) {
             dispatch(setProteinMenuMaxIntensity(undefined));
             dispatch(setPeptideMenuMaxIntensity(0));
             dispatch(addIsoforms(json.sequences));
+            dispatch(setDatasets(inactivateMissingDatasets(getState().loadProtein.datasets, json.proteinMerges)));
+
           }
           dispatch(addProteinData(json.proteinMerges));
           dispatch(proteinIsLoaded());
