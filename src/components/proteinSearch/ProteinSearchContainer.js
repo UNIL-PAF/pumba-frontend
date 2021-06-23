@@ -60,15 +60,19 @@ class ProteinSearchContainer extends React.Component{
 
     changeSampleChecked(event) {
         const {datasets, setDatasets} = this.props
-        const newDataset = {...datasets, [event.target.id]: {
-                isChecked: !datasets[event.target.id].isChecked,
-                datasets: datasets[event.target.id].datasets,
-                idx: datasets[event.target.id].idx,
-                isAvailable: datasets[event.target.id].isAvailable,
-                isActive: datasets[event.target.id].isActive,
-                organism: datasets[event.target.id].organism,
-            }
-        }
+        const newDataset = {
+          ...datasets,
+          [event.target.id]: {
+            isChecked: !datasets[event.target.id].isChecked,
+            datasets: datasets[event.target.id].datasets,
+            idx: datasets[event.target.id].idx,
+            isAvailable: datasets[event.target.id].isAvailable,
+            isActive: datasets[event.target.id].isActive,
+            organism: datasets[event.target.id].organism,
+            name: datasets[event.target.id].name,
+            colorGroup: datasets[event.target.id].colorGroup,
+          },
+        };
         setDatasets(newDataset)
     }
 
@@ -115,7 +119,8 @@ class ProteinSearchContainer extends React.Component{
             loadDatasets(organism)
             resetProteinData()
         }
-        const datasetsLoaded = (datasets && datasetNames && datasets[datasetNames[0]])
+
+        const datasetsLoaded = (datasets && datasetNames && true)
 
         return (
           <div>
