@@ -70,7 +70,31 @@ function inactivateMissingDatasets(origDatasets, proteinMerges){
     if(! availableSamples.includes(v.name)){
       v.isAvailable = false
       v.isActive = false
+    }else{
+
+      // check if the individual replicates are available
+      const proteinData =
+       _.find(proteinMerges, (p) => {
+        return p.sample === v.name;
+      });
+
+      const newReplDatasets = _.mapValues(v.datasets, (replDataset) => {
+        const dataSetAvailable = _.find(
+          proteinData.proteins,
+          _.matchesProperty("dataSet.id", replDataset.id)
+        );
+        if(! dataSetAvailable){
+          replDataset.isActive = false;
+          replDataset.isAvailable = false;
+        }else{
+          replDataset.isAvailable = true;
+        }
+        return replDataset
+      });
+
+      v.datasets = newReplDatasets
     }
+
     return v
   });
 
@@ -159,6 +183,8 @@ export function fetchProtein(proteinId, datasetIds, noReset, callOnComplete) {
           addShortMergedData(json.proteinMerges);
 
           if (!noReset) {
+            console.log(getState().loadProtein.datasets);
+
             // let's take the FASTA data from the first entry (should always be OK)
             dispatch(addSequenceData(json.mainSequence));
             dispatch(gotoViz(true));
@@ -169,7 +195,6 @@ export function fetchProtein(proteinId, datasetIds, noReset, callOnComplete) {
             dispatch(setPeptideMenuMaxIntensity(0));
             dispatch(addIsoforms(json.sequences));
             dispatch(setDatasets(inactivateMissingDatasets(getState().loadProtein.datasets, json.proteinMerges)));
-
           }
           dispatch(addProteinData(json.proteinMerges));
           dispatch(proteinIsLoaded());

@@ -120,11 +120,16 @@ class ProteinVizLegends extends PureComponent {
     }
 
     plotReplicate = (repl, x, y, height, sampleIdx, colorIdx, isSampleSelected, sampleName) => {
-        this.legendIdx = this.legendIdx + 1
         const {mouseOverReplId, width, mouseClickReplCB, datasets, plotType} = this.props
 
+        // don't plot anything if it is not available
+        const thisRepl = _.find(datasets[sampleName].datasets, (x) => {return x.id === repl.id})
+        if (!thisRepl.isAvailable) return null;
+
+        this.legendIdx = this.legendIdx + 1;
+
         // check if it is selected
-        const isSelected = (_.find(datasets[sampleName].datasets, (x) => {return x.id === repl.id})).isSelected
+        const isSelected = thisRepl.isSelected;
 
        const res = <LegendField
             key={repl.idx}

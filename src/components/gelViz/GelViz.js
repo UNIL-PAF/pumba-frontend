@@ -196,7 +196,8 @@ class GelViz extends PureComponent {
         let localPos = 0
 
         return _.map(datasets, (dataset, k) => {
-            if(! dataset.isSelected){
+
+            if(! dataset.isSelected || ! dataset.isAvailable){
                 return null
             }
 
@@ -364,7 +365,7 @@ class GelViz extends PureComponent {
         const {mouseY, mouseHere} = this.state
 
         const nrSlices = _.reduce(datasets, (acc, d) => {
-            const selectedDatasets = (d.isActive ? _.reduce(d.datasets, (acc2, d2) => {return (d2.isSelected && d2.isSelected.gel ? 1 : 0) + acc2}, 1) : 0)
+            const selectedDatasets = ((d.isAvailable && d.isActive) ? _.reduce(d.datasets, (acc2, d2) => {return (d2.isAvailable && d2.isSelected && d2.isSelected.gel ? 1 : 0) + acc2}, 1) : 0)
             return acc + selectedDatasets
         }, 0)
 

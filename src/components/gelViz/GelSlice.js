@@ -22,6 +22,8 @@ class GelSlice extends PureComponent {
         const {xPos, yPos, sliceWidth, datasetData, amplify, maxInt, yScale, greyScale, getMousePos, replId} = this.props
 
         const selData = _.find(datasetData, (p) => { return p.dataSet.id === replId})
+        if(! selData) return null
+
         const newDatasetData = {massFits: selData.dataSet.massFitResult.massFits, intensities: selData.intensities}
 
         return <DatasetGelSlice
