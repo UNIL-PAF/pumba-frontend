@@ -8,6 +8,9 @@
 #gel-plot {
     height: 100%;
     width: 100%;
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 .gel-y-axis {
@@ -111,4 +114,8 @@
     stroke-width: 2;
     stroke: lightblue;
     pointer-events: none;
+}
+
+#gel-option-group {
+    text-align: right !important;
 }

@@ -1,0 +1,46 @@
+.carousel-control-next,
+.carousel-control-prev /*, .carousel-indicators */ {
+    filter: invert(70%);
+    align-items: flex-start;
+}
+
+
+/*
+.carousel-indicators li {
+  background-color: darkgray;
+  align-items: flex-start;
+}
+
+.carousel-indicators active {
+  background-color: black;
+}
+*/
+
+.carousel-item h3 {
+  text-align: center !important;
+  display: inline-block;
+}
+
+.carousel-item .help-text {
+  text-align:center !important;
+}
+
+.carousel-item #inner-div {
+    text-align: left;
+    display: inline-block;
+}
+
+.carousel-indicators {
+  top: -60px;
+}
+
+.carousel-indicators li {
+  width: 20px;
+  height: 20px;
+  border-radius: 100%;
+  background-color: darkgray;
+}
+
+.carousel-indicators li:not(:last-child) {
+  margin-right: 20px;
+}

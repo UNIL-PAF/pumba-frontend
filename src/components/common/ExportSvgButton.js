@@ -124,16 +124,23 @@ class ExportSvgButton extends PureComponent {
     render() {
         const {isOpen} = this.state
 
-        return <ButtonDropdown size="sm" isOpen={isOpen} toggle={this.toggleDropdown}>
-            <DropdownToggle outline={true} caret>
-                Export graph
+        return (
+          <ButtonDropdown
+            isOpen={isOpen}
+            toggle={this.toggleDropdown}
+          >
+            <DropdownToggle caret color="primary">
+              Export graph
             </DropdownToggle>
             <DropdownMenu>
-                <DropdownItem onClick={() => this.exportPNG(2)}>PNG</DropdownItem>
-                <DropdownItem onClick={() => this.exportPNG(10)}>PNG high res</DropdownItem>
-                <DropdownItem onClick={() => this.exportSVG()}>SVG</DropdownItem>
+              <DropdownItem onClick={() => this.exportPNG(2)}>PNG</DropdownItem>
+              <DropdownItem onClick={() => this.exportPNG(10)}>
+                PNG high res
+              </DropdownItem>
+              <DropdownItem onClick={() => this.exportSVG()}>SVG</DropdownItem>
             </DropdownMenu>
-        </ButtonDropdown>
+          </ButtonDropdown>
+        );
     }
 }
 

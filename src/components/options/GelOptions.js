@@ -29,7 +29,7 @@ class GelOptions extends PureComponent {
 
         const contrastPercent = Math.round(100 / pumbaConfig.maxGelContrast * gelContrast)
 
-        return <div className={"options-menu"}>
+        return <div id="gel-options-menu" className={"options-menu"}>
             <p style={{minWidth: "160px"}}><span><strong>Lane options</strong></span>&nbsp;&nbsp;
                 <span><Button color="primary" size={"sm"} onClick={() => this.setToDefault()}>Reset</Button></span>
             </p>
