@@ -16,7 +16,7 @@ class GelHelpModal extends PureComponent {
         ],
       },
       {
-        title: "Look at individual replicates.",
+        title: "Look at individual replicates",
         src: "/images/help_movies/gel_expand_collapse.gif",
         text: [
           "The gels you see by default are merged from several replicates.",
@@ -25,11 +25,11 @@ class GelHelpModal extends PureComponent {
         ],
       },
       {
-        title: "Options for lanes view.",
+        title: "Lane Options",
         src: "/images/help_movies/gel_options.gif",
         text: [
           "You can set the contrast for the gels.",
-          "You can show the theoretical molecular weight of potential isoforms. Those are the isoforms from UniProt.",
+          "You can show the theoretical molecular weight of potential isoforms. Those are the isoforms found in UniProt.",
         ],
       },
     ];
