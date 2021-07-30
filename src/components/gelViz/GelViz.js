@@ -11,11 +11,7 @@ import {interpolateHsl} from "d3-interpolate";
 import { sampleColor } from '../common/colorSettings'
 import ExpandCollapsInfo from "./ExpandCollapsInfo";
 import ProteinTitle from "../common/ProteinTitle"
-import ExportSvgButton from "../common/ExportSvgButton"
-import {Button} from "reactstrap";
-import GelHelpModal from './GelHelpModal';
-import GelOptions from "../options/GelOptions";
-import { GearFill, InfoCircleFill } from "react-bootstrap-icons";
+import MenuButtonGroup from '../common/MenuButtonGroup';
 
 class GelViz extends PureComponent {
   // set the margins
@@ -65,8 +61,6 @@ class GelViz extends PureComponent {
     this.state = {
       proteinDataTimestamp: proteinData.timestamp,
       maxInt: this.getMaxInt(),
-      modal: false,
-      optionsMenu: false
     };
   }
 
@@ -237,10 +231,7 @@ class GelViz extends PureComponent {
         ></GelSlice>
         {this.state.mouseEnteredSample === sampleName &&
           this.plotExpandInfo(
-            thisProteinData,
-            title,
             slicePos,
-            sampleName,
             containsSelected
           )}
       </g>
@@ -307,10 +298,7 @@ class GelViz extends PureComponent {
   };
 
   plotExpandInfo = (
-    thisProteinData,
-    title,
     slicePos,
-    sampleName,
     containsSelected
   ) => {
     const { viewHeight } = this.props;
@@ -479,10 +467,6 @@ class GelViz extends PureComponent {
     }
   };
 
-  toggleHelp = () => {
-    this.setState({modal: ! this.state.modal})
-  };
-
   render() {
     const { viewWidth, viewHeight, datasets, sequenceData, showIsoforms } =
       this.props;
@@ -516,35 +500,13 @@ class GelViz extends PureComponent {
     // the mol weight at the mouse position
     const mouseWeightPos = this.yScale.invert(mouseY);
 
-    const { modal, optionsMenu } = this.state;
-
     return (
       <div id={"gel-plot"}>
-        <div id={"gel-option-group"}>
-          <Button
-            active={optionsMenu}
-            color="primary"
-            onClick={() => this.setState({ optionsMenu: !optionsMenu })}
-          >
-            <span>
-              <GearFill />
-            </span>
-            &nbsp; Options
-          </Button>
-          &nbsp;
-          {optionsMenu && <GelOptions></GelOptions>}
-          <ExportSvgButton
-            svg={this.svg}
-            fileName={sequenceData.proteinId + "-lanes"}
-          ></ExportSvgButton>
-          &nbsp;
-          <Button color="primary" onClick={() => this.toggleHelp()}>
-              <span><InfoCircleFill/></span>
-              &nbsp;
-            Help
-          </Button>
-          <GelHelpModal toggle={this.toggleHelp} modal={modal}></GelHelpModal>
-        </div>
+        <MenuButtonGroup
+          selectedViz="lanes"
+          svg={this.svg}
+          proteinId={sequenceData.proteinId}
+        ></MenuButtonGroup>
         <svg
           className="gel-svg"
           viewBox={`0 0 ${viewWidth} ${viewHeight}`}
