@@ -249,7 +249,9 @@ class ProteinVizLegends extends PureComponent {
         const samples = _.sortBy(_.values(_.mapValues(datasets, (value, key) => { value.name = key; return value; })), ['idx'])
 
         const legendHeight = 14
-        const nrRep = (mouseOverLegend ? _.sum(_.map(datasets, (d) => { return d.isActive && d.datasets.length})) : 0)
+        const nrRep = (mouseOverLegend ? _.sum(_.map(datasets, (d) => { 
+            return d.isActive ? Object.keys(d.datasets).length : 0
+        })) : 0)
         const nrActiveDatasets = _.filter(datasets, (d) => {return d.isAvailable && (d.isActive || mouseOverLegend)}).length
         const selectedReplNr = (! mouseOverLegend ? _.reduce(datasets, (res, v, k) => {
             return res + (datasets[k].isActive ? (_.some(datasets[k].datasets, (d) => {return d.isSelected && d.isSelected[plotType]}) ? datasets[k].datasets.length : 0) : 0)

@@ -6,7 +6,7 @@ import * as _ from 'lodash'
 import SliceBar from "./SliceBar"
 
 
-class   SliceBars extends PureComponent {
+class SliceBars extends PureComponent {
 
     constructor(props) {
         super(props)
@@ -110,7 +110,7 @@ class   SliceBars extends PureComponent {
 }
 
 SliceBars.propTypes = {
-    proteins: PropTypes.object.isRequired,
+    proteins: PropTypes.object,
     sampleName: PropTypes.string.isRequired,
     color: PropTypes.string.isRequired,
     margin: PropTypes.object.isRequired,
