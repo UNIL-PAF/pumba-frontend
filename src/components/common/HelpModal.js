@@ -51,7 +51,7 @@ class GelHelpModal extends PureComponent {
           <div className="help-text">
             <div id="inner-div">
               <h3>{item.title}</h3>
-              <p>
+              <div>
                 {_.map(item.text, (oneParagraph, i) => {
                   return (
                     <div>
@@ -60,7 +60,7 @@ class GelHelpModal extends PureComponent {
                     </div>
                   );
                 })}
-              </p>
+              </div>
             </div>
           </div>
 

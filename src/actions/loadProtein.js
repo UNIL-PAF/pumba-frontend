@@ -183,8 +183,6 @@ export function fetchProtein(proteinId, datasetIds, noReset, callOnComplete) {
           addShortMergedData(json.proteinMerges);
 
           if (!noReset) {
-            console.log(getState().loadProtein.datasets);
-
             // let's take the FASTA data from the first entry (should always be OK)
             dispatch(addSequenceData(json.mainSequence));
             dispatch(gotoViz(true));

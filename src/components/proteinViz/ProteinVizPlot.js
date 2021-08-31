@@ -13,7 +13,7 @@ import ProteinVizLegendsContainer from '../legends/ProteinVizLegendsContainer'
 import ProteinMergesContainer from "./ProteinMergesContainer"
 import PopOverSkeleton from "../common/popOverSkeleton"
 import ProteinTitle from "../common/ProteinTitle"
-import ExportSvgButton from "../common/ExportSvgButton"
+import MenuButtonGroup from "../common/MenuButtonGroup";
 
 
 class ProteinVizPlot extends Component {
@@ -278,68 +278,117 @@ class ProteinVizPlot extends Component {
         // the mol weight at the mouse position
         const mouseWeightPos = this.state.xScale.invert(this.state.mouseX - this.margin.left)
 
-        return <div id={"protein-plot"}>
-            <ExportSvgButton svg={this.svg} fileName={sequenceData.proteinId + "-graph"}></ExportSvgButton>
-            <svg className="protein-svg"
-                 viewBox={`0 0 ${viewWidth} ${viewHeight}`}
-                 preserveAspectRatio="xMinYMin"
-                 width="100%"
-                 height="100%"
-                 ref={this.svg}
-                 onMouseMove={(e) => this.mouseMove(e)}
-                 onMouseEnter={(e) => this.mouseEnter(e)}
-                 onMouseLeave={(e) => this.mouseLeave(e)}
+        return (
+          <div id={"protein-plot"}>
+            <MenuButtonGroup
+              selectedViz="proteins"
+              svg={this.svg}
+              proteinId={sequenceData.proteinId}
+            ></MenuButtonGroup>
+            <svg
+              className="protein-svg"
+              viewBox={`0 0 ${viewWidth} ${viewHeight}`}
+              preserveAspectRatio="xMinYMin"
+              width="100%"
+              height="100%"
+              ref={this.svg}
+              onMouseMove={(e) => this.mouseMove(e)}
+              onMouseEnter={(e) => this.mouseEnter(e)}
+              onMouseLeave={(e) => this.mouseLeave(e)}
             >
+              <g
+                className="brush-g"
+                ref={this.brushG}
+                onClick={() => this.clickBrushRect()}
+                onDoubleClick={this.zoomOut}
+                onMouseEnter={() => mouseLeaveSampleCB()}
+                transform={
+                  "translate(" + this.margin.left + "," + this.margin.top + ")"
+                }
+              />{" "}
+              }
+              <g
+                className="protein-main-g"
+                transform={
+                  "translate(" + this.margin.left + "," + this.margin.top + ")"
+                }
+              >
+                {this.plotTheoMolWeightLine()}
 
-                <g className="brush-g"
-                   ref={this.brushG}
-                   onClick={() => this.clickBrushRect()}
-                   onDoubleClick={this.zoomOut}
-                   onMouseEnter={() => mouseLeaveSampleCB()}
-                   transform={'translate(' + this.margin.left + ',' + this.margin.top + ')'}/> }
+                <ProteinTitle
+                  sequenceData={sequenceData}
+                  onMouseEnter={() => {
+                    this.setState({ hideMouse: true });
+                  }}
+                  onMouseLeave={() => {
+                    this.setState({ hideMouse: false });
+                  }}
+                ></ProteinTitle>
 
-                <g className="protein-main-g" transform={'translate(' + this.margin.left + ',' + this.margin.top + ')'}>
+                {this.state.mouseHere &&
+                  !this.state.hideMouse &&
+                  this.plotMousePositionCircles(mouseWeightPos)}
 
-                    {this.plotTheoMolWeightLine()}
+                <g
+                  className="y-axis"
+                  ref={(r) => (this.yAxis = r)}
+                  transform={
+                    "translate(" +
+                    this.margin.left +
+                    "," +
+                    this.margin.top +
+                    ")"
+                  }
+                />
 
-                    <ProteinTitle
-                        sequenceData={sequenceData}
-                        onMouseEnter={()=>{this.setState({'hideMouse':true})}}
-                        onMouseLeave={()=>{this.setState({'hideMouse':false})}}
-                    ></ProteinTitle>
+                <g
+                  className="x-axis"
+                  ref={(r) => (this.xAxis = r)}
+                  transform={
+                    "translate(" +
+                    this.margin.left +
+                    "," +
+                    (viewHeight - this.margin.bottom) +
+                    ")"
+                  }
+                />
 
-                    {this.state.mouseHere && ! this.state.hideMouse && this.plotMousePositionCircles(mouseWeightPos)}
+                {this.state.mouseHere &&
+                  !this.state.hideMouse &&
+                  this.plotMousePositionLine(mouseWeightPos)}
 
-                    <g className="y-axis" ref={r => this.yAxis = r}
-                       transform={'translate(' + this.margin.left + ',' + this.margin.top + ')'}/>
+                {this.svg && (
+                  <ProteinMergesContainer
+                    xScale={this.state.xScale}
+                    yScale={this.state.yScale}
+                    history={history}
+                    margin={this.margin}
+                    svgParent={this.svg}
+                    scaleChanged={this.state.scaleChanged}
+                    getMousePos={this.getMousePos}
+                  ></ProteinMergesContainer>
+                )}
 
-                    <g className="x-axis" ref={r => this.xAxis = r}
-                       transform={'translate(' + this.margin.left + ',' + (viewHeight - this.margin.bottom) + ')'}/>
+                <ProteinVizLegendsContainer
+                  x={localLegendPos.x}
+                  y={localLegendPos.y}
+                  width={150}
+                  theoMolWeight={this.state.theoMolWeight}
+                  parentSvg={this.svg}
+                  plotType={"prot"}
+                  onMouseEnter={() => {
+                    this.setState({ hideMouse: true });
+                  }}
+                  onMouseLeave={() => {
+                    this.setState({ hideMouse: false });
+                  }}
+                ></ProteinVizLegendsContainer>
 
-                    {this.state.mouseHere && ! this.state.hideMouse && this.plotMousePositionLine(mouseWeightPos)}
-
-                    {this.svg &&  <ProteinMergesContainer xScale={this.state.xScale} yScale={this.state.yScale} history={history}
-                                                 margin={this.margin} svgParent={this.svg} scaleChanged={this.state.scaleChanged}
-                                                getMousePos={this.getMousePos}>
-                                </ProteinMergesContainer>}
-
-                    <ProteinVizLegendsContainer
-                        x={localLegendPos.x}
-                        y={localLegendPos.y}
-                        width={150}
-                        theoMolWeight={this.state.theoMolWeight}
-                        parentSvg={this.svg}
-                        plotType={"prot"}
-                        onMouseEnter={()=>{this.setState({'hideMouse':true})}}
-                        onMouseLeave={()=>{this.setState({'hideMouse':false})}}
-                    >
-                    </ProteinVizLegendsContainer>
-
-                    {popup && this.plotPopup()}
-                </g>
-
+                {popup && this.plotPopup()}
+              </g>
             </svg>
-        </div>
+          </div>
+        );
     }
 }
 

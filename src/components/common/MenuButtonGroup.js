@@ -5,6 +5,8 @@ import { Button } from "reactstrap";
 import GelOptions from "../options/GelOptions";
 import { GearFill, InfoCircleFill } from "react-bootstrap-icons";
 import GelHelpModal from "../gelViz/GelHelpModal";
+import ProteinOptions from "../options/ProteinOptions";
+import ProteinHelpModal from "../proteinViz/ProteinHelpModal";
 
 class MenuButtonGroup extends PureComponent {
   constructor(props) {
@@ -21,6 +23,8 @@ class MenuButtonGroup extends PureComponent {
 
     if (selectedViz === "lanes") {
       return <GelOptions></GelOptions>;
+    }else if(selectedViz === "proteins"){
+      return <ProteinOptions></ProteinOptions>
     }
   }
 
@@ -34,6 +38,13 @@ class MenuButtonGroup extends PureComponent {
             toggle={this.toggleHelp}
             modal={showHelpModal}
           ></GelHelpModal>
+        );
+      }else if (selectedViz === "proteins"){
+        return (
+          <ProteinHelpModal
+            toggle={this.toggleHelp}
+            modal={showHelpModal}
+          ></ProteinHelpModal>
         );
       }
   }

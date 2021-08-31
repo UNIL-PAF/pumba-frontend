@@ -83,6 +83,9 @@
 #protein-plot {
   height: 100%;
   width: 100%;
+  padding-top: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 
