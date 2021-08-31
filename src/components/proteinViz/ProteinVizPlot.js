@@ -306,7 +306,6 @@ class ProteinVizPlot extends Component {
                   "translate(" + this.margin.left + "," + this.margin.top + ")"
                 }
               />{" "}
-              }
               <g
                 className="protein-main-g"
                 transform={

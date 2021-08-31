@@ -6,7 +6,9 @@ import GelOptions from "../options/GelOptions";
 import { GearFill, InfoCircleFill } from "react-bootstrap-icons";
 import GelHelpModal from "../gelViz/GelHelpModal";
 import ProteinOptions from "../options/ProteinOptions";
+import PeptideOptions from "../options/PeptideOptions";
 import ProteinHelpModal from "../proteinViz/ProteinHelpModal";
+import PeptideHelpModal from "../peptideViz/PeptideHelpModal";
 
 class MenuButtonGroup extends PureComponent {
   constructor(props) {
@@ -25,6 +27,8 @@ class MenuButtonGroup extends PureComponent {
       return <GelOptions></GelOptions>;
     }else if(selectedViz === "proteins"){
       return <ProteinOptions></ProteinOptions>
+    }else if(selectedViz === "peptides"){
+      return <PeptideOptions></PeptideOptions>
     }
   }
 
@@ -46,6 +50,11 @@ class MenuButtonGroup extends PureComponent {
             modal={showHelpModal}
           ></ProteinHelpModal>
         );
+      }else if(selectedViz === "peptides"){
+          return <PeptideHelpModal
+            toggle={this.toggleHelp}
+            modal={showHelpModal}
+          ></PeptideHelpModal>;
       }
   }
 

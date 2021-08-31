@@ -14,7 +14,7 @@ import PopOverSkeleton from "../common/popOverSkeleton"
 import ProteinTitle from "../common/ProteinTitle"
 import { sampleColor } from '../common/colorSettings'
 import optionsConfig from "../options/OptionsConfig";
-import ExportSvgButton from "../common/ExportSvgButton"
+import MenuButtonGroup from "../common/MenuButtonGroup";
 
 class PeptideViz extends PureComponent {
 
@@ -284,41 +284,73 @@ class PeptideViz extends PureComponent {
         // set the initial legend position
         const localLegendPos = (legendPos && legendPos.peptide) ? legendPos.peptide : {x: viewWidth-185, y: 20}
 
-        return <div id={"peptide-plot"}>
-            <ExportSvgButton svg={this.svg} fileName={sequenceData.proteinId + "-peptides"}></ExportSvgButton>
-            <svg className="peptide-svg"
-                 viewBox={`0 0 ${viewWidth} ${viewHeight}`}
-                 preserveAspectRatio="xMinYMin"
-                 width="100%"
-                 height="100%"
-                 ref={this.svg}
-                 onMouseMove={(e) => this.mouseMove(e)}
+        return (
+          <div id={"peptide-plot"}>
+            <MenuButtonGroup
+              selectedViz="peptides"
+              svg={this.svg}
+              proteinId={sequenceData.proteinId}
+            ></MenuButtonGroup>
+            <svg
+              className="peptide-svg"
+              viewBox={`0 0 ${viewWidth} ${viewHeight}`}
+              preserveAspectRatio="xMinYMin"
+              width="100%"
+              height="100%"
+              ref={this.svg}
+              onMouseMove={(e) => this.mouseMove(e)}
             >
-                <g className="pep-y-axis" ref={r => this.yAxis = r}
-                   transform={'translate(' + this.margin.left + ',' + this.margin.top + ')'}/>
-                <g className="pep-x-axis" ref={r => this.xAxis = r}
-                   transform={'translate(' + this.margin.left + ',' + (viewHeight - this.margin.bottom) + ')'}/>
-                <g className="brush-g"
-                   ref={this.brushG}
-                   onDoubleClick={this.zoomOut}
-                   onMouseEnter={() => mouseLeaveSampleCB()}
-                   onClick={() => this.clickBrushRect()}
-                   transform={'translate(' + this.margin.left + ',' + this.margin.top + ')'}/>
-                <g className="peptide-viz-g"
-                   transform={'translate(' + this.margin.left + ',' + this.margin.top + ')'}
-                   onDoubleClick={this.zoomOut}
-                >
-                    { this.plotTheoWeightLine() }
-                    <ProteinTitle sequenceData={sequenceData} y={-10}/>
-                    { this.plotAminoAcidBar() }
-                    { this.svg && this.plotPeptides() }
-                </g>
-                <ProteinVizLegendsContainer x={localLegendPos.x} y={localLegendPos.y} width={150}
-                                            theoMolWeight={this.state.theoMolWeight} plotType={"pep"}>
-                </ProteinVizLegendsContainer>
-                {popup && this.plotPopup()}
+              <g
+                className="pep-y-axis"
+                ref={(r) => (this.yAxis = r)}
+                transform={
+                  "translate(" + this.margin.left + "," + this.margin.top + ")"
+                }
+              />
+              <g
+                className="pep-x-axis"
+                ref={(r) => (this.xAxis = r)}
+                transform={
+                  "translate(" +
+                  this.margin.left +
+                  "," +
+                  (viewHeight - this.margin.bottom) +
+                  ")"
+                }
+              />
+              <g
+                className="brush-g"
+                ref={this.brushG}
+                onDoubleClick={this.zoomOut}
+                onMouseEnter={() => mouseLeaveSampleCB()}
+                onClick={() => this.clickBrushRect()}
+                transform={
+                  "translate(" + this.margin.left + "," + this.margin.top + ")"
+                }
+              />
+              <g
+                className="peptide-viz-g"
+                transform={
+                  "translate(" + this.margin.left + "," + this.margin.top + ")"
+                }
+                onDoubleClick={this.zoomOut}
+              >
+                {this.plotTheoWeightLine()}
+                <ProteinTitle sequenceData={sequenceData} y={-10} />
+                {this.plotAminoAcidBar()}
+                {this.svg && this.plotPeptides()}
+              </g>
+              <ProteinVizLegendsContainer
+                x={localLegendPos.x}
+                y={localLegendPos.y}
+                width={150}
+                theoMolWeight={this.state.theoMolWeight}
+                plotType={"pep"}
+              ></ProteinVizLegendsContainer>
+              {popup && this.plotPopup()}
             </svg>
-        </div>
+          </div>
+        );
     }
 
 }
