@@ -244,7 +244,7 @@ class GelViz extends PureComponent {
     let localPos = 0;
 
     return _.map(datasets, (dataset, k) => {
-      if (!dataset.isSelected || !dataset.isAvailable) {
+      if (! dataset.isSelected || ! dataset.isAvailable || ! dataset.isActive) {
         return null;
       }
 
@@ -481,7 +481,7 @@ class GelViz extends PureComponent {
                 d.datasets,
                 (acc2, d2) => {
                   return (
-                    (d2.isAvailable && d2.isSelected && d2.isSelected.gel
+                    (d2.isAvailable && d2.isActive && d2.isSelected && d2.isSelected.gel
                       ? 1
                       : 0) + acc2
                   );
