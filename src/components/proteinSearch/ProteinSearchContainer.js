@@ -183,7 +183,8 @@ class ProteinSearchContainer extends React.Component{
                 <Col className="text-center" md={{ size: 4, offset: 4 }}>
                   {datasetsLoaded &&
                     _.map(datasetNames, (name) => {
-                      return this.oneSample(name, datasets[name].isChecked);
+                      if (!datasets[name]) return null;
+                        return this.oneSample(name, datasets[name].isChecked);
                     })}
                 </Col>
               </Row>
