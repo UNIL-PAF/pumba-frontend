@@ -5,7 +5,7 @@
 
 var config = {};
 
-config.version = '0.9.0'
+config.version = '0.9.1'
 
 config.urlBackend = "http://localhost:9000"
 //config.urlBackend = "https://pumba.dcsr.unil.ch/backend"
