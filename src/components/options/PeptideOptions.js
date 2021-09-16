@@ -32,45 +32,84 @@ class PeptideOptions extends PureComponent {
     }
 
     render() {
-        const {showOnlyRazor, showOnlyUnique, peptideMenuMaxIntensity, peptideMaxIntensity, peptideMinIntensity} = this.props
+        const {showOnlyRazor, showOnlyUnique, peptideMenuMaxIntensity, peptideMaxIntensity, peptideMinIntensity, close} = this.props
 
         const realIntValue = peptideMenuMaxIntensity ? (optionsConfig.computeRealIntValue(peptideMaxIntensity, peptideMinIntensity, peptideMenuMaxIntensity)).toExponential(1) : ''
 
-        return <div className={"options-menu"}>
-            <p style={{minWidth: "160px"}}><span><strong>Peptide graph options</strong></span>&nbsp;&nbsp;
-                <span><Button color="primary" size={"sm"} onClick={() => this.setToDefault()}>Reset</Button></span>
+        return (
+          <div className={"options-menu"}>
+            <button
+              style={{ marginTop: "-10px", marginRigth: "-10px" }}
+              type="button"
+              class="close"
+              aria-label="Close"
+              onClick={() => close()}
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <p style={{ minWidth: "160px", textAlign: "left" }}>
+              <span>
+                <strong>Peptide graph options</strong>
+              </span>
+              &nbsp;&nbsp;
+              <span>
+                <Button
+                  color="primary"
+                  size={"sm"}
+                  onClick={() => this.setToDefault()}
+                >
+                  Reset
+                </Button>
+              </span>
             </p>
-            <p className={'options-paragraph'}><input type={"checkbox"} checked={showOnlyRazor} onChange={this.clickShowOnlyRazor} />
-                <span className={"options-checkbox-span"}>Show only razor peptides</span>
+            <p className={"options-paragraph"}>
+              <input
+                type={"checkbox"}
+                checked={showOnlyRazor}
+                onChange={this.clickShowOnlyRazor}
+              />
+              <span className={"options-checkbox-span"}>
+                Show only razor peptides
+              </span>
             </p>
-            <p className={'options-paragraph'}><input type={"checkbox"} checked={showOnlyUnique} onChange={this.clickShowOnlyUnique} />
-                <span className={"options-checkbox-span"}>Show only unique peptides</span>
+            <p className={"options-paragraph"}>
+              <input
+                type={"checkbox"}
+                checked={showOnlyUnique}
+                onChange={this.clickShowOnlyUnique}
+              />
+              <span className={"options-checkbox-span"}>
+                Show only unique peptides
+              </span>
             </p>
-            <div>Intensity threshold {realIntValue}
-                <Slider
-                    min={0}
-                    max={optionsConfig.pepIntSliderSteps}
-                    value={peptideMenuMaxIntensity}
-                    step={0.5}
-                    onChange={(bounds) => this.movingSlider(bounds)}
-                    trackStyle={{backgroundColor: '#e9e9e9'}}
-                    handleStyle={{borderColor: '#007bff'}}
-                    railStyle={{backgroundColor: "#007bff"}}
-                />
+            <div className={"options-paragraph"}>
+              Intensity threshold {realIntValue}
+              <Slider
+                min={0}
+                max={optionsConfig.pepIntSliderSteps}
+                value={peptideMenuMaxIntensity}
+                step={0.5}
+                onChange={(bounds) => this.movingSlider(bounds)}
+                trackStyle={{ backgroundColor: "#e9e9e9" }}
+                handleStyle={{ borderColor: "#007bff" }}
+                railStyle={{ backgroundColor: "#007bff" }}
+              />
             </div>
-        </div>
+          </div>
+        );
     }
 }
 
 PeptideOptions.propTypes = {
-    showOnlyRazor: PropTypes.bool.isRequired,
-    showOnlyUnique: PropTypes.bool.isRequired,
-    setShowOnlyRazor: PropTypes.func.isRequired,
-    setShowOnlyUnique: PropTypes.func.isRequired,
-    peptideMaxIntensity: PropTypes.number,
-    peptideMenuMaxIntensity: PropTypes.number.isRequired,
-    setPeptideMenuMaxIntensity: PropTypes.func.isRequired,
-    peptideMinIntensity: PropTypes.number
+  showOnlyRazor: PropTypes.bool.isRequired,
+  showOnlyUnique: PropTypes.bool.isRequired,
+  setShowOnlyRazor: PropTypes.func.isRequired,
+  setShowOnlyUnique: PropTypes.func.isRequired,
+  peptideMaxIntensity: PropTypes.number,
+  peptideMenuMaxIntensity: PropTypes.number.isRequired,
+  setPeptideMenuMaxIntensity: PropTypes.func.isRequired,
+  peptideMinIntensity: PropTypes.number,
+  close: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => {

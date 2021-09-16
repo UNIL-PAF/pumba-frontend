@@ -25,37 +25,69 @@ class GelOptions extends PureComponent {
 
 
     render() {
-        const {gelContrast, showIsoforms} = this.props
+        const {gelContrast, showIsoforms, close} = this.props
 
         const contrastPercent = Math.round(100 / pumbaConfig.maxGelContrast * gelContrast)
 
-        return <div id="gel-options-menu" className={"options-menu"}>
-            <p style={{minWidth: "160px"}}><span><strong>Lane options</strong></span>&nbsp;&nbsp;
-                <span><Button color="primary" size={"sm"} onClick={() => this.setToDefault()}>Reset</Button></span>
+        return (
+          <div id="gel-options-menu" className={"options-menu"}>
+            <button
+              style={{ marginTop: "-10px", marginRigth: "-10px" }}
+              type="button"
+              class="close"
+              aria-label="Close"
+              onClick={() => close()}
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <p style={{ minWidth: "160px", textAlign: "left" }}>
+              <span>
+                <strong>Lane options</strong>
+              </span>
+              &nbsp;&nbsp;
+              <span>
+                <Button
+                  color="primary"
+                  size={"sm"}
+                  onClick={() => this.setToDefault()}
+                >
+                  Reset
+                </Button>
+              </span>
             </p>
-            <p>Contrast {contrastPercent}%
-                <Slider
-                    min={0.5}
-                    max={pumbaConfig.maxGelContrast}
-                    value={gelContrast}
-                    step={0.5}
-                    onChange={(bounds) => this.movingSlider(bounds)}
-                    trackStyle={{backgroundColor: '#007bff'}}
-                    handleStyle={{borderColor: '#007bff'}}
-                />
+            <p className={"options-paragraph"}>
+              Contrast {contrastPercent}%
+              <Slider
+                min={0.5}
+                max={pumbaConfig.maxGelContrast}
+                value={gelContrast}
+                step={0.5}
+                onChange={(bounds) => this.movingSlider(bounds)}
+                trackStyle={{ backgroundColor: "#007bff" }}
+                handleStyle={{ borderColor: "#007bff" }}
+              />
             </p>
-            <p className={'options-paragraph'}><input type={"checkbox"} checked={showIsoforms} onChange={this.clickShowIsoforms} />
-                <span className={"options-checkbox-span"}>Show theoretical MW of potential isoforms</span>
+            <p className={"options-paragraph"}>
+              <input
+                type={"checkbox"}
+                checked={showIsoforms}
+                onChange={this.clickShowIsoforms}
+              />
+              <span className={"options-checkbox-span"}>
+                Show theoretical MW of potential isoforms
+              </span>
             </p>
-        </div>
+          </div>
+        );
     }
 }
 
 GelOptions.propTypes = {
-    gelContrast: PropTypes.number.isRequired,
-    showIsoforms: PropTypes.bool.isRequired,
-    setGelContrast: PropTypes.func.isRequired,
-    setShowIsoforms: PropTypes.func.isRequired
+  gelContrast: PropTypes.number.isRequired,
+  showIsoforms: PropTypes.bool.isRequired,
+  setGelContrast: PropTypes.func.isRequired,
+  setShowIsoforms: PropTypes.func.isRequired,
+  close: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => {

@@ -24,11 +24,11 @@ class MenuButtonGroup extends PureComponent {
     const { selectedViz } = this.props;
 
     if (selectedViz === "lanes") {
-      return <GelOptions></GelOptions>;
+      return <GelOptions close={this.toggleOptions}></GelOptions>;
     }else if(selectedViz === "proteins"){
-      return <ProteinOptions></ProteinOptions>
+      return <ProteinOptions close={this.toggleOptions}></ProteinOptions>;
     }else if(selectedViz === "peptides"){
-      return <PeptideOptions></PeptideOptions>
+      return <PeptideOptions close={this.toggleOptions}></PeptideOptions>;
     }
   }
 
