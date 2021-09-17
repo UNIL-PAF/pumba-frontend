@@ -22,51 +22,78 @@ class App extends React.Component{
         const organismClass = organism === "human" ? "human-organism" : "mouse-organism"
         const organismName = organism === "human" ? "Human" : "Mouse"
 
-        return <ConnectedRouter history={history}>
-                <div id={"routes"}>
-                    <Navbar color="light" light expand="md" className={organismClass}>
-                        <NavbarBrand tag={Link} to="/"><img src={logo2} height="30" alt="UNIL"/></NavbarBrand>
-                        <NavbarToggler/>
-                        <Collapse isOpen={true} navbar>
-                            <Nav className="ml-auto" navbar>
-                                <NavItem>
-                                    <LinkContainer to="/" exact={true}>
-                                        <NavLink tag={Link} to="/" className={organismClass}>Search</NavLink>
-                                    </LinkContainer>
-                                </NavItem>
-                                <NavItem>
-                                    <LinkContainer to="/lanes">
-                                        <NavLink tag={Link} to="/lanes" className={organismClass}>Lanes</NavLink>
-                                    </LinkContainer>
-                                </NavItem>
-                                <NavItem>
-                                    <LinkContainer to="/graph">
-                                        <NavLink tag={Link} to="/graph" className={organismClass}>Graph</NavLink>
-                                    </LinkContainer>
-                                </NavItem>
-                                <NavItem>
-                                    <LinkContainer to="/peptides">
-                                        <NavLink tag={Link} to="/peptides" className={organismClass}>Peptides</NavLink>
-                                    </LinkContainer>
-                                </NavItem>
-                            </Nav>
-                            <Nav className="ml-auto" navbar>
-                                <NavItem id="menu-organism-label">
-                                    {organismName}
-                                </NavItem>
-                            </Nav>
-                        </Collapse>
-                    </Navbar>
-                    <Switch>
-                        <Route exact path="/" component={ProteinSearchContainer} />
-                        <Route path="/graph" component={ProteinViz} />
-                        <Route path="/peptides" component={PeptideVizContainer} />
-                        <Route path="/lanes" component={GelVizContainer} />
-                        <Route component={ProteinSearchContainer} />
-                    </Switch>
-                    <PumbaNotifications/>
-                </div>
-            </ConnectedRouter>
+        return (
+          <ConnectedRouter history={history}>
+            <div id={"routes"}>
+              <Navbar color="light" light expand="md" className={organismClass}>
+                <NavbarBrand tag={Link} to="/">
+                  <div>
+                    <img src={logo2} height="30" alt="UNIL" />
+                    <span id="navbar-pumba-title" >
+                      Pumba
+                    </span>
+                  </div>
+                </NavbarBrand>
+                <NavbarToggler />
+                <Collapse isOpen={true} navbar>
+                  <Nav className="ml-auto" navbar>
+                    <NavItem>
+                      <LinkContainer to="/" exact={true}>
+                        <NavLink tag={Link} to="/" className={organismClass}>
+                          Search
+                        </NavLink>
+                      </LinkContainer>
+                    </NavItem>
+                    <NavItem>
+                      <LinkContainer to="/lanes">
+                        <NavLink
+                          tag={Link}
+                          to="/lanes"
+                          className={organismClass}
+                        >
+                          Lanes
+                        </NavLink>
+                      </LinkContainer>
+                    </NavItem>
+                    <NavItem>
+                      <LinkContainer to="/graph">
+                        <NavLink
+                          tag={Link}
+                          to="/graph"
+                          className={organismClass}
+                        >
+                          Graph
+                        </NavLink>
+                      </LinkContainer>
+                    </NavItem>
+                    <NavItem>
+                      <LinkContainer to="/peptides">
+                        <NavLink
+                          tag={Link}
+                          to="/peptides"
+                          className={organismClass}
+                        >
+                          Peptides
+                        </NavLink>
+                      </LinkContainer>
+                    </NavItem>
+                  </Nav>
+                  <Nav className="ml-auto" navbar>
+                    <NavItem id="menu-organism-label">{organismName}</NavItem>
+                  </Nav>
+                </Collapse>
+              </Navbar>
+              <Switch>
+                <Route exact path="/" component={ProteinSearchContainer} />
+                <Route path="/graph" component={ProteinViz} />
+                <Route path="/peptides" component={PeptideVizContainer} />
+                <Route path="/lanes" component={GelVizContainer} />
+                <Route component={ProteinSearchContainer} />
+              </Switch>
+              <PumbaNotifications />
+            </div>
+          </ConnectedRouter>
+        );
         }
 }
 
