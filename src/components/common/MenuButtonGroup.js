@@ -109,7 +109,7 @@ class MenuButtonGroup extends PureComponent {
 MenuButtonGroup.propTypes = {
   selectedViz: PropTypes.string.isRequired,
   svg: PropTypes.object.isRequired,
-  proteinId: PropTypes.object.isRequired,
+  proteinId: PropTypes.string.isRequired,
 };
 
 export default MenuButtonGroup;
