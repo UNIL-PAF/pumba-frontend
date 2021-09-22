@@ -14,8 +14,8 @@ class ProteinOptions extends PureComponent {
     }
 
     setToDefault = () => {
-        const {maxIntensity, setProteinMenuMaxIntensity} = this.props
-        setProteinMenuMaxIntensity(maxIntensity)
+        const { proteinMaxIntensity } = this.props;
+        this.props.setProteinMenuMaxIntensity(proteinMaxIntensity);
     }
 
     render() {
@@ -29,7 +29,7 @@ class ProteinOptions extends PureComponent {
             <button
               style={{ marginTop: "-10px", marginRigth: "-10px" }}
               type="button"
-              class="close"
+              className="close"
               aria-label="Close"
               onClick={() => close()}
             >

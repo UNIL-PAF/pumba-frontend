@@ -28,12 +28,11 @@ class ProteinVizPlot extends Component {
 
     resetYScale = () => {
         const {proteinMaxIntensity, proteinMenuMaxIntensity} = this.props
-
         const currentMaxIntensity = proteinMenuMaxIntensity ? proteinMenuMaxIntensity : proteinMaxIntensity
 
         return {
-            yScale: scaleLinear().range([this.props.viewHeight - this.margin.top - this.margin.bottom, 0]).domain([0, currentMaxIntensity]),
-            proteinMenuMaxIntensity: proteinMenuMaxIntensity
+          currentMaxIntensity : proteinMenuMaxIntensity,
+          yScale: scaleLinear().range([this.props.viewHeight - this.margin.top - this.margin.bottom, 0]).domain([0, currentMaxIntensity])
         }
     }
 
@@ -140,8 +139,6 @@ class ProteinVizPlot extends Component {
         this.setState({mouseHere: false})
     }
 
-
-
     componentDidUpdate(){
         const {zoomLeft, zoomRight, proteinData, proteinMenuMaxIntensity} = this.props
 
@@ -165,9 +162,12 @@ class ProteinVizPlot extends Component {
         if(this.state.proteinDataTimestamp && (this.state.proteinDataTimestamp !== proteinData.timestamp)){
             this.setState(this.resetXScale())
             this.setState({ proteinDataTimestamp: proteinData.timestamp })
-        }else if(proteinMenuMaxIntensity && (proteinMenuMaxIntensity !== this.state.proteinMenuMaxIntensity)){
-            this.setState(this.resetYScale())
-            this.resetYAxis()
+        }else if (
+          proteinMenuMaxIntensity &&
+          proteinMenuMaxIntensity !== this.state.currentMaxIntensity
+        ) {
+          this.setState(this.resetYScale());
+          this.resetYAxis();
         }
 
     }
