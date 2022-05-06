@@ -248,6 +248,8 @@ class GelViz extends PureComponent {
         return null;
       }
 
+        const selProtein = thisProteinData.proteins.filter( p => { return p.dataSet.id === dataset.id})
+
       const gelPlot = (
         <GelSlice
           key={"gel-slice-" + dataset.name}
@@ -263,7 +265,7 @@ class GelViz extends PureComponent {
           yPos={this.margin.top}
           yScale={this.yScale}
           maxInt={this.state.maxInt}
-          datasetData={thisProteinData.proteins}
+          proteinData={selProtein.length === 1 ? selProtein[0] : null}
           amplify={gelContrast}
           greyScale={this.greyScale}
           mouseClickReplCB={mouseClickReplCB}

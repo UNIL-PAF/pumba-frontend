@@ -2,7 +2,6 @@ import React, {
     PureComponent
 } from 'react'
 import PropTypes from 'prop-types'
-import * as _ from 'lodash';
 import MergedGelSlice from "./MergedGelSlice"
 import DatasetGelSlice from "./DatasetGelSlice"
 
@@ -19,12 +18,11 @@ class GelSlice extends PureComponent {
     }
 
     plotDatasetData = () => {
-        const {xPos, yPos, sliceWidth, datasetData, amplify, maxInt, yScale, greyScale, getMousePos, replId} = this.props
+        const {xPos, yPos, sliceWidth, proteinData, amplify, maxInt, yScale, greyScale, getMousePos} = this.props
+        
+        if(! proteinData) return null
 
-        const selData = _.find(datasetData, (p) => { return p.dataSet.id === replId})
-        if(! selData) return null
-
-        const newDatasetData = {massFits: selData.dataSet.massFitResult.massFits, intensities: selData.intensities}
+        const newDatasetData = {massFits: proteinData.dataSet.massFitResult.massFits, intensities: proteinData.intensities}
 
         return <DatasetGelSlice
             datasetData={newDatasetData}
@@ -84,9 +82,11 @@ class GelSlice extends PureComponent {
     }
 
     render() {
-        const {xPos, yPos, sliceWidth, sliceHeight, title, subTitle, mergedData} = this.props
+        const {xPos, yPos, sliceWidth, sliceHeight, title, subTitle, mergedData, proteinData} = this.props
 
         const rectStyle = (mergedData ? {cursor: 'pointer'} : {})
+
+        const isFirstAC = (!proteinData || proteinData.isFirstAC) ? "" : "*"
 
         return <g key={'gel-slice-' + title}
                   onMouseEnter={() => this.onMouseEnter()}
@@ -103,7 +103,7 @@ class GelSlice extends PureComponent {
                     </rect>
                     <g transform={'translate(' + (xPos+10) + ',' + (yPos-10) + ') rotate(-45)'}>
                             <text className={mergedData ? 'gel-title-merged' : 'gel-title-sample'}>{title}</text>
-                            <text y={10} className={mergedData ? 'gel-subtitle-merged' : 'gel-subtitle-sample'}>{subTitle}</text>
+                            <text y={10} className={mergedData ? 'gel-subtitle-merged' : 'gel-subtitle-sample'}>{subTitle + isFirstAC}</text>
                     </g>
                     {this.plotSlice()}
                 </g>
@@ -131,7 +131,8 @@ GelSlice.propTypes = {
     mouseClickReplCB: PropTypes.func,
     onMouseEnterCB: PropTypes.func,
     onMouseLeaveCB: PropTypes.func,
-    getMousePos: PropTypes.func
+    getMousePos: PropTypes.func,
+    proteinData: PropTypes.object
 };
 
 export default GelSlice
