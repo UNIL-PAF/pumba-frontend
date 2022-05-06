@@ -18,8 +18,11 @@ class GelVizContainer extends PureComponent {
             gelContrast,
             isoforms,
             sequenceData,
-            showIsoforms
+            showIsoforms,
+            containsNotFirstAC
         } = this.props
+
+        console.log(proteinData)
 
         return <div id={"gel-viz"}>
             { proteinData && <GelViz proteinData={proteinData}
@@ -33,6 +36,7 @@ class GelVizContainer extends PureComponent {
                                      isoforms={isoforms}
                                      sequenceData={sequenceData}
                                      showIsoforms={showIsoforms}
+                                     containsNotFirstAC={containsNotFirstAC}
             /> }
         </div>
     }
@@ -58,7 +62,8 @@ const mapStateToProps = (state) => {
         datasetChanged: state.loadProtein.datasetChanged,
         gelContrast: state.menu.gelContrast,
         isoforms: state.loadProtein.isoforms,
-        showIsoforms: state.menu.showIsoforms
+        showIsoforms: state.menu.showIsoforms,
+        containsNotFirstAC: state.loadProtein.containsNotFirstAC
     }
     return props
 }

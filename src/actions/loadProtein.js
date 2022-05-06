@@ -30,6 +30,7 @@ export const SET_PEPTIDE_MAX_INTENSITY = "SET_PEPTIDE_MAX_INTENSITY";
 export const SET_PEPTIDE_MIN_INTENSITY = "SET_PEPTIDE_MIN_INTENSITY";
 export const ADD_ISOFORMS = "ADD_ISOFORMS";
 export const SET_SUGGESTIONS = "SET_SUGGESTIONS";
+export const SET_CONTAINS_NOT_FIRST_AC = "SET_CONTAINS_NOT_FIRST_AC";
 
 export function reloadProtein(activeDatasetIds, callOnComplete) {
   return function (dispatch, getState) {
@@ -192,6 +193,7 @@ export function fetchProtein(proteinId, datasetIds, noReset, callOnComplete) {
             dispatch(setProteinMenuMaxIntensity(undefined));
             dispatch(setPeptideMenuMaxIntensity(0));
             dispatch(addIsoforms(json.sequences));
+            dispatch(setContainsNotFirstAC(json.containsNotFirstAC))
             dispatch(setDatasets(inactivateMissingDatasets(getState().loadProtein.datasets, json.proteinMerges)));
           }
           dispatch(addProteinData(json.proteinMerges));
@@ -413,3 +415,8 @@ export const addIsoforms = (isoforms) => ({
   type: ADD_ISOFORMS,
   isoforms: isoforms,
 });
+
+export const setContainsNotFirstAC = (containsNotFirstAC) => ({
+  type: SET_CONTAINS_NOT_FIRST_AC,
+  containsNotFirstAC: containsNotFirstAC
+})

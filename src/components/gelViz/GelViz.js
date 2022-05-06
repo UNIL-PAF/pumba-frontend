@@ -15,7 +15,7 @@ import MenuButtonGroup from '../common/MenuButtonGroup';
 
 class GelViz extends PureComponent {
   // set the margins
-  margin = { top: 80, right: 10, bottom: 40, left: 60 };
+  margin = { top: 90, right: 10, bottom: 40, left: 60 };
   sliceWidth = 40;
   sliceSpacing = 10;
 
@@ -531,6 +531,12 @@ class GelViz extends PureComponent {
           {mouseHere &&
             this.plotMousePositionLine(mouseWeightPos, totalSlicesWidth)}
           <ProteinTitle sequenceData={sequenceData} x={100} y={20} />
+            {this.props.containsNotFirstAC && <g transform={'translate(' + (100) + ',' + (40) + ')'}>
+                <text className={'protein-title-warning'} style={{fontSize: '16px', fontWeight: 'bold'}}>*</text>
+                <g transform={'translate(' + (10) + ',' + (-4) + ')'}>
+                    <text className={'protein-title-warning'}>There is a protein with more peptide identifications in the same protein group.</text>
+                </g>
+            </g>}
         </svg>
       </div>
     );

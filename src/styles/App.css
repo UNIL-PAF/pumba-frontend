@@ -253,7 +253,14 @@ protein title
   text-decoration: underline;
 }
 
-
+.protein-title-warning {
+  font-family: sans-serif;
+  font-size: 12px;
+  font-weight: normal;
+  pointer-events: none;
+  user-select: none;
+  fill:  red;
+}
 
 /****
 svgCheckbox

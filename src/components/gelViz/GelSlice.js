@@ -4,6 +4,7 @@ import React, {
 import PropTypes from 'prop-types'
 import MergedGelSlice from "./MergedGelSlice"
 import DatasetGelSlice from "./DatasetGelSlice"
+import {connect} from "react-redux";
 
 class GelSlice extends PureComponent {
 
@@ -19,7 +20,7 @@ class GelSlice extends PureComponent {
 
     plotDatasetData = () => {
         const {xPos, yPos, sliceWidth, proteinData, amplify, maxInt, yScale, greyScale, getMousePos} = this.props
-        
+
         if(! proteinData) return null
 
         const newDatasetData = {massFits: proteinData.dataSet.massFitResult.massFits, intensities: proteinData.intensities}
@@ -86,8 +87,6 @@ class GelSlice extends PureComponent {
 
         const rectStyle = (mergedData ? {cursor: 'pointer'} : {})
 
-        const isFirstAC = (!proteinData || proteinData.isFirstAC) ? "" : "*"
-
         return <g key={'gel-slice-' + title}
                   onMouseEnter={() => this.onMouseEnter()}
                   onMouseLeave={() => this.onMouseLeave()}
@@ -101,9 +100,13 @@ class GelSlice extends PureComponent {
                         style={rectStyle}
                     >
                     </rect>
+            {proteinData && !proteinData.isFirstAC && <g transform={'translate(' + (xPos+10) + ',' + (yPos-10) + ')'}>
+                    <text className={"gel-not-first"}>*</text>
+                </g>
+            }
                     <g transform={'translate(' + (xPos+10) + ',' + (yPos-10) + ') rotate(-45)'}>
                             <text className={mergedData ? 'gel-title-merged' : 'gel-title-sample'}>{title}</text>
-                            <text y={10} className={mergedData ? 'gel-subtitle-merged' : 'gel-subtitle-sample'}>{subTitle + isFirstAC}</text>
+                            <text y={10} className={mergedData ? 'gel-subtitle-merged' : 'gel-subtitle-sample'}>{subTitle}</text>
                     </g>
                     {this.plotSlice()}
                 </g>
