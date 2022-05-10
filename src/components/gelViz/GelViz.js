@@ -531,12 +531,16 @@ class GelViz extends PureComponent {
           {mouseHere &&
             this.plotMousePositionLine(mouseWeightPos, totalSlicesWidth)}
           <ProteinTitle sequenceData={sequenceData} x={100} y={20} />
-            {this.props.containsNotFirstAC && <g transform={'translate(' + (100) + ',' + (40) + ')'}>
-                <text className={'protein-title-warning'} style={{fontSize: '16px', fontWeight: 'bold'}}>*</text>
-                <g transform={'translate(' + (10) + ',' + (-4) + ')'}>
-                    <text className={'protein-title-warning'}>There is a protein with more peptide identifications in the same protein group.</text>
+            {this.props.containsNotFirstAC && <g transform={'translate(' + (60) + ',' + (viewHeight - 10) + ')'}>
+                <g>
+                    <text className={'protein-title-warning'} style={{fontSize: '12px', fontWeight: 'bold'}}>*</text>
+                    <text transform={'translate(' + (8) + ',' + (-4) + ')'} className={'protein-title-warning'}>In one or more samples, another sequence in the same protein group has
+                        been assigned more peptide identifications.</text>
+                    <text transform={'translate(' + (8) + ',' + (4) + ')'} className={'protein-title-warning'}>Click on the lanes to find
+                        out in which samples.</text>
                 </g>
-            </g>}
+            </g>
+            }
         </svg>
       </div>
     );

@@ -4,7 +4,6 @@ import React, {
 import PropTypes from 'prop-types'
 import MergedGelSlice from "./MergedGelSlice"
 import DatasetGelSlice from "./DatasetGelSlice"
-import {connect} from "react-redux";
 
 class GelSlice extends PureComponent {
 
