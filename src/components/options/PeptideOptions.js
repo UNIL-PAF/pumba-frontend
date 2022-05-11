@@ -40,7 +40,7 @@ class PeptideOptions extends PureComponent {
             <button
               style={{ marginTop: "-10px", marginRigth: "-10px" }}
               type="button"
-              class="close"
+              className="close"
               aria-label="Close"
               onClick={() => close()}
             >

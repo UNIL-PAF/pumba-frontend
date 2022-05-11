@@ -54,8 +54,8 @@ class GelHelpModal extends PureComponent {
               <div>
                 {_.map(item.text, (oneParagraph, i) => {
                   return (
-                    <div>
-                      <span key={i}>{oneParagraph}</span>
+                    <div key={i}>
+                      <span>{oneParagraph}</span>
                       <br></br>
                     </div>
                   );
