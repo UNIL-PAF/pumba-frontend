@@ -33,7 +33,6 @@ class PeptideOptions extends PureComponent {
 
     render() {
         const {showOnlyRazor, showOnlyUnique, peptideMenuMaxIntensity, peptideMaxIntensity, peptideMinIntensity, close} = this.props
-
         const realIntValue = peptideMenuMaxIntensity ? (optionsConfig.computeRealIntValue(peptideMaxIntensity, peptideMinIntensity, peptideMenuMaxIntensity)).toExponential(1) : ''
 
         return (

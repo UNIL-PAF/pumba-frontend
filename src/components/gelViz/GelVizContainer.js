@@ -22,8 +22,6 @@ class GelVizContainer extends PureComponent {
             containsNotFirstAC
         } = this.props
 
-        console.log(proteinData)
-
         return <div id={"gel-viz"}>
             { proteinData && <GelViz proteinData={proteinData}
                                      datasets={datasets}
