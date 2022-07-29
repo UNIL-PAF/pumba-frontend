@@ -16,7 +16,6 @@ class LoadEntry extends PureComponent {
 
     componentDidMount() {
         if (this.props.match.params.id) {
-            console.log(this.props.match.params.type)
             this.props.fetchProtein(this.props.match.params.id);
             this.setState({isLoading: true})
         }
@@ -31,14 +30,25 @@ class LoadEntry extends PureComponent {
         }
     }
 
+    renderLoading(){
+        return  <h5><LoadingSvgIcon iconHeight={25} iconWidth={25} hide={false}></LoadingSvgIcon>
+            &nbsp;Loading {this.props.match.params.id}...
+        </h5>
+    }
+
+    renderError(){
+        return <h5>
+            Failed to load {this.props.match.params.id}.
+        </h5>
+    }
+
     render() {
 
         return <div>
             <Row>
                 <Col className="text-center" md={{size: 4, offset: 4}}>
-                    <h5><LoadingSvgIcon iconHeight={25} iconWidth={25} hide={false}></LoadingSvgIcon>
-                        &nbsp;Loading {this.props.match.params.id}...
-                    </h5>
+                    { this.state.isLoading && !this.props.error && this.renderLoading()}
+                    { this.props.error && this.renderError()}
                 </Col>
             </Row>
         </div>
@@ -50,6 +60,7 @@ const mapStateToProps = (state) => {
         proteinData: state.loadProtein.proteinData,
         datasets: state.loadProtein.datasets,
         sequenceData: state.loadProtein.sequenceData,
+        error: state.loadProtein.error
     }
     return props
 }
