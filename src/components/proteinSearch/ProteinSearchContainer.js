@@ -28,11 +28,11 @@ class ProteinSearchContainer extends React.Component{
     }
 
     componentDidUpdate() {
-        const {gotoViz, history, gotoProteinViz} = this.props
+        const {gotoViz, history, gotoProteinViz, proteinData} = this.props
 
         // let's move to the ProteinViz, but only once
         if (gotoViz){
-            history.push('/lanes')
+            history.push('/lanes/')
             gotoProteinViz(false)
         }
     }

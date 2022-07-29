@@ -1,12 +1,39 @@
-import React, {
-    PureComponent
-} from 'react'
-import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
+import React, {PureComponent} from 'react'
+import {connect} from 'react-redux'
 import GelViz from './GelViz'
 import {selectAllDatasets, selectDataset} from "../../actions/loadProtein";
 
 class GelVizContainer extends PureComponent {
+
+    constructor(props) {
+        super(props)
+
+        this.state = {
+            dataIsLoaded: false
+        }
+    }
+
+    componentDidMount() {
+        this.fetchDataOrUpdateURL()
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if(! this.state.dataIsLoaded){
+            this.fetchDataOrUpdateURL()
+        }
+    }
+
+    fetchDataOrUpdateURL(){
+        if(this.props.proteinData){
+            this.setState({dataIsLoaded: true})
+            this.props.history.replace('/lanes/' + this.props.proteinData[0].mainProteinId)
+            this.setState({dataIsLoaded: true})
+        }else{
+            if(this.props.match.params.id){
+                this.props.history.replace('/entry/' + this.props.match.params.id + '/lanes')
+            }
+        }
+    }
 
     render(){
         const {
@@ -39,18 +66,6 @@ class GelVizContainer extends PureComponent {
         </div>
     }
 }
-
-GelVizContainer.propTypes = {
-    proteinData: PropTypes.array,
-    datasets: PropTypes.object.isRequired,
-    datasetChanged: PropTypes.number.isRequired,
-    mouseClickSampleCB: PropTypes.func.isRequired,
-    mouseClickReplCB: PropTypes.func.isRequired,
-    gelContrast: PropTypes.number.isRequired,
-    isoforms: PropTypes.array,
-    sequenceData: PropTypes.object,
-    showIsoforms: PropTypes.bool.isRequired
-};
 
 const mapStateToProps = (state) => {
     const props = {

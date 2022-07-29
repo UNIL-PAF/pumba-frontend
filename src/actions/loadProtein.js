@@ -64,7 +64,7 @@ function addShortMergedData(json) {
   });
 }
 
-function inactivateMissingDatasets(origDatasets, proteinMerges){
+export function inactivateMissingDatasets(origDatasets, proteinMerges){
   const availableSamples = _.map(proteinMerges, "sample")
 
   const newDatasets = _.mapValues(origDatasets, (v) => {
@@ -233,7 +233,6 @@ function setAndDispatchProtein(json, dispatch, proteinId, noReset, callOnComplet
 
     if (!noReset) {
       // let's take the FASTA data from the first entry (should always be OK)
-      console.log(json.mainSequence)
       dispatch(addSequenceData(json.mainSequence));
       dispatch(gotoViz(true));
       dispatch(setGelContrast(pumbaConfig.initialGelContrast));
@@ -243,7 +242,9 @@ function setAndDispatchProtein(json, dispatch, proteinId, noReset, callOnComplet
       dispatch(setPeptideMenuMaxIntensity(0));
       dispatch(addIsoforms(json.sequences));
       dispatch(setContainsNotFirstAC(json.containsNotFirstAC))
-      dispatch(setDatasets(inactivateMissingDatasets(getState().loadProtein.datasets, json.proteinMerges)));
+      if(getState().loadProtein.datasets){
+        dispatch(setDatasets(inactivateMissingDatasets(getState().loadProtein.datasets, json.proteinMerges)));
+      }
     }
     dispatch(addProteinData(json.proteinMerges));
     dispatch(proteinIsLoaded());

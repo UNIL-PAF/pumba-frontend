@@ -1,5 +1,5 @@
 import React, {PureComponent} from 'react'
-import {fetchOneProtein} from "../../actions/loadProtein";
+import {fetchOneProtein, inactivateMissingDatasets, setDatasets} from "../../actions/loadProtein";
 import {connect} from "react-redux";
 import LoadingSvgIcon from "../common/loadingSvgIcon";
 import {Col, Row} from 'reactstrap'
@@ -16,6 +16,7 @@ class LoadEntry extends PureComponent {
 
     componentDidMount() {
         if (this.props.match.params.id) {
+            console.log(this.props.match.params.type)
             this.props.fetchProtein(this.props.match.params.id);
             this.setState({isLoading: true})
         }
@@ -23,9 +24,11 @@ class LoadEntry extends PureComponent {
 
     componentDidUpdate(prevProps, prevState, snapshot) {
         const {proteinData, datasets, history, sequenceData} = this.props
-        console.log(proteinData)
-        console.log(datasets)
-        if(proteinData && datasets && sequenceData) history.push('/lanes')
+        const link = this.props.match.params.type ? this.props.match.params.type : 'lanes'
+        if(proteinData && datasets && sequenceData){
+            inactivateMissingDatasets(datasets, proteinData)
+            history.push('/' + link + '/' + this.props.match.params.id)
+        }
     }
 
     render() {
@@ -56,6 +59,9 @@ const mapDispatchToProps = (dispatch) => {
         fetchProtein: (proteinId) => {
             dispatch(fetchOneProtein(proteinId))
         },
+        inactivateMissingDatasets: (origDatasets, proteinMerges) => {
+            dispatch(setDatasets(inactivateMissingDatasets(origDatasets, proteinMerges)))
+        }
     }
 }
 
