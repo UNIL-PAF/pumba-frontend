@@ -12,6 +12,7 @@ import { Navbar, Nav, NavItem, NavbarBrand, Collapse , NavLink, NavbarToggler} f
 import { LinkContainer } from 'react-router-bootstrap';
 import logo2 from './images/logo_UNIL.png';
 import PropTypes from 'prop-types'
+import LoadEntry from "./components/entry/LoadEntry";
 
 
 class App extends React.Component{
@@ -88,6 +89,7 @@ class App extends React.Component{
                 <Route path="/graph" component={ProteinViz} />
                 <Route path="/peptides" component={PeptideVizContainer} />
                 <Route path="/lanes" component={GelVizContainer} />
+                <Route path="/entry/:id" component={LoadEntry} />
                 <Route component={ProteinSearchContainer} />
               </Switch>
               <PumbaNotifications />

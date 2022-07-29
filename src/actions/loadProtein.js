@@ -102,6 +102,37 @@ function inactivateMissingDatasets(origDatasets, proteinMerges){
   return newDatasets
 }
 
+export function fetchOneProtein(proteinId){
+  return function (dispatch, getState) {
+    return fetch(
+        pumbaConfig.urlBackend +
+        "/merge-protein/" +
+        proteinId
+    )
+        .then((response) => {
+          if (!response.ok) {
+            throw response;
+          }
+          return response.json();
+        })
+        .then((json) => {
+          dispatch(fetchDatasets(json.mainSequence.organismName))
+          setAndDispatchProtein(json, dispatch, proteinId, false, null, getState)
+        })
+        .catch((err) => {
+          // we have to catch error messages differently for if backend is on or off.
+          if (err.message) {
+            dispatch(proteinLoadError(err.message));
+          } else {
+            err.text().then((message) => {
+              dispatch(proteinLoadError(err.statusText + ": " + message));
+            });
+          }
+          dispatch(proteinIsLoaded());
+        });
+  }
+}
+
 export function fetchProtein(proteinId, datasetIds, noReset, callOnComplete) {
   return function (dispatch, getState) {
     dispatch(requestProtein(proteinId));
@@ -134,84 +165,7 @@ export function fetchProtein(proteinId, datasetIds, noReset, callOnComplete) {
         return response.json();
       })
       .then((json) => {
-        // if protein is not found
-        if (json.proteinMerges.length === 0) {
-          dispatch(proteinLoadError("Could not find [" + proteinId + "]."));
-          dispatch(proteinIsLoaded());
-        } else {
-          // add a timestamp to the data
-          json.proteinMerges.timestamp = noReset
-            ? getState().loadProtein.proteinData.timestamp
-            : Date.now();
-
-          // add the maximum protein intensity
-          const maxProteinIntensity = _.max(
-            _.map(json.proteinMerges, function (pd) {
-              return _.max(
-                _.map(pd.proteins, function (p) {
-                  return _.max(p.intensities);
-                })
-              );
-            })
-          );
-          dispatch(setProteinMaxIntensity(maxProteinIntensity));
-
-          // add the maximum peptide intensity
-          const maxPeptideIntensity = _.max(
-            _.map(json.proteinMerges, function (pd) {
-              return _.max(
-                _.map(pd.proteins, function (p) {
-                  return _.max(_.map(p.peptides, "intensity"));
-                })
-              );
-            })
-          );
-          dispatch(setPeptideMaxIntensity(maxPeptideIntensity));
-
-          // add the minimum peptide intensity
-          const minPeptideIntensity = _.min(
-            _.map(json.proteinMerges, function (pd) {
-              return _.min(
-                _.map(pd.proteins, function (p) {
-                  return _.min(_.map(p.peptides, "intensity"));
-                })
-              );
-            })
-          );
-          dispatch(setPeptideMinIntensity(minPeptideIntensity));
-
-          // add a short version of the merged data for the gel view
-          addShortMergedData(json.proteinMerges);
-
-          if (!noReset) {
-            // let's take the FASTA data from the first entry (should always be OK)
-            dispatch(addSequenceData(json.mainSequence));
-            dispatch(gotoViz(true));
-            dispatch(setGelContrast(pumbaConfig.initialGelContrast));
-            dispatch(setShowOnlyRazor(false));
-            dispatch(setShowOnlyUnique(false));
-            dispatch(setProteinMenuMaxIntensity(undefined));
-            dispatch(setPeptideMenuMaxIntensity(0));
-            dispatch(addIsoforms(json.sequences));
-            dispatch(setContainsNotFirstAC(json.containsNotFirstAC))
-            dispatch(setDatasets(inactivateMissingDatasets(getState().loadProtein.datasets, json.proteinMerges)));
-          }
-          dispatch(addProteinData(json.proteinMerges));
-          dispatch(proteinIsLoaded());
-
-          // call the callback if there is a function
-          if (callOnComplete) callOnComplete();
-
-          // in case there is a zoom we have to reset the precalculated data
-          if (noReset && getState().proteinViz.zoomLeft) {
-            dispatch(
-              computeTheoMergedProteins(
-                getState().proteinViz.zoomLeft,
-                getState().proteinViz.zoomRight
-              )
-            );
-          }
-        }
+        setAndDispatchProtein(json, dispatch, proteinId, noReset, callOnComplete, getState)
       })
       .catch((err) => {
         // we have to catch error messages differently for if backend is on or off.
@@ -225,6 +179,88 @@ export function fetchProtein(proteinId, datasetIds, noReset, callOnComplete) {
         dispatch(proteinIsLoaded());
       });
   };
+}
+
+function setAndDispatchProtein(json, dispatch, proteinId, noReset, callOnComplete, getState){
+  // if protein is not found
+  if (json.proteinMerges.length === 0) {
+    dispatch(proteinLoadError("Could not find [" + proteinId + "]."));
+    dispatch(proteinIsLoaded());
+  } else {
+    // add a timestamp to the data
+    json.proteinMerges.timestamp = noReset
+        ? (getState().loadProtein.proteinData && getState().loadProtein.proteinData.timestamp)
+        : Date.now();
+
+    // add the maximum protein intensity
+    const maxProteinIntensity = _.max(
+        _.map(json.proteinMerges, function (pd) {
+          return _.max(
+              _.map(pd.proteins, function (p) {
+                return _.max(p.intensities);
+              })
+          );
+        })
+    );
+    dispatch(setProteinMaxIntensity(maxProteinIntensity));
+
+    // add the maximum peptide intensity
+    const maxPeptideIntensity = _.max(
+        _.map(json.proteinMerges, function (pd) {
+          return _.max(
+              _.map(pd.proteins, function (p) {
+                return _.max(_.map(p.peptides, "intensity"));
+              })
+          );
+        })
+    );
+    dispatch(setPeptideMaxIntensity(maxPeptideIntensity));
+
+    // add the minimum peptide intensity
+    const minPeptideIntensity = _.min(
+        _.map(json.proteinMerges, function (pd) {
+          return _.min(
+              _.map(pd.proteins, function (p) {
+                return _.min(_.map(p.peptides, "intensity"));
+              })
+          );
+        })
+    );
+    dispatch(setPeptideMinIntensity(minPeptideIntensity));
+
+    // add a short version of the merged data for the gel view
+    addShortMergedData(json.proteinMerges);
+
+    if (!noReset) {
+      // let's take the FASTA data from the first entry (should always be OK)
+      console.log(json.mainSequence)
+      dispatch(addSequenceData(json.mainSequence));
+      dispatch(gotoViz(true));
+      dispatch(setGelContrast(pumbaConfig.initialGelContrast));
+      dispatch(setShowOnlyRazor(false));
+      dispatch(setShowOnlyUnique(false));
+      dispatch(setProteinMenuMaxIntensity(undefined));
+      dispatch(setPeptideMenuMaxIntensity(0));
+      dispatch(addIsoforms(json.sequences));
+      dispatch(setContainsNotFirstAC(json.containsNotFirstAC))
+      dispatch(setDatasets(inactivateMissingDatasets(getState().loadProtein.datasets, json.proteinMerges)));
+    }
+    dispatch(addProteinData(json.proteinMerges));
+    dispatch(proteinIsLoaded());
+
+    // call the callback if there is a function
+    if (callOnComplete) callOnComplete();
+
+    // in case there is a zoom we have to reset the precalculated data
+    if (noReset && getState().proteinViz.zoomLeft) {
+      dispatch(
+          computeTheoMergedProteins(
+              getState().proteinViz.zoomLeft,
+              getState().proteinViz.zoomRight
+          )
+      );
+    }
+  }
 }
 
 export function fetchDatasets(organism) {
