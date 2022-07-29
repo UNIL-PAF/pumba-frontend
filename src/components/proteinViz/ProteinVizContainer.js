@@ -11,6 +11,36 @@ import {showOptionsMenu} from "../../actions/menuActions";
 
 class ProteinVizContainer extends Component {
 
+    constructor(props) {
+        super(props)
+
+        this.state = {
+            dataIsLoaded: false
+        }
+    }
+
+    componentDidMount() {
+        this.fetchDataOrUpdateURL()
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if(! this.state.dataIsLoaded){
+            this.fetchDataOrUpdateURL()
+        }
+    }
+
+    fetchDataOrUpdateURL(){
+        if(this.props.proteinData){
+            this.setState({dataIsLoaded: true})
+            this.props.history.replace('/graph/' + this.props.proteinData[0].mainProteinId)
+            this.setState({dataIsLoaded: true})
+        }else{
+            if(this.props.match.params.id){
+                this.props.history.replace('/entry/' + this.props.match.params.id + '/graph')
+            }
+        }
+    }
+
     render(){
         const {proteinData, mouseOverSampleId, mouseOverReplId, mouseLeaveSampleCB, zoomLeft, zoomRight,
             changeZoomRangeCB, theoMergedProteins, showOptionsMenu,

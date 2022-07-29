@@ -86,11 +86,9 @@ class App extends React.Component {
                     </Navbar>
                     <Switch>
                         <Route exact path="/" component={ProteinSearchContainer}/>
-                        <Route exact path="/graph/:id"
-                               render={(props) => <LoadEntry {...props} type={"graph"}/>}></Route>
+                        <Route path="/graph/:id" component={ProteinViz}/>
                         <Route path="/graph" component={ProteinViz}/>
-                        <Route exact path="/peptides/:id"
-                               render={(props) => <LoadEntry {...props} type={"peptides"}/>}></Route>
+                        <Route path="/peptides/:id" component={PeptideVizContainer}/>
                         <Route path="/peptides" component={PeptideVizContainer}/>
                         <Route path="/lanes/:id" component={GelVizContainer}/>
                         <Route path="/lanes" component={GelVizContainer}/>

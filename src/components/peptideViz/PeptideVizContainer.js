@@ -12,6 +12,37 @@ import {setShowOnlyRazor, setShowOnlyUnique, showOptionsMenu} from "../../action
 
 class PeptideVizContainer extends Component {
 
+    constructor(props) {
+        super(props)
+
+        this.state = {
+            dataIsLoaded: false
+        }
+    }
+
+    componentDidMount() {
+        this.fetchDataOrUpdateURL()
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if(! this.state.dataIsLoaded){
+            this.fetchDataOrUpdateURL()
+        }
+    }
+
+    fetchDataOrUpdateURL(){
+        if(this.props.proteinData){
+            this.setState({dataIsLoaded: true})
+            this.props.history.replace('/peptides/' + this.props.proteinData[0].mainProteinId)
+            this.setState({dataIsLoaded: true})
+        }else{
+            if(this.props.match.params.id){
+                this.props.history.replace('/entry/' + this.props.match.params.id + '/peptides')
+            }
+        }
+    }
+
+
     render(){
         const {proteinData, sequenceData, zoom, changeZoomRangeCB, clickedSlices, mouseOverSampleId,
             mouseOverReplId, mouseLeaveSampleCB, showPopupCB, removePopupCB, popup, datasets, legendPos, setLegendPos,
