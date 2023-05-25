@@ -7,6 +7,7 @@ import ProteinViz from './components/proteinViz/ProteinVizContainer'
 import PeptideVizContainer from "./components/peptideViz/PeptideVizContainer"
 import GelVizContainer from "./components/gelViz/GelVizContainer"
 import PumbaNotifications from "./components/PumbaNotifications"
+import PumbaError from "./components/PumbaError"
 import {Link} from 'react-router-dom'
 import {Navbar, Nav, NavItem, NavbarBrand, Collapse, NavLink, NavbarToggler} from 'reactstrap'
 import {LinkContainer} from 'react-router-bootstrap';
@@ -94,7 +95,7 @@ class App extends React.Component {
                         <Route path="/lanes" component={GelVizContainer}/>
                         <Route path="/entry/:id/:type" component={LoadEntry}/>
                         <Route path="/entry/:id" component={LoadEntry}/>
-                        <Route component={ProteinSearchContainer}/>
+                        <Route component={PumbaError}/>
                     </Switch>
                     <PumbaNotifications/>
                 </div>
