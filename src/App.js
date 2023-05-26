@@ -32,7 +32,7 @@ class App extends React.Component {
                             <div>
                                 <img src={logo2} height="30" alt="UNIL"/>
                                 <span id="navbar-pumba-title">
-                      Pumba
+                      Pumba - {organismName}
                     </span>
                             </div>
                         </NavbarBrand>
@@ -81,7 +81,20 @@ class App extends React.Component {
                                 </NavItem>
                             </Nav>
                             <Nav className="ml-auto" navbar>
-                                <NavItem id="menu-organism-label">{organismName}</NavItem>
+                                <NavItem>
+                                    <LinkContainer to="#">
+                                        <NavLink
+                                            to='#'
+                                            className={organismClass}
+                                            onClick={(e) => {
+                                                window.location.href = "mailto:roman.mylonas@unil.ch";
+                                                e.preventDefault();
+                                            }}
+                                        >
+                                            {"Contact"}
+                                        </NavLink>
+                                    </LinkContainer>
+                                </NavItem>
                             </Nav>
                         </Collapse>
                     </Navbar>
