@@ -132,7 +132,7 @@ class ProteinSearchContainer extends React.Component{
 
         return (
           <div>
-              <PumbaDescription></PumbaDescription>
+              <PumbaDescription history={this.props.history}></PumbaDescription>
             <br />
             <Row>
               <Col className="text-center" md={{ size: 4, offset: 4 }}>

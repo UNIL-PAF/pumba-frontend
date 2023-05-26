@@ -51,7 +51,7 @@ class GelVizContainer extends PureComponent {
         } = this.props
 
         return <div id={"gel-viz"}>
-            <PumbaDescription></PumbaDescription>
+            <PumbaDescription history={this.props.history}></PumbaDescription>
             { proteinData && <GelViz proteinData={proteinData}
                                      datasets={datasets}
                                      datasetChanged={datasetChanged}

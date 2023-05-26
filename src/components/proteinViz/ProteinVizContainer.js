@@ -50,7 +50,7 @@ class ProteinVizContainer extends Component {
             sequenceData} = this.props
 
         return <div id={"protein-viz"}>
-            <PumbaDescription></PumbaDescription>
+            <PumbaDescription history={this.props.history}></PumbaDescription>
         { proteinData && <ProteinVizPlot proteinData={proteinData} viewWidth={1000} viewHeight={400}
                              mouseOverSampleId={mouseOverSampleId} selectedOption={selectedOption}
                              mouseOverReplId={mouseOverReplId} showOptionsMenu={showOptionsMenu}

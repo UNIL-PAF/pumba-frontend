@@ -1,9 +1,19 @@
 import React, {Component,} from 'react';
 import {Alert} from "reactstrap";
 import {connect} from "react-redux";
-import {setShowPumbaDescription} from "../../actions/commonInfo";
+import {setLastHistory, setShowPumbaDescription} from "../../actions/commonInfo";
 
 class PumbaDescription extends Component {
+
+    componentDidMount() {
+        // check if the user navigated to another tab
+        if(this.props.lastHistory && this.props.lastHistory !== this.props.history.location.pathname){
+            this.props.setShowPumbaDescription(false)
+        }else{
+            this.props.setLastHistory(this.props.history.location.pathname)
+        }
+    }
+
     render() {
         return <Alert color="warning" style={{marginBottom: 0, paddingBottom: 0}}
                       isOpen={this.props.showPumbaDescription} toggle={() => {
@@ -22,6 +32,7 @@ class PumbaDescription extends Component {
 const mapStateToProps = (state) => {
     const props = {
         showPumbaDescription: state.commonInfo.showPumbaDescription,
+        lastHistory: state.commonInfo.lastHistory
     }
     return props
 }
@@ -31,6 +42,9 @@ const mapDispatchToProps = (dispatch) => {
         setShowPumbaDescription: (showPumbaDescription) => {
             dispatch(setShowPumbaDescription(showPumbaDescription))
         },
+        setLastHistory: (lastHistory) => {
+            dispatch(setLastHistory(lastHistory))
+        }
     }
 }
 

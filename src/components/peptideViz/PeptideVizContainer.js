@@ -58,7 +58,7 @@ class PeptideVizContainer extends Component {
         })
 
         return <div id={"peptide-viz"}>
-            <PumbaDescription></PumbaDescription>
+            <PumbaDescription history={this.props.history}></PumbaDescription>
             { proteinData && <PeptideViz proteinData={proteinData}
                                          sequenceData={sequenceData}
                                          viewWidth={1000}
