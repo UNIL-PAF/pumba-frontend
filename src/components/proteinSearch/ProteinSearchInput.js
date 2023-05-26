@@ -8,14 +8,15 @@ class ProteinSearchInput extends Component {
     super(props);
 
     this.state = {
-      value: ""
+      value: "",
+      highlighted: null
     };
   }
 
   keyClicked = (e) => {
     if (e.key === "Enter") {
-        if(this.props.suggestions.length === 0){
-            this.props.onEnterClicked();
+        if(this.props.suggestions.length === 0 || !this.state.highlighted){
+            this.props.onEnterClicked(this.state.value);
             e.preventDefault();
             e.stopPropagation();
         }
@@ -40,8 +41,11 @@ class ProteinSearchInput extends Component {
       this.getSuggestions();
   };
 
-  onSuggestionSelect = (e, { suggestion, suggestionValue, index, method }) => {
+  onSuggestionHighlighted = (e) => {
+    this.setState({highlighted: e.suggestion ? e.suggestion.proteinId : undefined})
+  }
 
+  onSuggestionSelect = (e, { suggestion, suggestionValue, index, method }) => {
     const {value} = this.state
     const lowValue = value.toLowerCase()
 
@@ -112,6 +116,7 @@ class ProteinSearchInput extends Component {
               getSuggestionValue={this.getSuggestionValue}
               renderSuggestion={this.renderSuggestion}
               onSuggestionSelected={this.onSuggestionSelect}
+              onSuggestionHighlighted={this.onSuggestionHighlighted}
             />
           </Col>
         </Row>
