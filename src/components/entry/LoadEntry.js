@@ -3,6 +3,7 @@ import {fetchOneProtein, inactivateMissingDatasets, setDatasets} from "../../act
 import {connect} from "react-redux";
 import LoadingSvgIcon from "../common/loadingSvgIcon";
 import {Col, Row} from 'reactstrap'
+import PumbaError from "../PumbaError";
 
 class LoadEntry extends PureComponent {
 
@@ -37,9 +38,7 @@ class LoadEntry extends PureComponent {
     }
 
     renderError(){
-        return <h5>
-            Failed to load {this.props.match.params.id}.
-        </h5>
+        return <PumbaError errorMessage={"Failed to load " + this.props.match.params.id + "."}></PumbaError>
     }
 
     render() {

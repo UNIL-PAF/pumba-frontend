@@ -26,7 +26,7 @@ class GelVizContainer extends PureComponent {
     fetchDataOrUpdateURL(){
         if(this.props.proteinData){
             this.setState({dataIsLoaded: true})
-            this.props.history.replace('/lanes/' + this.props.proteinData[0].mainProteinId)
+            this.props.history.replace('/lanes/' + this.props.sequenceData.proteinId)
             this.setState({dataIsLoaded: true})
         }else{
             if(this.props.match.params.id){
