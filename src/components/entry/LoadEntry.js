@@ -4,6 +4,7 @@ import {connect} from "react-redux";
 import LoadingSvgIcon from "../common/loadingSvgIcon";
 import {Col, Row} from 'reactstrap'
 import PumbaError from "../PumbaError";
+import {setOrganism} from "../../actions/menuActions";
 
 class LoadEntry extends PureComponent {
 
@@ -26,6 +27,7 @@ class LoadEntry extends PureComponent {
         const {proteinData, datasets, history, sequenceData} = this.props
         const link = this.props.match.params.type ? this.props.match.params.type : 'lanes'
         if(proteinData && datasets && sequenceData){
+            this.props.setOrganism(sequenceData.organismName)
             inactivateMissingDatasets(datasets, proteinData)
             history.push('/' + link + '/' + this.props.match.params.id)
         }
@@ -71,7 +73,10 @@ const mapDispatchToProps = (dispatch) => {
         },
         inactivateMissingDatasets: (origDatasets, proteinMerges) => {
             dispatch(setDatasets(inactivateMissingDatasets(origDatasets, proteinMerges)))
-        }
+        },
+        setOrganism: (organism) => {
+            dispatch(setOrganism(organism));
+        },
     }
 }
 
