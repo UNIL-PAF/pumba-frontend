@@ -8,6 +8,7 @@ import { mouseLeaveSample, clickSlice, unclickSlice} from "../../actions/sampleS
 import {changeZoomAndFilter, removeSlicePopup, showSlicePopup} from "../../actions/proteinVizActions";
 import {setLegendPos} from "../../actions/legendActions";
 import {showOptionsMenu} from "../../actions/menuActions";
+import PumbaDescription from "../common/PumbaDescription";
 
 class ProteinVizContainer extends Component {
 
@@ -49,6 +50,7 @@ class ProteinVizContainer extends Component {
             sequenceData} = this.props
 
         return <div id={"protein-viz"}>
+            <PumbaDescription></PumbaDescription>
         { proteinData && <ProteinVizPlot proteinData={proteinData} viewWidth={1000} viewHeight={400}
                              mouseOverSampleId={mouseOverSampleId} selectedOption={selectedOption}
                              mouseOverReplId={mouseOverReplId} showOptionsMenu={showOptionsMenu}

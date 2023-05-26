@@ -1,12 +1,20 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import {fetchProtein, gotoViz, fetchDatasets, setDatasets, addProteinData, fetchSuggestions} from '../../actions/loadProtein'
+import {connect} from 'react-redux'
+import {
+    addProteinData,
+    fetchDatasets,
+    fetchProtein,
+    fetchSuggestions,
+    gotoViz,
+    setDatasets
+} from '../../actions/loadProtein'
 import {setOrganism} from '../../actions/menuActions'
 import ProteinSearchButton from "./ProteinSearchButton";
 import ProteinSearchInput from "./ProteinSearchInput";
-import {Form, FormGroup, Col, Row, Label, Input, Button, ButtonGroup} from 'reactstrap'
+import {Button, ButtonGroup, Col, Form, FormGroup, Input, Label, Row} from 'reactstrap'
 import * as _ from 'lodash';
+import PumbaDescription from "../common/PumbaDescription";
 
 class ProteinSearchContainer extends React.Component{
 
@@ -124,6 +132,7 @@ class ProteinSearchContainer extends React.Component{
 
         return (
           <div>
+              <PumbaDescription></PumbaDescription>
             <br />
             <Row>
               <Col className="text-center" md={{ size: 4, offset: 4 }}>

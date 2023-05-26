@@ -2,6 +2,7 @@ import React, {PureComponent} from 'react'
 import {connect} from 'react-redux'
 import GelViz from './GelViz'
 import {selectAllDatasets, selectDataset} from "../../actions/loadProtein";
+import PumbaDescription from "../common/PumbaDescription";
 
 class GelVizContainer extends PureComponent {
 
@@ -50,6 +51,7 @@ class GelVizContainer extends PureComponent {
         } = this.props
 
         return <div id={"gel-viz"}>
+            <PumbaDescription></PumbaDescription>
             { proteinData && <GelViz proteinData={proteinData}
                                      datasets={datasets}
                                      datasetChanged={datasetChanged}

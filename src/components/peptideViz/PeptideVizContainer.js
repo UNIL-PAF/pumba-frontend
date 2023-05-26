@@ -9,6 +9,7 @@ import {changePepZoomRange, removePepPopup, showPepPopup} from "../../actions/pe
 import {mouseLeaveSample} from "../../actions/sampleSelection";
 import {setLegendPos} from "../../actions/legendActions";
 import {setShowOnlyRazor, setShowOnlyUnique, showOptionsMenu} from "../../actions/menuActions";
+import PumbaDescription from "../common/PumbaDescription";
 
 class PeptideVizContainer extends Component {
 
@@ -57,6 +58,7 @@ class PeptideVizContainer extends Component {
         })
 
         return <div id={"peptide-viz"}>
+            <PumbaDescription></PumbaDescription>
             { proteinData && <PeptideViz proteinData={proteinData}
                                          sequenceData={sequenceData}
                                          viewWidth={1000}
