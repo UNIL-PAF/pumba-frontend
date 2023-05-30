@@ -12,7 +12,7 @@ import {
 import {setOrganism} from '../../actions/menuActions'
 import ProteinSearchButton from "./ProteinSearchButton";
 import ProteinSearchInput from "./ProteinSearchInput";
-import {Button, ButtonGroup, Col, Form, FormGroup, Input, Label, Row} from 'reactstrap'
+import {Button, ButtonGroup, Col, Form, FormGroup, Input, Label, Row, Alert} from 'reactstrap'
 import * as _ from 'lodash';
 import PumbaDescription from "../common/PumbaDescription";
 
@@ -132,6 +132,15 @@ class ProteinSearchContainer extends React.Component{
 
         return (
           <div>
+              <div style={{position: "absolute", bottom: "0"}}>
+                  <Alert color={"primary"}>
+                      <Row><Col md={{ size: 2}}>Latest major update:</Col><Col md={{size: 10}}><strong>2023-01-07</strong> (18222 proteins, 2 species, 6 cell lines).</Col></Row>
+                      <Row><Col md={{ size: 2}}>Please cite:</Col><Col md={{size: 10}}>Mylonas R, Potts A, Waridel P, Barblan J, Conde Rubio MDC, Widmann C, Quadroni M. <strong>A Database of Accurate Electrophoretic Migration Patterns for Human Proteins.</strong> <a
+                          href="https://doi.org/10.1016/j.jmb.2022.167933" target="_blank" rel="noopener noreferrer">J Mol Biol. 2023 Feb 28;435(4):167933. doi: 10.1016/j.jmb.2022.167933. Epub 2022 Dec 26. PMID: 36581244.</a></Col></Row>
+                      <div><em></em>
+                      </div>
+                  </Alert>
+              </div>
               <PumbaDescription history={this.props.history}></PumbaDescription>
             <br />
             <Row>
