@@ -239,11 +239,18 @@ protein title
  */
 .protein-title {
   font-size: 90%;
-  cursor: pointer;
   font-family: sans-serif;
 }
 
-.protein-title:hover {
+.protein-title-link {
+  font-size: 90%;
+  cursor: pointer;
+  font-family: sans-serif;
+  fill: #0d6efd;
+}
+
+.protein-title-link:hover {
+  fill: #0a58ca;
   text-decoration: underline;
 }
 

@@ -13,29 +13,33 @@ class ProteinTitle extends PureComponent {
         win.focus();
     }
 
-    onMouseEnter(){
+    onMouseEnter() {
         const {onMouseEnter} = this.props
-        if(onMouseEnter) onMouseEnter()
+        if (onMouseEnter) onMouseEnter()
     }
 
-    onMouseLeave(){
+    onMouseLeave() {
         const {onMouseLeave} = this.props
-        if(onMouseLeave) onMouseLeave()
+        if (onMouseLeave) onMouseLeave()
     }
 
     render() {
-        const { x, y, sequenceData} = this.props;
+        const {x, y, sequenceData} = this.props;
 
-        const proteinStr = sequenceData.proteinId + " - " + sequenceData.geneName + " - " + sequenceData.proteinName
+        const proteinStr = sequenceData.geneName + " - " + sequenceData.proteinName
+        const uniprotAC = "(UniProtKB: " + sequenceData.proteinId + ")"
+        const transform = "translate(" + (typeof x !== 'undefined' ? x : 80) + "," + (typeof y !== 'undefined' ? y : 20) + ")"
 
-        return <g onMouseEnter={()=>this.onMouseEnter()} onMouseLeave={()=>this.onMouseLeave()}>
+
+        return <g onMouseEnter={() => this.onMouseEnter()}
+                  onMouseLeave={() => this.onMouseLeave()}
+                 transform={transform}
+        >
             <text
                 className={"protein-title unselecteable"}
-                x={typeof x !== 'undefined' ? x : 80}
-                y={typeof y !== 'undefined' ? y : 20}
-                onClick={() => this.openInNewTab()}
-            >
-                {proteinStr}</text>
+            >{proteinStr} <tspan className={"protein-title-link"} onClick={() => this.openInNewTab()}>{uniprotAC}</tspan>
+                <tspan className={"protein-title"} onClick={() => this.openInNewTab()}>{uniprotAC}</tspan>
+            </text>
         </g>
     }
 }
