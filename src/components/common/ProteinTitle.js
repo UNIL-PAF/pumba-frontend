@@ -38,7 +38,6 @@ class ProteinTitle extends PureComponent {
             <text
                 className={"protein-title unselecteable"}
             >{proteinStr} <tspan className={"protein-title-link"} onClick={() => this.openInNewTab()}>{uniprotAC}</tspan>
-                <tspan className={"protein-title"} onClick={() => this.openInNewTab()}>{uniprotAC}</tspan>
             </text>
         </g>
     }
