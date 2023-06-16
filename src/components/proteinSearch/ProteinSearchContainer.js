@@ -104,7 +104,7 @@ class ProteinSearchContainer extends React.Component{
             })
 
         setDatasets(newDatasets)
-        const finalSearchTerm = proteinId ? proteinId : this.state.searchString
+        const finalSearchTerm = (proteinId && typeof proteinId === "string") ? proteinId : this.state.searchString
 
         onLoadProtein(finalSearchTerm.trim(), availableDatasets.join(","));
     }
